@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thank You | Online Coaching | CG Performance Training</title>
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy:#0d1b2a; --navy-mid:#162032; --navy-light:#1e2d40;
+      --blue:#4a9ede; --blue-light:#6db8f0;
+      --red:#c0392b; --red-bright:#e74c3c;
+      --silver:#b8c5d0; --white:#f0f4f8; --text-muted:#7a96b0;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Barlow',sans-serif; background:var(--navy); color:var(--white); min-height:100vh; display:flex; flex-direction:column; }
+
+    nav {
+      position:fixed; top:0; width:100%; z-index:100;
+      background:rgba(13,27,42,0.95); backdrop-filter:blur(10px);
+      border-bottom:1px solid rgba(74,158,222,0.2);
+      padding:0.75rem 2rem; display:flex; align-items:center;
+    }
+    .nav-brand-name { font-family:'Bebas Neue',sans-serif; font-size:1.3rem; letter-spacing:0.15em; color:var(--white); text-decoration:none; }
+
+    main {
+      flex:1; display:flex; align-items:center; justify-content:center;
+      padding:8rem 2rem 4rem; text-align:center;
+    }
+    .card {
+      background:var(--navy-mid); border:1px solid rgba(74,158,222,0.25);
+      max-width:580px; width:100%; padding:3.5rem 3rem;
+    }
+    .icon {
+      width:72px; height:72px; border-radius:50%;
+      background:rgba(26,188,156,0.15); border:2px solid #1abc9c;
+      display:flex; align-items:center; justify-content:center;
+      margin:0 auto 2rem;
+    }
+    .icon svg { width:36px; height:36px; stroke:#1abc9c; fill:none; stroke-width:2.5; stroke-linecap:round; stroke-linejoin:round; }
+    .tag { font-family:'Barlow Condensed',sans-serif; font-size:0.8rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--blue); margin-bottom:0.75rem; display:block; }
+    h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(2.5rem,6vw,3.5rem); line-height:1; margin-bottom:1.25rem; }
+    h1 span { color:var(--blue); }
+    p { color:var(--silver); line-height:1.8; margin-bottom:1rem; font-size:1rem; }
+    .highlight { color:var(--white); font-weight:600; }
+    .what-next {
+      background:var(--navy-light); border:1px solid rgba(74,158,222,0.2);
+      padding:1.5rem; text-align:left; margin:1.5rem 0;
+    }
+    .what-next h3 { font-family:'Barlow Condensed',sans-serif; font-size:0.8rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--blue); margin-bottom:1rem; }
+    .what-next ul { list-style:none; display:flex; flex-direction:column; gap:0.6rem; }
+    .what-next ul li { display:flex; align-items:flex-start; gap:0.6rem; color:var(--silver); font-size:0.95rem; line-height:1.5; }
+    .what-next ul li::before { content:'✓'; color:#1abc9c; font-weight:700; flex-shrink:0; margin-top:0.1rem; }
+    .divider { border:none; border-top:1px solid rgba(74,158,222,0.15); margin:2rem 0; }
+    .btn-home {
+      display:inline-block; padding:0.9rem 2.5rem;
+      background:var(--red); color:var(--white); text-decoration:none;
+      font-family:'Barlow Condensed',sans-serif; font-weight:700;
+      font-size:1rem; letter-spacing:0.15em; text-transform:uppercase;
+      transition:background 0.2s, transform 0.2s;
+      clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);
+    }
+    .btn-home:hover { background:var(--red-bright); transform:translateY(-2px); }
+    .email-note { font-size:0.85rem; color:var(--text-muted); margin-top:1.5rem; }
+    .email-note a { color:var(--blue-light); text-decoration:none; }
+
+    footer { background:#080f17; padding:1.5rem 2rem; text-align:center; border-top:1px solid rgba(74,158,222,0.15); }
+    footer p { color:var(--text-muted); font-size:0.8rem; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-brand-name">CG PERFORMANCE TRAINING</a>
+</nav>
+
+<main>
+  <div class="card">
+    <div class="icon">
+      <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <span class="tag">Online Coaching — Payment Confirmed</span>
+    <h1>You're In.<br><span>Let's Get To Work.</span></h1>
+    <p>Your Online Coaching subscription is confirmed. <span class="highlight">Welcome to the team</span> — this is where your transformation starts.</p>
+    <p>Charlie will be in touch within <span class="highlight">24 hours</span> to kick off your onboarding, gather your goals, and build your first personalised programme.</p>
+
+    <div class="what-next">
+      <h3>What Happens Next</h3>
+      <ul>
+        <li>You'll receive a welcome email with your onboarding questionnaire</li>
+        <li>Charlie will build your bespoke training & nutrition plan</li>
+        <li>Weekly check-ins begin from your programme start date</li>
+        <li>Direct coach access via messaging throughout the month</li>
+      </ul>
+    </div>
+
+    <hr class="divider">
+    <a href="index.html" class="btn-home">Back to Home</a>
+    <p class="email-note">Questions? <a href="mailto:cgperformancetraining@outlook.com">cgperformancetraining@outlook.com</a></p>
+  </div>
+</main>
+
+<footer>
+  <p>&copy; <script>document.write(new Date().getFullYear())</script> CG Performance Training. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thank You | Starter Kit | CG Performance Training</title>
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy:#0d1b2a; --navy-mid:#162032; --navy-light:#1e2d40;
+      --blue:#4a9ede; --blue-light:#6db8f0;
+      --red:#c0392b; --red-bright:#e74c3c;
+      --silver:#b8c5d0; --white:#f0f4f8; --text-muted:#7a96b0;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Barlow',sans-serif; background:var(--navy); color:var(--white); min-height:100vh; display:flex; flex-direction:column; }
+
+    nav {
+      position:fixed; top:0; width:100%; z-index:100;
+      background:rgba(13,27,42,0.95); backdrop-filter:blur(10px);
+      border-bottom:1px solid rgba(74,158,222,0.2);
+      padding:0.75rem 2rem; display:flex; align-items:center;
+    }
+    .nav-brand-name { font-family:'Bebas Neue',sans-serif; font-size:1.3rem; letter-spacing:0.15em; color:var(--white); text-decoration:none; }
+
+    main {
+      flex:1; display:flex; align-items:center; justify-content:center;
+      padding:8rem 2rem 4rem; text-align:center;
+    }
+    .card {
+      background:var(--navy-mid); border:1px solid rgba(74,158,222,0.25);
+      max-width:580px; width:100%; padding:3.5rem 3rem;
+    }
+    .icon {
+      width:72px; height:72px; border-radius:50%;
+      background:rgba(26,188,156,0.15); border:2px solid #1abc9c;
+      display:flex; align-items:center; justify-content:center;
+      margin:0 auto 2rem;
+    }
+    .icon svg { width:36px; height:36px; stroke:#1abc9c; fill:none; stroke-width:2.5; stroke-linecap:round; stroke-linejoin:round; }
+    .tag { font-family:'Barlow Condensed',sans-serif; font-size:0.8rem; letter-spacing:0.3em; text-transform:uppercase; color:var(--blue); margin-bottom:0.75rem; display:block; }
+    h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(2.5rem,6vw,3.5rem); line-height:1; margin-bottom:1.25rem; }
+    h1 span { color:var(--blue); }
+    p { color:var(--silver); line-height:1.8; margin-bottom:1rem; font-size:1rem; }
+    .highlight { color:var(--white); font-weight:600; }
+
+    .download-box {
+      background:rgba(74,158,222,0.08); border:1px solid rgba(74,158,222,0.35);
+      padding:2rem; margin:2rem 0;
+    }
+    .download-box h3 {
+      font-family:'Bebas Neue',sans-serif; font-size:1.5rem; letter-spacing:0.05em;
+      color:var(--white); margin-bottom:0.5rem;
+    }
+    .download-box p { font-size:0.9rem; color:var(--text-muted); margin-bottom:1.25rem; }
+    .btn-download {
+      display:inline-flex; align-items:center; gap:0.6rem;
+      padding:1rem 2rem; background:var(--blue); color:var(--navy);
+      text-decoration:none; font-family:'Barlow Condensed',sans-serif;
+      font-weight:700; font-size:1rem; letter-spacing:0.1em; text-transform:uppercase;
+      transition:background 0.2s, transform 0.2s;
+      clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);
+    }
+    .btn-download:hover { background:var(--blue-light); transform:translateY(-2px); }
+    .btn-download svg { width:18px; height:18px; stroke:currentColor; fill:none; stroke-width:2.5; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0; }
+    .download-note { font-size:0.8rem; color:var(--text-muted); margin-top:0.75rem; margin-bottom:0; }
+
+    .upgrade-box {
+      background:var(--navy-light); border:1px solid rgba(74,158,222,0.15);
+      padding:1.5rem; margin:1.5rem 0; text-align:left;
+    }
+    .upgrade-box h3 { font-family:'Barlow Condensed',sans-serif; font-size:0.8rem; letter-spacing:0.2em; text-transform:uppercase; color:var(--blue); margin-bottom:0.75rem; }
+    .upgrade-box p { font-size:0.9rem; margin-bottom:1rem; }
+    .btn-upgrade {
+      display:inline-block; padding:0.6rem 1.5rem;
+      background:transparent; color:var(--blue-light);
+      border:1px solid var(--blue); text-decoration:none;
+      font-family:'Barlow Condensed',sans-serif; font-size:0.9rem;
+      letter-spacing:0.1em; text-transform:uppercase;
+      transition:background 0.2s, color 0.2s;
+    }
+    .btn-upgrade:hover { background:var(--blue); color:var(--navy); }
+
+    .divider { border:none; border-top:1px solid rgba(74,158,222,0.15); margin:2rem 0; }
+    .btn-home {
+      display:inline-block; padding:0.9rem 2.5rem;
+      background:var(--red); color:var(--white); text-decoration:none;
+      font-family:'Barlow Condensed',sans-serif; font-weight:700;
+      font-size:1rem; letter-spacing:0.15em; text-transform:uppercase;
+      transition:background 0.2s, transform 0.2s;
+      clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);
+    }
+    .btn-home:hover { background:var(--red-bright); transform:translateY(-2px); }
+    .email-note { font-size:0.85rem; color:var(--text-muted); margin-top:1.5rem; }
+    .email-note a { color:var(--blue-light); text-decoration:none; }
+
+    footer { background:#080f17; padding:1.5rem 2rem; text-align:center; border-top:1px solid rgba(74,158,222,0.15); }
+    footer p { color:var(--text-muted); font-size:0.8rem; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-brand-name">CG PERFORMANCE TRAINING</a>
+</nav>
+
+<main>
+  <div class="card">
+    <div class="icon">
+      <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <span class="tag">Starter Kit — Payment Confirmed</span>
+    <h1>Your Kit<br><span>Is Ready.</span></h1>
+    <p>Payment confirmed — your <span class="highlight">CG Performance Training Starter Kit</span> is ready to download. Everything you need to start training smart is right here.</p>
+
+    <div class="download-box">
+      <h3>Download Your Starter Kit</h3>
+      <p>Your personalised fitness plan — click below to download your PDF.</p>
+      <a href="starter-kit.pdf" download="CG-Performance-Starter-Kit.pdf" class="btn-download">
+        <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download PDF
+      </a>
+      <p class="download-note">Having trouble? Email us and we'll send it directly to you.</p>
+    </div>
+
+    <div class="upgrade-box">
+      <h3>Ready For More?</h3>
+      <p>The Starter Kit is just the beginning. When you're ready to take your training to the next level, explore full coaching with Charlie.</p>
+      <a href="index.html#products" class="btn-upgrade">View Coaching Packages</a>
+    </div>
+
+    <hr class="divider">
+    <a href="index.html" class="btn-home">Back to Home</a>
+    <p class="email-note">Questions? <a href="mailto:cgperformancetraining@outlook.com">cgperformancetraining@outlook.com</a></p>
+  </div>
+</main>
+
+<footer>
+  <p>&copy; <script>document.write(new Date().getFullYear())</script> CG Performance Training. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
