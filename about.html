@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About Charlie | CG Performance Training</title>
+<meta name="description" content="The story behind CG Performance Training — how Charlie's personal 40kg transformation led to a coaching career built on discipline, routine, and purpose.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://cg-pt.co.uk/about.html">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RGV8CSK8HW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-RGV8CSK8HW');
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:#0d1b2a; --navy-mid:#162032; --navy-light:#1e2d40;
+    --blue:#4a9ede; --blue-light:#6db8f0;
+    --red:#c0392b; --red-bright:#e74c3c;
+    --silver:#b8c5d0; --white:#f0f4f8; --text-muted:#7a96b0;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family:'Barlow',sans-serif; background:var(--navy); color:var(--white); overflow-x:hidden; }
+  nav { position:fixed; top:0; width:100%; z-index:100; background:rgba(13,27,42,0.95); backdrop-filter:blur(10px); border-bottom:1px solid rgba(74,158,222,0.2); padding:0.75rem 2rem; display:flex; align-items:center; justify-content:space-between; }
+  nav img.logo { height:52px; width:auto; }
+  .nav-logo-group { display:flex; align-items:center; gap:0.75rem; text-decoration:none; }
+  .nav-brand-name { font-family:'Bebas Neue',sans-serif; font-size:1.3rem; letter-spacing:0.15em; color:var(--white); }
+  nav ul { list-style:none; display:flex; gap:2rem; }
+  nav ul li a { color:var(--silver); text-decoration:none; font-size:0.85rem; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; transition:color 0.2s; }
+  nav ul li a:hover, nav ul li a.active { color:var(--blue-light); }
+  .hamburger { display:none; flex-direction:column; justify-content:center; gap:5px; width:36px; height:36px; background:none; border:none; cursor:pointer; padding:4px; z-index:200; }
+  .hamburger span { display:block; width:100%; height:2px; background:var(--silver); border-radius:2px; transition:all 0.3s; transform-origin:center; }
+  .hamburger.active span:nth-child(1) { transform:translateY(7px) rotate(45deg); }
+  .hamburger.active span:nth-child(2) { opacity:0; transform:scaleX(0); }
+  .hamburger.active span:nth-child(3) { transform:translateY(-7px) rotate(-45deg); }
+  .mobile-nav { display:none; position:fixed; inset:0; background:rgba(13,27,42,0.98); backdrop-filter:blur(12px); z-index:150; flex-direction:column; align-items:center; justify-content:center; }
+  .mobile-nav.open { display:flex; }
+  .mobile-nav a { display:block; color:var(--silver); text-decoration:none; font-family:'Bebas Neue',sans-serif; font-size:2.2rem; letter-spacing:0.2em; text-transform:uppercase; padding:1rem 2rem; transition:color 0.2s; border-bottom:1px solid rgba(74,158,222,0.15); width:100%; text-align:center; }
+  .mobile-nav a:first-child { border-top:1px solid rgba(74,158,222,0.15); }
+  .mobile-nav a:hover { color:var(--blue-light); }
+  .mobile-nav-close {
+    position:absolute; top:1.25rem; right:1.5rem;
+    width:44px; height:44px; background:none;
+    border:1px solid rgba(74,158,222,0.35); color:var(--silver);
+    font-size:1.6rem; line-height:1; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition:all 0.2s; border-radius:0;
+  }
+  .mobile-nav-close:hover { color:var(--white); border-color:var(--blue); background:rgba(74,158,222,0.1); }
+  .page-hero { min-height:45vh; background:linear-gradient(135deg,#0d1b2a 0%,#162032 50%,#0d1b2a 100%); position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center; text-align:center; padding:8rem 2rem 4rem; }
+  .page-hero::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at 30% 50%,rgba(74,158,222,0.08) 0%,transparent 60%),radial-gradient(ellipse at 70% 50%,rgba(192,57,43,0.06) 0%,transparent 60%); }
+  .hero-grid { position:absolute; inset:0; opacity:0.03; background-image:repeating-linear-gradient(0deg,var(--blue) 0px,transparent 1px,transparent 60px),repeating-linear-gradient(90deg,var(--blue) 0px,transparent 1px,transparent 60px); }
+  .page-hero-content { position:relative; z-index:1; max-width:700px; margin:0 auto; }
+  .page-tag { font-family:'Barlow Condensed',sans-serif; font-size:0.85rem; letter-spacing:0.35em; text-transform:uppercase; color:var(--red-bright); margin-bottom:0.75rem; display:block; font-weight:600; }
+  .page-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(3rem,7vw,5.5rem); line-height:0.95; color:var(--white); margin-bottom:1rem; }
+  .page-title span { color:var(--blue); }
+  .page-sub { color:var(--silver); font-size:1.1rem; line-height:1.7; font-weight:300; }
+  .content-section { padding:5rem 2rem; }
+  .container { max-width:1100px; margin:0 auto; }
+  .transformation-left { order: 2; }
+  .about-text-block { order: 1; }
+  .transformation-grid { display:grid; grid-template-columns:1fr 1fr; gap:3rem; align-items:start; }
+  .about-photo-wrap { position:relative; }
+  .about-photo-wrap::before { content:''; position:absolute; top:-12px; left:-12px; right:12px; bottom:12px; border:2px solid var(--blue); opacity:0.4; pointer-events:none; }
+  .about-photo-wrap::after { content:''; position:absolute; top:12px; left:12px; right:-12px; bottom:-12px; border:2px solid var(--red); opacity:0.3; pointer-events:none; }
+  .photo-placeholder { width:100%; aspect-ratio:3/4; background:var(--navy-light); border:2px dashed rgba(74,158,222,0.3); display:flex; align-items:center; justify-content:center; color:var(--text-muted); font-size:0.9rem; text-align:center; padding:2rem; }
+  .section-tag { font-family:'Barlow Condensed',sans-serif; font-size:0.8rem; letter-spacing:0.35em; text-transform:uppercase; color:var(--red-bright); margin-bottom:0.75rem; font-weight:600; display:block; }
+  .section-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(2.2rem,4vw,3.2rem); line-height:1; color:var(--white); margin-bottom:1rem; }
+  .section-title span { color:var(--blue); }
+  .divider { width:60px; height:3px; background:linear-gradient(90deg,var(--red),var(--blue)); margin-bottom:1.75rem; }
+  .about-text-block p { color:var(--silver); line-height:1.85; margin-bottom:1.25rem; font-size:1.05rem; }
+  .about-text-block p:last-child { margin-bottom:0; }
+  .highlight { color:var(--white); font-weight:600; }
+  .stats-row { display:flex; gap:1.5rem; margin:2rem 0; flex-wrap:wrap; }
+  .stat { background:var(--navy-light); border:1px solid rgba(74,158,222,0.2); padding:1.25rem 1.5rem; text-align:center; flex:1; min-width:100px; }
+  .stat-num { font-family:'Bebas Neue',sans-serif; font-size:2.5rem; color:var(--blue); line-height:1; }
+  .stat-label { font-family:'Barlow Condensed',sans-serif; font-size:0.75rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--text-muted); margin-top:0.25rem; }
+  .benefits-section { background:var(--navy-mid); padding:5rem 2rem; }
+  .benefits-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:2rem; margin-top:2.5rem; }
+  .benefit-card { background:var(--navy-light); border:1px solid rgba(74,158,222,0.15); padding:2rem; }
+  .benefit-icon { font-size:2rem; margin-bottom:1rem; display:block; }
+  .benefit-title { font-family:'Bebas Neue',sans-serif; font-size:1.4rem; letter-spacing:0.05em; color:var(--white); margin-bottom:0.5rem; }
+  .benefit-text { color:var(--silver); font-size:0.95rem; line-height:1.7; }
+  .cta-section { padding:5rem 2rem; text-align:center; }
+  .btn-primary { display:inline-block; padding:1rem 2.5rem; background:var(--red); color:white; text-decoration:none; font-family:'Barlow Condensed',sans-serif; font-size:1.1rem; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; transition:all 0.2s; clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%); }
+  .btn-primary:hover { background:var(--red-bright); transform:translateY(-2px); }
+  .btn-secondary { display:inline-block; padding:1rem 2.5rem; background:transparent; color:var(--blue-light); text-decoration:none; font-family:'Barlow Condensed',sans-serif; font-size:1.1rem; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; border:2px solid var(--blue); transition:all 0.2s; clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%); margin-left:1rem; }
+  .btn-secondary:hover { background:var(--blue); color:white; }
+  .social-section { padding:4rem 2rem; background:var(--navy-mid); text-align:center; }
+  .social-icons { display:flex; align-items:center; justify-content:center; gap:1.5rem; flex-wrap:wrap; margin-top:2rem; }
+  .social-icon { display:flex; align-items:center; justify-content:center; width:48px; height:48px; border:1px solid rgba(74,158,222,0.35); color:var(--silver); transition:all 0.2s; text-decoration:none; }
+  .social-icon svg { width:22px; height:22px; fill:currentColor; }
+  .social-icon:hover { transform:translateY(-3px); }
+  .social-icon.ig:hover { color:#e1306c; border-color:#e1306c; }
+  .social-icon.yt:hover { color:#ff0000; border-color:#ff0000; }
+  .social-icon.tt:hover { color:#69c9d0; border-color:#69c9d0; }
+  .social-divider { width:1px; height:48px; background:rgba(74,158,222,0.2); }
+  .applied-link { display:inline-flex; align-items:center; gap:0.6rem; text-decoration:none; color:var(--text-muted); font-size:0.85rem; transition:color 0.2s; padding:0.5rem; }
+  .applied-link:hover { color:var(--silver); }
+  .applied-link img { height:28px; width:auto; opacity:0.75; }
+  .applied-link:hover img { opacity:1; }
+  footer { background:#080f17; padding:2rem; text-align:center; border-top:1px solid rgba(74,158,222,0.15); }
+  .footer-links { display:flex; justify-content:center; gap:2rem; margin-bottom:1rem; flex-wrap:wrap; }
+  .footer-links a { color:var(--text-muted); text-decoration:none; font-size:0.85rem; transition:color 0.2s; }
+  .footer-links a:hover { color:var(--blue-light); }
+  .footer-copy { color:var(--text-muted); font-size:0.8rem; }
+  @media (max-width: 768px) {
+    .transformation-grid { grid-template-columns: 1fr; }
+    .transformation-left { order: 1; }
+    .about-text-block { order: 2; }
+    .hamburger { display:flex; }
+    nav ul { display:none; }
+    .btn-secondary { margin-left:0; margin-top:0.75rem; display:block; }
+    .benefits-grid { grid-template-columns:1fr; }
+  }
+
+  /* BEFORE/AFTER COMPARISON SLIDER */
+  .comparison-slider {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    cursor: ew-resize;
+    user-select: none;
+    touch-action: pan-y;
+    aspect-ratio: 3/4;
+    background: var(--navy-light);
+  }
+  .comparison-before { clip-path: inset(0 50% 0 0); z-index: 2; }
+  .comparison-before,
+  .comparison-after {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+  }
+  .comparison-before img,
+  .comparison-after img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+    pointer-events: none;
+    -webkit-user-drag: none;
+  }
+  .comparison-handle {
+    position: absolute;
+    top: 0; bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 10;
+    pointer-events: none;
+  }
+  .handle-line {
+    flex: 1;
+    width: 2px;
+    background: rgba(255,255,255,0.9);
+    box-shadow: 0 0 6px rgba(0,0,0,0.5);
+  }
+  .handle-circle {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.5);
+    flex-shrink: 0;
+  }
+  .handle-circle svg {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: #222;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .comparison-label {
+    position: absolute;
+    top: 1rem;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.75rem;
+    background: rgba(0,0,0,0.65);
+    color: white;
+    pointer-events: none;
+  }
+  .label-before { right: 1rem; }
+  .label-after { left: 1rem; }
+  .slider-intro {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  .slider-hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--silver);
+    font-size: 0.95rem;
+    letter-spacing: 0.05em;
+    background: rgba(74,158,222,0.08);
+    border: 1px solid rgba(74,158,222,0.25);
+    padding: 0.6rem 1.25rem;
+  }
+  .slider-hint svg {
+    width: 18px;
+    height: 18px;
+    stroke: var(--blue);
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    flex-shrink: 0;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo-group">
+    <img src="images/logo.png" class="logo" alt="CG Performance Training">
+    <span class="nav-brand-name">CG PERFORMANCE TRAINING</span>
+  </a>
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html" class="active">About</a></li>
+    <li><a href="index.html#products">Packages</a></li>
+    <li><a href="index.html#inquiry">Enquire</a></li>
+    <li><a href="index.html#booking">Book</a></li>
+    <li><a href="index.html#location">Location</a></li>
+  </ul>
+  <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-nav" id="mobileNav">
+  <button class="mobile-nav-close" id="mobileNavClose">&times;</button>
+  <a href="index.html">Home</a>
+  <a href="about.html">About</a>
+  <a href="index.html#products">Packages</a>
+  <a href="index.html#inquiry">Enquire</a>
+  <a href="index.html#booking">Book</a>
+  <a href="index.html#location">Location</a>
+</div>
+
+<section class="page-hero">
+  <div class="hero-grid"></div>
+  <div class="page-hero-content">
+    <span class="page-tag">My Story</span>
+    <h1 class="page-title">About <span>Charlie</span></h1>
+    <p class="page-sub">From 108kg to a life built on discipline, purpose, and helping others transform.</p>
+  </div>
+</section>
+
+<section class="content-section">
+  <div class="container">
+    <div class="transformation-grid">
+      <div class="about-text-block">
+        <span class="section-tag">The Journey</span>
+        <h2 class="section-title">108kg to <span>Transformation</span></h2>
+        <div class="divider"></div>
+        <p>Four years ago, I was in a completely different place. At my heaviest, I was 108kg — and for the first time, I made the decision to take my health seriously. I started training, not knowing much, not having a clue what I was doing, but knowing I had to make a change.</p>
+        <p>What followed was a journey that changed everything. I have lost over 40kg, but the number on the scales is just one part of the story. The real transformation happened in my mindset. Training gave me something I did not realise I was missing — <strong class="highlight">discipline, routine, and purpose.</strong></p>
+        <p>Every early morning session, every rep, every choice in the kitchen added up. I stopped drifting through my days and started building them with intention. That structure bled into every corner of my life — my work ethic, my sleep, my energy, my relationships.</p>
+        <div class="stats-row">
+          <div class="stat">
+            <div class="stat-num">108<span style="font-size:1.5rem">kg</span></div>
+            <div class="stat-label">Starting Weight</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">40+<span style="font-size:1.5rem">kg</span></div>
+            <div class="stat-label">Lost</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num">4</div>
+            <div class="stat-label">Years Training</div>
+          </div>
+        </div>
+        <p>The social change was something I never expected. I was never shy, but losing the weight and feeling strong in my own skin gave me a confidence I had not felt before. I became more outgoing, more driven, more comfortable putting myself out there. The gym taught me that hard things are worth doing — and that quiet consistency is more powerful than motivation.</p>
+        <p>That is why I became a coach. I know what it is like to start from scratch. I know what it is like to feel lost, to feel like it is not working, and to push through anyway. I built CG Performance Training because I genuinely believe that what training did for my life, it can do for yours.</p>
+      </div>
+      <div class="transformation-left">
+        <div class="slider-intro">
+          <h2 class="section-title" style="margin-bottom:0.75rem;">My <span>Transformation</span></h2>
+          <p class="slider-hint">
+            <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/><polyline points="8 5 1 12 8 19"/></svg>
+            Drag the slider to reveal my transformation
+          </p>
+        </div>
+        <div class="comparison-slider" id="comparisonSlider">
+          <div class="comparison-after">
+            <img src="images/after.jpg" alt="Charlie after - 40kg+ transformation">
+            <span class="comparison-label label-after">AFTER</span>
+          </div>
+          <div class="comparison-before">
+            <img src="images/before.jpg" alt="Charlie before - starting point at 108kg">
+            <span class="comparison-label label-before">BEFORE</span>
+          </div>
+          <div class="comparison-handle" id="comparisonHandle">
+            <div class="handle-line"></div>
+            <div class="handle-circle">
+              <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/><polyline points="9 18 15 12 9 6"/></svg>
+            </div>
+            <div class="handle-line"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="benefits-section">
+  <div class="container">
+    <span class="section-tag">What Training Gives You</span>
+    <h2 class="section-title">More Than <span>Fitness</span></h2>
+    <div class="divider"></div>
+    <div class="benefits-grid">
+      <div class="benefit-card">
+        <span class="benefit-icon">&#127919;</span>
+        <div class="benefit-title">Discipline</div>
+        <p class="benefit-text">Showing up when you do not feel like it. That habit built in the gym becomes the standard you hold yourself to everywhere else. The discipline you build in training transfers to every area of your life.</p>
+      </div>
+      <div class="benefit-card">
+        <span class="benefit-icon">&#128260;</span>
+        <div class="benefit-title">Routine &amp; Structure</div>
+        <p class="benefit-text">A consistent training schedule gives your days shape. Sleep, nutrition, energy — everything starts to align when you have a structure to build around. Routine is not restrictive; it is freeing.</p>
+      </div>
+      <div class="benefit-card">
+        <span class="benefit-icon">&#128161;</span>
+        <div class="benefit-title">Purpose</div>
+        <p class="benefit-text">Having a goal you are working towards changes how you move through the world. Progress in the gym creates momentum in everything else. You stop coasting and start building.</p>
+      </div>
+      <div class="benefit-card">
+        <span class="benefit-icon">&#129309;</span>
+        <div class="benefit-title">Confidence &amp; Drive</div>
+        <p class="benefit-text">When you feel strong, you carry yourself differently. You become more outgoing, more confident socially, and more willing to back yourself in situations you would have avoided before. It changes who you are.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="social-section">
+  <div class="container">
+    <span class="section-tag">Find Me Online</span>
+    <h2 class="section-title">Follow the <span>Journey</span></h2>
+    <div class="divider" style="margin:0 auto 0.5rem;"></div>
+    <p style="color:var(--text-muted);font-size:0.95rem;margin-bottom:0;">Training content, progress updates, and daily motivation.</p>
+    <div class="social-icons">
+      <a href="https://www.instagram.com/c.g_performancetraining?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener" aria-label="Instagram" class="social-icon ig">
+        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      </a>
+      <a href="https://youtube.com/@geddesgains?si=pfUgJtk4xDrOz9Xn" target="_blank" rel="noopener" aria-label="YouTube" class="social-icon yt">
+        <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+      </a>
+      <a href="https://www.tiktok.com/@charlieg04?is_from_webapp=1&sender_device=pc" target="_blank" rel="noopener" aria-label="TikTok" class="social-icon tt">
+        <svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z"/></svg>
+      </a>
+      <div class="social-divider"></div>
+      <a href="https://appliednutrition.uk/?ref=nicmokel" target="_blank" rel="noopener" class="applied-link" aria-label="Applied Nutrition Partner">
+        <img src="https://appliednutrition.uk/cdn/shop/files/AN_Full_Logo_White.png?v=1706271191" alt="Applied Nutrition" onerror="this.style.display='none'">
+        <span>Applied Nutrition Partner</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="container">
+    <span class="section-tag">Ready To Start?</span>
+    <h2 class="section-title">Let's Build Your <span>Transformation</span></h2>
+    <div class="divider" style="margin:0 auto 1.5rem;"></div>
+    <p style="color:var(--silver);max-width:550px;margin:0 auto 2rem;line-height:1.7;">If my story resonates with you, let's talk. Whether you want to lose weight, build strength, or just start somewhere — I've been where you are. I know what it takes.</p>
+    <a href="index.html#booking" class="btn-primary">Book a Free Call</a>
+    <a href="index.html#products" class="btn-secondary">View Packages</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="index.html#products">Packages</a>
+    <a href="index.html#inquiry">Enquire</a>
+    <a href="index.html#booking">Book a Call</a>
+    <a href="terms.html">Terms</a>
+    <a href="privacy.html">Privacy</a>
+    <a href="cookies.html">Cookies</a>
+  </div>
+  <p class="footer-copy">&copy; <script>document.write(new Date().getFullYear())</script> CG Performance Training. All rights reserved. Based in East Kilbride, Scotland.</p>
+</footer>
+
+<script>
+(function() {
+  var btn = document.getElementById('hamburgerBtn');
+  var closeBtn = document.getElementById('mobileNavClose');
+  var nav = document.getElementById('mobileNav');
+  if (!btn || !nav) return;
+  btn.addEventListener('click', function() {
+    btn.classList.toggle('active');
+    nav.classList.toggle('open');
+    document.body.style.overflow = nav.classList.contains('open') ? 'hidden' : '';
+  });
+  window.closeMobileNav = function() {
+    btn.classList.remove('active');
+    nav.classList.remove('open');
+    document.body.style.overflow = '';
+  };
+  if (closeBtn) { closeBtn.addEventListener('click', window.closeMobileNav); }
+  nav.querySelectorAll('a').forEach(function(a) { a.addEventListener('click', window.closeMobileNav); });
+})();
+</script>
+
+<script>
+(function() {
+  var slider = document.getElementById('comparisonSlider');
+  if (!slider) return;
+  var handle = document.getElementById('comparisonHandle');
+  var before = slider.querySelector('.comparison-before');
+  var isDragging = false;
+
+  function setPosition(clientX) {
+    var rect = slider.getBoundingClientRect();
+    var pct = Math.max(0, Math.min(100, (clientX - rect.left) / rect.width * 100));
+    before.style.clipPath = 'inset(0 ' + (100 - pct) + '% 0 0)';
+    handle.style.left = pct + '%';
+  }
+
+  slider.addEventListener('mousedown', function(e) {
+    isDragging = true;
+    setPosition(e.clientX);
+    e.preventDefault();
+  });
+  document.addEventListener('mousemove', function(e) {
+    if (isDragging) setPosition(e.clientX);
+  });
+  document.addEventListener('mouseup', function() { isDragging = false; });
+  slider.addEventListener('touchstart', function(e) {
+    isDragging = true;
+    setPosition(e.touches[0].clientX);
+  }, {passive: true});
+  slider.addEventListener('touchmove', function(e) {
+    if (isDragging) {
+      setPosition(e.touches[0].clientX);
+      e.preventDefault();
+    }
+  }, {passive: false});
+  slider.addEventListener('touchend', function() { isDragging = false; });
+})();
+</script>
+</body>
+</html>

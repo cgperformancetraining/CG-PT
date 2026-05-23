@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RGV8CSK8HW"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-RGV8CSK8HW');
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Terms &amp; Conditions | CG Performance Training</title>
@@ -32,11 +40,8 @@
     padding: 0.9rem 2rem;
     display: flex; align-items: center; justify-content: space-between;
   }
-  .nav-logo {
-    font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem;
-    color: var(--blue); text-decoration: none; letter-spacing: 0.08em;
-  }
-  .nav-logo span { color: var(--white); }
+  .nav-logo-group { display:flex; align-items:center; gap:0.75rem; text-decoration:none; }
+  nav img.logo { height:52px; width:auto; }
   nav ul { list-style: none; display: flex; gap: 2rem; }
   nav ul li a {
     color: var(--silver); text-decoration: none; font-size: 0.85rem;
@@ -102,19 +107,68 @@
   @media (max-width: 768px) {
     nav ul { display: none; }
   }
+
+  /* HAMBURGER & MOBILE NAV */
+  .hamburger {
+    display: none; flex-direction: column; justify-content: center; gap: 5px;
+    width: 36px; height: 36px; background: none; border: none; cursor: pointer; padding: 4px; z-index: 200;
+  }
+  .hamburger span { display: block; width: 100%; height: 2px; background: var(--silver); border-radius: 2px; transition: all 0.3s; transform-origin: center; }
+  .hamburger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.active span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  .hamburger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  .mobile-nav { display: none; position: fixed; inset: 0; background: rgba(13,27,42,0.98); backdrop-filter: blur(12px); z-index: 150; flex-direction: column; align-items: center; justify-content: center; }
+  .mobile-nav.open { display: flex; }
+  .mobile-nav a { display: block; color: var(--silver); text-decoration: none; font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; letter-spacing: 0.2em; text-transform: uppercase; padding: 1rem 2rem; transition: color 0.2s; border-bottom: 1px solid rgba(74,158,222,0.15); width: 100%; text-align: center; }
+  .mobile-nav a:first-child { border-top: 1px solid rgba(74,158,222,0.15); }
+  .mobile-nav a:hover { color: var(--blue-light); }
+  @media (max-width: 768px) { .hamburger { display: flex; } nav ul { display: none; } }
+
+  .mobile-nav-close {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.5rem;
+    width: 44px;
+    height: 44px;
+    background: none;
+    border: 1px solid rgba(74,158,222,0.35);
+    color: var(--silver);
+    font-size: 1.6rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .mobile-nav-close:hover {
+    color: var(--white);
+    border-color: var(--blue);
+    background: rgba(74,158,222,0.1);
+  }
 </style>
 </head>
 <body>
 
 <nav>
-  <a href="index.html" class="nav-logo">CG <span>Performance</span></a>
+  <a href="index.html" class="nav-logo-group">
+    <img src="images/logo.png" alt="CG Performance Training" class="logo">
+  </a>
   <ul>
     <li><a href="index.html#welcome">Home</a></li>
     <li><a href="index.html#products">Packages</a></li>
     <li><a href="index.html#inquiry">Enquire</a></li>
     <li><a href="index.html#booking">Book</a></li>
   </ul>
+  <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu"><span></span><span></span><span></span></button>
 </nav>
+<div class="mobile-nav" id="mobileNav">
+  <button class="mobile-nav-close" id="mobileNavClose">&times;</button>
+  <a href="index.html#welcome" onclick="closeMobileNav()">Home</a>
+  <a href="index.html#products" onclick="closeMobileNav()">Packages</a>
+  <a href="index.html#inquiry" onclick="closeMobileNav()">Enquire</a>
+  <a href="index.html#booking" onclick="closeMobileNav()">Book</a>
+</div>
 
 <div class="page-hero">
   <span class="tag">Legal</span>
@@ -201,7 +255,7 @@
     <a href="cookies.html">Cookie Policy</a>
     <a href="mailto:cgperformancetraining@outlook.com">Contact</a>
   </div>
-  <p class="footer-copy">© 2026 CG Performance Training. All rights reserved. Based in East Kilbride, Scotland.</p>
+  <p class="footer-copy">© <script>document.write(new Date().getFullYear())</script> CG Performance Training. All rights reserved. Based in East Kilbride, Scotland.</p>
 </footer>
 
 </body>
