@@ -11,6 +11,8 @@
   </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="images/CG%20PT%20Favicon.png">
+  <link rel="apple-touch-icon" href="images/CG%20PT%20Favicon.png">
   <title>Personal Trainer East Kilbride | CG Performance Training</title>
   <meta name="description" content="CG Performance Training — expert personal training in East Kilbride, Scotland. In-person coaching at JD Gyms East Kilbride and online programmes. Book a free consultation today.">
   <meta name="keywords" content="personal trainer East Kilbride, personal training East Kilbride, fitness coach East Kilbride, gym coach East Kilbride, online personal trainer Scotland, CG Performance Training">
@@ -115,6 +117,7 @@
     display:flex;
     align-items:center;
     gap:0.75rem;
+    text-decoration:none;
   }
   .nav-brand-name {
     font-family:'Bebas Neue',sans-serif;
@@ -831,10 +834,10 @@
 
 <!-- NAV -->
 <nav>
-  <div class="nav-logo-group">
+  <a href="index.html" class="nav-logo-group">
     <img src="images/logo.png" alt="CG Performance Training" class="logo">
     <span class="nav-brand-name">CG PERFORMANCE TRAINING</span>
-  </div>
+  </a>
   <ul>
     <li><a href="#welcome">Home</a></li>
     <li><a href="about.html">About</a></li>
@@ -1242,7 +1245,7 @@ function buyProduct(product) {
 </script>
 
 <!-- Cookie consent banner -->
-<div id="cookieBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;background:#0d1b2a;border-top:2px solid #4a9ede;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:'Barlow',sans-serif;">
+<div id="cookieBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;background:#0d1b2a;border-top:2px solid #4a9ede;padding:16px 24px;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:'Barlow',sans-serif;">
   <p style="margin:0;color:#b8c5d0;font-size:14px;flex:1;min-width:200px;">
     This site uses cookies to improve your experience. By continuing to browse, you agree to our use of cookies in accordance with UK GDPR.
     <a href="cookies.html" style="color:#4a9ede;text-decoration:underline;margin-left:4px;">Learn more</a>
@@ -1255,19 +1258,19 @@ function buyProduct(product) {
 
 <script>
 (function() {
-  var consent = sessionStorage.getItem('cgpt_cookie_consent');
+  var consent = localStorage.getItem('cgpt_cookie_consent');
   if (!consent) {
     document.getElementById('cookieBanner').style.display = 'flex';
   }
 })();
 
 function acceptCookies() {
-  sessionStorage.setItem('cgpt_cookie_consent', 'accepted');
+  localStorage.setItem('cgpt_cookie_consent', 'accepted');
   document.getElementById('cookieBanner').style.display = 'none';
 }
 
 function declineCookies() {
-  sessionStorage.setItem('cgpt_cookie_consent', 'declined');
+  localStorage.setItem('cgpt_cookie_consent', 'declined');
   document.getElementById('cookieBanner').style.display = 'none';
 }
 </script>

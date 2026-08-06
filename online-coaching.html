@@ -11,6 +11,8 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="images/CG%20PT%20Favicon.png">
+  <link rel="apple-touch-icon" href="images/CG%20PT%20Favicon.png">
 <title>Online Personal Trainer Scotland | CG Performance Training — £170/month</title>
 <meta name="description" content="Expert online personal training from CG Performance Training, East Kilbride. Monthly bespoke programme with workout and nutrition guidance — train anywhere in Scotland for £170/month.">
 <meta name="keywords" content="online personal trainer Scotland, online fitness coach Scotland, remote personal trainer East Kilbride, online coaching South Lanarkshire, online personal training Glasgow, CG Performance Training online">
@@ -139,9 +141,109 @@
   }
   .cta-box .price-big { font-family:'Bebas Neue',sans-serif; font-size:4rem; color:var(--blue); }
   .cta-box p { font-size:1rem; color:var(--text-muted); margin-bottom:1.5rem; }
-  footer { background:#080f17; padding:2rem; text-align:center; border-top:1px solid rgba(74,158,222,0.15); }
-  footer img { height:50px; margin-bottom:1rem; opacity:0.8; }
-  footer p { color:var(--text-muted); font-size:0.8rem; }
+  /* FOOTER */
+  footer {
+    background: #080f17;
+    padding: 3rem 2rem;
+    border-top: 1px solid rgba(74,158,222,0.15);
+    text-align: center;
+  }
+  footer img {
+    height: 60px;
+    margin-bottom: 1.5rem;
+    opacity: 0.85;
+  }
+  .footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .footer-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--blue-light); }
+  .footer-copy {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+  }
+  .footer-applied { margin: 1rem 0; }
+  .applied-nutrition-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    text-decoration: none;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    transition: color 0.2s;
+  }
+  .applied-nutrition-link:hover { color: var(--silver); }
+  .applied-nutrition-link img {
+    height: 28px;
+    width: auto;
+    opacity: 0.75;
+  }
+  .applied-nutrition-link:hover img { opacity: 1; }
+
+  .footer-social {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .footer-social a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 50%;
+    color: var(--text-muted);
+    transition: color 0.2s, border-color 0.2s, transform 0.2s;
+  }
+  .footer-social a:hover { transform: translateY(-3px); }
+  .footer-social a.ig:hover {
+    color: #e1306c;
+    border-color: #e1306c;
+  }
+  .footer-social a.yt:hover {
+    color: #ff0000;
+    border-color: #ff0000;
+  }
+  .footer-social a.tt:hover {
+    color: #69c9d0;
+    border-color: #69c9d0;
+  }
+  .footer-social svg {
+    width: 22px;
+    height: 22px;
+    fill: currentColor;
+  }
+  .btn-contact {
+    display: inline-block;
+    padding: 0.9rem 2.5rem;
+    background: var(--blue);
+    color: white;
+    text-decoration: none;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 2rem;
+    transition: background 0.2s;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  }
+  .btn-contact:hover { background: var(--blue-light); }
+
   @media(max-width:600px) { .features { grid-template-columns:1fr; } }
 </style>
 </head>
@@ -177,13 +279,78 @@
 </div>
 
 <footer>
-  <img src="images/logo.png" alt="CG Performance Training">
-  <p>© <script>document.write(new Date().getFullYear())</script> CG Performance Training · East Kilbride, Scotland</p>
+  <a href="index.html"><img src="images/logo.png" alt="CG Performance Training"></a>
+  <div>
+    <a href="mailto:cgperformancetraining@outlook.com" class="btn-contact">Contact Us</a>
+  </div>
+  <div class="footer-links">
+    <a href="index.html#welcome">Home</a>
+    <a href="index.html#about">About</a>
+    <a href="index.html#products">Packages</a>
+    <a href="index.html#inquiry">Enquire</a>
+    <a href="index.html#booking">Book a Call</a>
+    <a href="index.html#location">Location</a>
+    <a href="mailto:cgperformancetraining@outlook.com">Email Us</a>
+  </div>
+  <div class="footer-links" style="margin-top:1rem;gap:1.5rem;">
+    <a href="terms.html" style="font-size:0.75rem;">Terms &amp; Conditions</a>
+    <a href="privacy.html" style="font-size:0.75rem;">Privacy Policy</a>
+    <a href="cookies.html" style="font-size:0.75rem;">Cookie Policy</a>
+  </div>
+  <div class="footer-social">
+    <a href="https://www.instagram.com/c.g_performancetraining?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" rel="noopener" aria-label="Instagram" class="ig">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+    </a>
+    <a href="https://youtube.com/@geddesgains?si=pfUgJtk4xDrOz9Xn" target="_blank" rel="noopener" aria-label="YouTube" class="yt">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+    </a>
+    <a href="https://www.tiktok.com/@charlieg04?is_from_webapp=1&sender_device=pc" target="_blank" rel="noopener" aria-label="TikTok" class="tt">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.01-.06z"/></svg>
+    </a>
+  </div>
+  <div class="footer-applied">
+    <a href="https://appliednutrition.uk/?ref=nicmokel" target="_blank" rel="noopener" class="applied-nutrition-link" aria-label="Applied Nutrition Partner">
+      <img src="https://appliednutrition.uk/cdn/shop/files/AN_Full_Logo_White.png?v=1706271191" alt="Applied Nutrition" onerror="this.outerHTML='Applied Nutrition'">
+      <span>Use code <strong>CGPT20</strong> for discount</span>
+    </a>
+  </div>
+  <p class="footer-copy" style="margin-top:1rem;">© <script>document.write(new Date().getFullYear())</script> CG Performance Training. All rights reserved. Based in East Kilbride, Scotland.</p>
 </footer>
 
 <script>
 function buyNow() {
   window.location.href = "https://buy.stripe.com/fZudRb62xaIAde25At9Zm03";
+}
+</script>
+
+<!-- Cookie consent banner -->
+<div id="cookieBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9999;background:#0d1b2a;border-top:2px solid #4a9ede;padding:16px 24px;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;font-family:'Barlow',sans-serif;">
+  <p style="margin:0;color:#b8c5d0;font-size:14px;flex:1;min-width:200px;">
+    This site uses cookies to improve your experience. By continuing to browse, you agree to our use of cookies in accordance with UK GDPR.
+    <a href="cookies.html" style="color:#4a9ede;text-decoration:underline;margin-left:4px;">Learn more</a>
+  </p>
+  <div style="display:flex;gap:10px;flex-shrink:0;">
+    <button onclick="acceptCookies()" style="background:#4a9ede;color:#fff;border:none;padding:9px 20px;border-radius:4px;cursor:pointer;font-weight:600;font-size:14px;">Accept</button>
+    <button onclick="declineCookies()" style="background:transparent;color:#b8c5d0;border:1px solid #4a9ede;padding:9px 20px;border-radius:4px;cursor:pointer;font-size:14px;">Decline</button>
+  </div>
+</div>
+
+<script>
+(function() {
+  var consent = localStorage.getItem('cgpt_cookie_consent');
+  if (!consent) {
+    document.getElementById('cookieBanner').style.display = 'flex';
+  }
+})();
+
+function acceptCookies() {
+  localStorage.setItem('cgpt_cookie_consent', 'accepted');
+  document.getElementById('cookieBanner').style.display = 'none';
+}
+
+function declineCookies() {
+  localStorage.setItem('cgpt_cookie_consent', 'declined');
+  document.getElementById('cookieBanner').style.display = 'none';
 }
 </script>
 </body>
