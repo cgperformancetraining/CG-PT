@@ -856,7 +856,7 @@
   <button class="mobile-nav-close" id="mobileNavClose">&times;</button>
   <a href="#welcome" onclick="closeMobileNav()">Home</a>
   <a href="about.html" onclick="closeMobileNav()">About</a>
-  <a href="#products" onclick="closeMobileNav()">Packages</a>
+  <a href="packages.html" onclick="closeMobileNav()">Packages</a>
   <a href="#inquiry" onclick="closeMobileNav()">Enquire</a>
   <a href="#booking" onclick="closeMobileNav()">Book</a>
   <a href="#location" onclick="closeMobileNav()">Location</a>
@@ -899,7 +899,7 @@
             <div class="stat-label">Coaching</div>
           </div>
           <div class="stat">
-            <div class="stat-num">3</div>
+            <div class="stat-num">6</div>
             <div class="stat-label">Packages</div>
           </div>
         </div>
@@ -916,50 +916,45 @@
     <h2 class="section-title">Choose Your <span>Package</span></h2>
     <div class="divider"></div>
     <div class="products-grid">
-      <!-- Starter Kit -->
+      <!-- Foundation -->
       <div class="product-card">
-        <div class="product-icon">🚀</div>
-        <div class="product-name">Starter Kit</div>
-        <div class="product-price">£25</div>
-        <div class="product-price-note">One-time payment</div>
-        <p class="product-desc">Everything you need to get started on your fitness journey. Includes a personalised workout plan, nutrition guidance, and goal-setting framework.</p>
-        <div class="card-buttons">
-          <a href="starter-kit.html" class="btn-learn">Learn More</a>
-          <button class="btn-buy" onclick="buyProduct('starter-kit', 2500)">Buy Now</button>
-        </div>
-      </div>
-      <!-- 1-1 Coaching -->
-      <div class="product-card featured">
         <div class="product-icon">💪</div>
-        <div class="product-name">1-1 In Person Coaching</div>
-        <div class="product-price-note" style="margin:0.75rem 0 0.25rem; font-size:0.75rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--text-muted); font-weight:600;">Two plans available</div>
-        <div style="display:flex; gap:0.75rem; justify-content:center; margin-bottom:1.25rem; flex-wrap:wrap;">
-          <div onclick="window.location.href='in-person-coaching.html?plan=4'" class="index-plan-pill">
-            <div style="font-family:'Bebas Neue',sans-serif; font-size:1.6rem; color:var(--blue);">£130</div>
-            <div style="font-size:0.72rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em;">4 Sessions</div>
-          </div>
-          <div onclick="window.location.href='in-person-coaching.html?plan=12'" class="index-plan-pill">
-            <div style="font-family:'Bebas Neue',sans-serif; font-size:1.6rem; color:var(--blue);">£310</div>
-            <div style="font-size:0.72rem; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.08em;">12 Sessions</div>
-          </div>
-        </div>
-        <p class="product-desc">Train face-to-face with expert guidance. Fully bespoke programming, real-time form coaching, and accountability to maximise every session.</p>
+        <div class="product-name">Foundation</div>
+        <div class="product-price">£165</div>
+        <div class="product-price-note">per month</div>
+        <p class="product-desc">1 session a week plus your personalised programme in the app. Expert hands-on coaching with the structure to keep progressing between sessions.</p>
         <div class="card-buttons">
-          <a href="in-person-coaching.html" class="btn-learn">Learn More</a>
+          <a href="foundation.html" class="btn-learn">Learn More</a>
+          <button class="btn-buy" onclick="buyProduct('foundation')">Buy Now</button>
         </div>
       </div>
-      <!-- Online Coaching -->
+      <!-- Core -->
+      <div class="product-card featured">
+        <div class="product-icon">🔥</div>
+        <div class="product-name">Core</div>
+        <div class="product-price">£299</div>
+        <div class="product-price-note">per month</div>
+        <p class="product-desc">2 sessions a week, your programme in the app, and personalised nutrition targets — training and nutrition working together.</p>
+        <div class="card-buttons">
+          <a href="core.html" class="btn-learn">Learn More</a>
+          <button class="btn-buy" onclick="buyProduct('core')">Buy Now</button>
+        </div>
+      </div>
+      <!-- Online -->
       <div class="product-card">
         <div class="product-icon">📱</div>
-        <div class="product-name">Online Coaching</div>
-        <div class="product-price">£170</div>
+        <div class="product-name">Online</div>
+        <div class="product-price">£79</div>
         <div class="product-price-note">per month</div>
-        <p class="product-desc">World-class coaching from anywhere. Custom training plans, nutrition support, weekly check-ins, and direct messaging access to your coach.</p>
+        <p class="product-desc">Your personalised programme, every workout tracked in the app, and a weekly check-in to keep you moving forward.</p>
         <div class="card-buttons">
-          <a href="online-coaching.html" class="btn-learn">Learn More</a>
-          <button class="btn-buy" onclick="buyProduct('online-coaching', 17000)">Buy Now</button>
+          <a href="online.html" class="btn-learn">Learn More</a>
+          <button class="btn-buy" onclick="buyProduct('online')">Buy Now</button>
         </div>
       </div>
+    </div>
+    <div style="text-align:center; margin-top:2.5rem;">
+      <a href="packages.html" class="btn-primary">View All Packages</a>
     </div>
   </div>
 </section>
@@ -1233,8 +1228,11 @@ document.getElementById('inquiryForm').addEventListener('submit', async function
 
 // Stripe buy now
 var stripeLinks = {
-  'in-person-coaching': 'https://buy.stripe.com/14A7sN8aFaIA8XM4wp9Zm06',
-  'online-coaching': 'https://buy.stripe.com/fZudRb62xaIAde25At9Zm03',
+  'foundation': 'https://buy.stripe.com/fZu3cx62x7wo7TIaUN9Zm0e',
+  'core': 'https://buy.stripe.com/9B69AV9eJdUM5LAaUN9Zm0d',
+  'performance': 'https://buy.stripe.com/aFa9AVaiN6sk8XM3sl9Zm0c',
+  'online': 'https://buy.stripe.com/5kQcN776B2c40rg3sl9Zm0b',
+  'online-plus': 'https://buy.stripe.com/aFa8wR62xbME2zo2oh9Zm0a',
   'starter-kit': 'https://buy.stripe.com/3cI6oJez3bMEa1Qd2V9Zm08'
 };
 
