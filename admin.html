@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/png" href="images/CG%20PT%20Favicon.png">
+<title>Admin | CG Performance Training</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0d1b2a; --navy-mid: #162032; --navy-light: #1e2d40;
+    --blue: #4a9ede; --blue-light: #6db8f0; --red: #c0392b; --red-bright: #e74c3c;
+    --green: #3fb27f; --silver: #b8c5d0; --white: #f0f4f8; --text-muted: #7a96b0;
+    --line: rgba(74,158,222,0.2);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Barlow', sans-serif; background: var(--navy); color: var(--white); min-height: 100vh; }
+  button { font-family: inherit; cursor: pointer; }
+  [hidden] { display: none !important; }
+
+  header {
+    position: sticky; top: 0; z-index: 10; display: flex; align-items: center; justify-content: space-between;
+    padding: 0.8rem 1.5rem; background: rgba(13,27,42,0.97); border-bottom: 1px solid var(--line);
+  }
+  header img { height: 44px; }
+  header .title { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 0.08em; color: var(--silver); margin-left: 1rem; }
+  header .left { display: flex; align-items: center; }
+
+  .btn {
+    background: var(--blue); color: #fff; border: none; padding: 0.65rem 1.2rem; border-radius: 3px;
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; font-size: 0.9rem;
+    transition: background 0.2s;
+  }
+  .btn:hover { background: var(--blue-light); }
+  .btn.ghost { background: transparent; border: 1px solid var(--line); color: var(--silver); }
+  .btn.ghost:hover { border-color: var(--blue); color: var(--white); }
+  .btn.danger { background: transparent; border: 1px solid rgba(231,76,60,0.5); color: var(--red-bright); }
+  .btn.danger:hover { background: rgba(231,76,60,0.12); }
+  .btn:disabled { opacity: 0.6; cursor: wait; }
+
+  /* LOGIN */
+  .login { display: grid; place-items: center; min-height: calc(100vh - 70px); padding: 1.5rem; }
+  .login-card { width: 100%; max-width: 380px; background: var(--navy-mid); border: 1px solid var(--line); padding: 2.25rem 2rem; border-radius: 4px; }
+  .login-card h1 { font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; letter-spacing: 0.04em; }
+  .login-card h1 span { color: var(--blue); }
+  .login-card p { color: var(--text-muted); margin: 0.3rem 0 1.5rem; font-size: 0.95rem; }
+  label { display: block; font-size: 0.78rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--silver); margin-bottom: 0.45rem; }
+  input[type=password], input[type=search], select {
+    width: 100%; background: var(--navy); border: 1px solid rgba(74,158,222,0.3); color: var(--white);
+    font-family: inherit; font-size: 1rem; padding: 0.75rem 0.9rem; border-radius: 3px;
+  }
+  input:focus, select:focus { outline: none; border-color: var(--blue); }
+  .login-card .btn { width: 100%; margin-top: 1rem; padding: 0.85rem; }
+  .err { color: var(--red-bright); font-size: 0.9rem; margin-top: 0.8rem; }
+
+  /* DASHBOARD */
+  main { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+  .stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.75rem; margin-bottom: 1.5rem; }
+  .stat { background: var(--navy-mid); border: 1px solid var(--line); padding: 1rem; border-radius: 4px; }
+  .stat b { display: block; font-family: 'Bebas Neue', sans-serif; font-size: 2rem; line-height: 1; }
+  .stat span { color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; }
+  .toolbar { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1.25rem; align-items: center; }
+  .toolbar input { flex: 1; min-width: 200px; }
+  .toolbar select { width: auto; }
+  .count { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.75rem; }
+
+  .card { background: var(--navy-mid); border: 1px solid var(--line); border-radius: 4px; margin-bottom: 0.75rem; }
+  .card summary {
+    list-style: none; display: grid; grid-template-columns: 1.5fr 1fr auto; gap: 1rem; align-items: center;
+    padding: 1rem 1.25rem; cursor: pointer;
+  }
+  .card summary::-webkit-details-marker { display: none; }
+  .card summary:hover { background: var(--navy-light); }
+  .card .name { font-weight: 700; font-size: 1.05rem; }
+  .card .sub { color: var(--text-muted); font-size: 0.85rem; }
+  .chips { display: flex; gap: 0.35rem; flex-wrap: wrap; justify-content: flex-end; }
+  .chip { font-size: 0.75rem; font-weight: 600; padding: 0.2rem 0.55rem; border-radius: 99px; border: 1px solid; white-space: nowrap; }
+  .chip.yes { color: var(--green); border-color: rgba(63,178,127,0.5); }
+  .chip.no { color: var(--text-muted); border-color: rgba(122,150,176,0.35); text-decoration: line-through; }
+  .chip.warn { color: #f0b429; border-color: rgba(240,180,41,0.5); }
+  .detail { padding: 0.5rem 1.25rem 1.25rem; border-top: 1px solid var(--line); }
+  .detail dl { display: grid; grid-template-columns: 220px 1fr; gap: 0.55rem 1rem; margin: 1rem 0 1.25rem; }
+  .detail dt { color: var(--text-muted); font-size: 0.85rem; }
+  .detail dd { color: var(--white); overflow-wrap: anywhere; }
+  .detail .actions { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+  .empty { text-align: center; color: var(--text-muted); padding: 3rem 1rem; border: 1px dashed var(--line); border-radius: 4px; }
+
+  @media (max-width: 760px) {
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .card summary { grid-template-columns: 1fr; gap: 0.5rem; }
+    .chips { justify-content: flex-start; }
+    .detail dl { grid-template-columns: 1fr; gap: 0.15rem; }
+    .detail dd { margin-bottom: 0.6rem; }
+    header .title { display: none; }
+  }
+
+  /* PRINT: just the opened record */
+  @media print {
+    body { background: #fff; color: #000; }
+    header, .stats, .toolbar, .count, .actions, .card:not(.printing) { display: none !important; }
+    .card { border: none; }
+    .card summary { padding: 0 0 1rem; }
+    .card .sub, .detail dt { color: #444; }
+    .detail dd { color: #000; }
+    .chip.no { color: #666; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="left">
+    <a href="index.html"><img src="images/logo.png" alt="CG Performance Training"></a>
+    <span class="title">Consent Forms</span>
+  </div>
+  <button class="btn ghost" id="logoutBtn" hidden>Log out</button>
+</header>
+
+<section class="login" id="loginView">
+  <form class="login-card" id="loginForm">
+    <h1>Admin <span>Login</span></h1>
+    <p>Photo consent form submissions</p>
+    <label for="password">Password</label>
+    <input type="password" id="password" autocomplete="current-password" required autofocus>
+    <button class="btn" type="submit" id="loginBtn">Log in</button>
+    <p class="err" id="loginErr" hidden></p>
+  </form>
+</section>
+
+<main id="dashView" hidden>
+  <div class="stats" id="stats"></div>
+  <div class="toolbar">
+    <input type="search" id="search" placeholder="Search name, email or phone…" aria-label="Search">
+    <select id="filter" aria-label="Filter">
+      <option value="all">All submissions</option>
+      <option value="website">Allowed on website</option>
+      <option value="social">Allowed on social media</option>
+      <option value="marketing">Allowed in marketing</option>
+      <option value="private">Private only (no sharing)</option>
+      <option value="minor">Under 18</option>
+    </select>
+    <button class="btn ghost" id="refreshBtn">Refresh</button>
+    <button class="btn" id="csvBtn">Export CSV</button>
+  </div>
+  <p class="count" id="count"></p>
+  <div id="list"></div>
+</main>
+
+<script>
+(function () {
+  var API = '/api/consent-submissions';
+  var KEY = 'cgpt_admin_pw';
+  var password = null;
+  var data = [];
+
+  var $ = function (id) { return document.getElementById(id); };
+  var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
+  var store = {
+    get: function () { try { return sessionStorage.getItem(KEY); } catch (e) { return null; } },
+    set: function (v) { try { sessionStorage.setItem(KEY, v); } catch (e) {} },
+    clear: function () { try { sessionStorage.removeItem(KEY); } catch (e) {} }
+  };
+
+  var FIELDS = [
+    ['full_name', 'Full name'], ['email', 'Email'], ['phone', 'Phone'], ['coaching_type', 'Coaching type'],
+    ['over_18', '18 or over'], ['guardian_name', 'Parent / guardian'],
+    ['use_website', 'Website'], ['use_social_media', 'Social media'], ['use_marketing', 'Marketing & advertising'],
+    ['face_visibility', 'Face'], ['name_usage', 'Name'], ['restrictions', 'Other restrictions'],
+    ['declaration', 'Declaration'], ['signature', 'Signature'], ['signed_date', 'Date signed'], ['created_at', 'Submitted']
+  ];
+
+  function fmtDate(iso) {
+    if (!iso) return '';
+    var d = new Date(iso);
+    return isNaN(d) ? iso : d.toLocaleString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  }
+
+  function call(method, query) {
+    return fetch(API + (query || ''), { method: method, headers: { Authorization: 'Bearer ' + password } })
+      .then(function (r) { return r.json().catch(function () { return {}; }).then(function (b) { b._status = r.status; return b; }); });
+  }
+
+  function login(pw, silent) {
+    password = pw;
+    $('loginBtn').disabled = true;
+    $('loginErr').hidden = true;
+    return call('GET').then(function (res) {
+      $('loginBtn').disabled = false;
+      if (res._status === 401) {
+        store.clear();
+        if (!silent) { $('loginErr').textContent = 'Incorrect password.'; $('loginErr').hidden = false; }
+        return;
+      }
+      if (res.error) { $('loginErr').textContent = res.error; $('loginErr').hidden = false; return; }
+      store.set(pw);
+      data = (res.submissions || []).sort(function (a, b) { return new Date(b.created_at) - new Date(a.created_at); });
+      $('loginView').hidden = true; $('dashView').hidden = false; $('logoutBtn').hidden = false;
+      render();
+    }).catch(function () {
+      $('loginBtn').disabled = false;
+      $('loginErr').textContent = 'Could not reach the server. Check your connection and try again.';
+      $('loginErr').hidden = false;
+    });
+  }
+
+  function isYes(v) { return v === 'Yes'; }
+  function sharesAny(s) { return isYes(s.use_website) || isYes(s.use_social_media) || isYes(s.use_marketing); }
+
+  function renderStats() {
+    var n = function (fn) { return data.filter(fn).length; };
+    var items = [
+      [data.length, 'Total forms'],
+      [n(function (s) { return isYes(s.use_website); }), 'Website OK'],
+      [n(function (s) { return isYes(s.use_social_media); }), 'Social OK'],
+      [n(function (s) { return isYes(s.use_marketing); }), 'Marketing OK'],
+      [n(function (s) { return !sharesAny(s); }), 'Private only']
+    ];
+    $('stats').innerHTML = items.map(function (i) { return '<div class="stat"><b>' + i[0] + '</b><span>' + i[1] + '</span></div>'; }).join('');
+  }
+
+  function filtered() {
+    var q = $('search').value.trim().toLowerCase();
+    var f = $('filter').value;
+    return data.filter(function (s) {
+      if (q && [s.full_name, s.email, s.phone, s.signature].join(' ').toLowerCase().indexOf(q) === -1) return false;
+      if (f === 'website') return isYes(s.use_website);
+      if (f === 'social') return isYes(s.use_social_media);
+      if (f === 'marketing') return isYes(s.use_marketing);
+      if (f === 'private') return !sharesAny(s);
+      if (f === 'minor') return s.over_18 === 'No';
+      return true;
+    });
+  }
+
+  function chip(label, val) { return '<span class="chip ' + (isYes(val) ? 'yes' : 'no') + '">' + label + '</span>'; }
+
+  function render() {
+    renderStats();
+    var rows = filtered();
+    $('count').textContent = rows.length + ' of ' + data.length + ' submission' + (data.length === 1 ? '' : 's');
+    if (!data.length) { $('list').innerHTML = '<div class="empty">No consent forms submitted yet.<br>Share <strong>cg-pt.co.uk/consent.html</strong> with your clients.</div>'; return; }
+    if (!rows.length) { $('list').innerHTML = '<div class="empty">No submissions match your search.</div>'; return; }
+    $('list').innerHTML = rows.map(function (s) {
+      var dl = FIELDS.map(function (f) {
+        var v = f[0] === 'created_at' ? fmtDate(s.created_at) : s[f[0]];
+        if (!v && f[0] === 'guardian_name') return '';
+        return '<dt>' + esc(f[1]) + '</dt><dd>' + (esc(v) || '—') + '</dd>';
+      }).join('');
+      var faceChip = s.face_visibility && s.face_visibility.indexOf('hidden') > -1 ? '<span class="chip warn">Hide face</span>' : '';
+      var minorChip = s.over_18 === 'No' ? '<span class="chip warn">Under 18</span>' : '';
+      return '<details class="card" data-id="' + esc(s.id) + '"><summary>' +
+        '<div><div class="name">' + esc(s.full_name || '(no name)') + '</div><div class="sub">' + esc(s.email) + '</div></div>' +
+        '<div class="sub">Submitted ' + esc(fmtDate(s.created_at)) + '</div>' +
+        '<div class="chips">' + chip('Website', s.use_website) + chip('Social', s.use_social_media) + chip('Marketing', s.use_marketing) + faceChip + minorChip + '</div>' +
+        '</summary><div class="detail"><dl>' + dl + '</dl><div class="actions">' +
+        '<button class="btn ghost" data-act="print">Print / Save PDF</button>' +
+        '<button class="btn danger" data-act="delete">Delete (consent withdrawn)</button>' +
+        '</div></div></details>';
+    }).join('');
+  }
+
+  $('list').addEventListener('click', function (e) {
+    var btn = e.target.closest('button[data-act]');
+    if (!btn) return;
+    var card = btn.closest('.card');
+    var id = card.getAttribute('data-id');
+    if (btn.getAttribute('data-act') === 'print') {
+      card.classList.add('printing');
+      window.print();
+      card.classList.remove('printing');
+      return;
+    }
+    var rec = data.find(function (s) { return s.id === id; });
+    if (!confirm('Permanently delete the consent form for ' + (rec && rec.full_name || 'this client') + '?\n\nThis cannot be undone.')) return;
+    btn.disabled = true;
+    call('DELETE', '?id=' + encodeURIComponent(id)).then(function (res) {
+      if (res.error) { alert(res.error); btn.disabled = false; return; }
+      data = data.filter(function (s) { return s.id !== id; });
+      render();
+    });
+  });
+
+  $('loginForm').addEventListener('submit', function (e) { e.preventDefault(); login($('password').value); });
+  $('search').addEventListener('input', render);
+  $('filter').addEventListener('change', render);
+  $('refreshBtn').addEventListener('click', function () { login(password, true); });
+  $('logoutBtn').addEventListener('click', function () {
+    store.clear(); password = null; data = [];
+    $('dashView').hidden = true; $('logoutBtn').hidden = true; $('loginView').hidden = false;
+    $('password').value = ''; $('list').innerHTML = '';
+  });
+
+  $('csvBtn').addEventListener('click', function () {
+    var rows = filtered();
+    var cell = function (v) { v = String(v == null ? '' : v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; };
+    var csv = [FIELDS.map(function (f) { return cell(f[1]); }).join(',')]
+      .concat(rows.map(function (s) { return FIELDS.map(function (f) { return cell(f[0] === 'created_at' ? fmtDate(s.created_at) : s[f[0]]); }).join(','); }))
+      .join('\r\n');
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob(['﻿' + csv], { type: 'text/csv' }));
+    a.download = 'photo-consent-forms-' + new Date().toISOString().slice(0, 10) + '.csv';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+
+  var saved = store.get();
+  if (saved) login(saved, true);
+})();
+</script>
+</body>
+</html>
