@@ -855,6 +855,43 @@
     .partner-grid { grid-template-columns:1fr; gap:2.5rem; }
     .partner-logo-panel { min-height:200px; order:-1; }
   }
+
+  /* HERO CALL-TO-ACTION BUTTONS */
+  .hero-ctas { display:flex; gap:1.25rem; justify-content:center; flex-wrap:wrap; }
+  .hero-btn {
+    display:inline-flex; align-items:center; justify-content:center; gap:0.6rem;
+    min-width:260px; padding:1.3rem 2.75rem; text-decoration:none; color:#fff;
+    font-family:'Barlow Condensed',sans-serif; font-size:1.35rem; font-weight:700; letter-spacing:0.15em; text-transform:uppercase;
+    clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%);
+    transition:transform 0.2s, background 0.2s, filter 0.2s;
+  }
+  .hero-btn span { transition:transform 0.2s; }
+  .hero-btn:hover { transform:translateY(-3px); }
+  .hero-btn:hover span { transform:translateX(4px); }
+  .hero-btn-primary { background:var(--red); filter:drop-shadow(0 0 18px rgba(231,76,60,0.55)); }
+  .hero-btn-primary:hover { background:var(--red-bright); filter:drop-shadow(0 0 26px rgba(231,76,60,0.75)); }
+  .hero-btn-secondary { background:var(--blue); filter:drop-shadow(0 0 18px rgba(74,158,222,0.45)); }
+  .hero-btn-secondary:hover { background:var(--blue-light); filter:drop-shadow(0 0 26px rgba(74,158,222,0.7)); }
+
+  /* CLIENT TRANSFORMATIONS STRIP */
+  .results-strip { background:var(--navy-mid); }
+  .results-head { text-align:center; }
+  .results-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; margin-top:1rem; }
+  .result-card { position:relative; display:block; overflow:hidden; border:1px solid rgba(74,158,222,0.2); background:var(--navy); text-decoration:none; transition:border-color 0.2s, transform 0.2s; }
+  .result-card:hover { border-color:var(--blue); transform:translateY(-4px); }
+  .result-card img { display:block; width:100%; aspect-ratio:1/1; object-fit:cover; }
+  .result-name { position:absolute; left:0; bottom:0; padding:0.45rem 1rem; background:var(--red); color:#fff;
+    font-family:'Bebas Neue',sans-serif; font-size:1.4rem; letter-spacing:0.1em; clip-path:polygon(0 0,100% 0,calc(100% - 10px) 100%,0 100%); padding-right:1.5rem; }
+  .results-cta { text-align:center; margin-top:2.5rem; }
+  @media (max-width: 900px) { .results-grid { grid-template-columns:1fr; max-width:480px; margin-left:auto; margin-right:auto; } }
+  @media (max-width: 600px) {
+    .hero-ctas { flex-direction:column; align-items:stretch; gap:0.9rem; }
+    .hero-btn { min-width:0; width:100%; font-size:1.2rem; padding:1.15rem 1.5rem; }
+    #welcome { padding-top:5.5rem; }
+    .hero-logo { width:110px; height:110px; margin-bottom:1rem; }
+    .hero-title { margin-bottom:1rem; }
+    .hero-sub { margin-bottom:1.75rem; font-size:1.05rem; }
+  }
 </style>
 <style id="cg-applied-css">
   /* Applied Nutrition partner block (footer) */
@@ -912,8 +949,38 @@
     <span class="hero-eyebrow">East Kilbride · Scotland</span>
     <h1 class="hero-title">Train Harder.<br><span>Perform Better.</span><br>Live Stronger.</h1>
     <p class="hero-sub">Elite personal training tailored to your goals. Whether you're starting your journey or pushing to the next level, CG Performance Training delivers results.</p>
-    <a href="packages.html" class="btn-primary">View Packages</a>
-    <a href="#booking" class="btn-secondary">Free Consultation</a>
+    <div class="hero-ctas">
+      <a href="packages.html" class="hero-btn hero-btn-primary">View Packages <span aria-hidden="true">&rarr;</span></a>
+      <a href="#booking" class="hero-btn hero-btn-secondary">Free Consultation</a>
+    </div>
+  </div>
+</section>
+
+<!-- CLIENT TRANSFORMATIONS -->
+<section id="results" class="results-strip">
+  <div class="container">
+    <div class="results-head">
+      <span class="section-tag">Client Results</span>
+      <h2 class="section-title">Real <span>Transformations</span></h2>
+      <div class="divider" style="margin:0 auto 1.25rem;"></div>
+    </div>
+    <div class="results-grid">
+      <a href="testimonials.html" class="result-card">
+        <img src="images/Abbys%20image.JPG" alt="Abby before and after" loading="lazy">
+        <span class="result-name">Abby</span>
+      </a>
+      <a href="testimonials.html" class="result-card">
+        <img src="images/euans%20image.JPG" alt="Euan before and after" loading="lazy">
+        <span class="result-name">Euan</span>
+      </a>
+      <a href="testimonials.html" class="result-card">
+        <img src="images/connors%20image.JPG" alt="Connor before and after" loading="lazy">
+        <span class="result-name">Connor</span>
+      </a>
+    </div>
+    <div class="results-cta">
+      <a href="testimonials.html" class="hero-btn hero-btn-secondary">See Client Stories</a>
+    </div>
   </div>
 </section>
 
