@@ -340,6 +340,11 @@
   .t-quote { position:relative; color:var(--silver); font-size:1.02rem; line-height:1.7; padding-left:1.25rem; border-left:3px solid var(--blue); }
   .t-name { font-family:'Bebas Neue',sans-serif; font-size:1.6rem; letter-spacing:0.06em; color:var(--white); line-height:1; }
   .t-plan { display:block; font-family:'Barlow',sans-serif; font-size:0.8rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--text-muted); margin-top:0.35rem; }
+  .t-card { scroll-margin-top:110px; }
+  .t-card.t-highlight { border-color:var(--blue); box-shadow:0 0 0 2px var(--blue), 0 0 40px rgba(74,158,222,0.45); animation:tGlow 1.6s ease-in-out 3; }
+  .t-card.t-highlight .t-name::after { content:'Featured'; display:inline-block; margin-left:0.6rem; vertical-align:middle; font-family:'Barlow Condensed',sans-serif;
+    font-size:0.75rem; letter-spacing:0.2em; text-transform:uppercase; color:#fff; background:var(--blue); padding:0.15rem 0.5rem; }
+  @keyframes tGlow { 0%,100% { box-shadow:0 0 0 2px var(--blue), 0 0 40px rgba(74,158,222,0.45); } 50% { box-shadow:0 0 0 3px var(--blue-light), 0 0 70px rgba(74,158,222,0.8); } }
   .testimonials-empty { text-align:center; color:var(--silver); font-size:1.1rem; padding:2rem 0; }
   @media (max-width: 768px) {
     .testimonials-section { padding:3.5rem 1rem; }
@@ -608,6 +613,7 @@ var TESTIMONIALS = [
 
   list.forEach(function(t) {
     var card = el('article', 't-card');
+    if (t.name) card.id = String(t.name).toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
     if (t.before && t.after) {
       card.appendChild(buildSlider(t));
     } else if (t.photo || t.before || t.after) {
@@ -632,6 +638,15 @@ var TESTIMONIALS = [
     card.appendChild(body);
     grid.appendChild(card);
   });
+
+  // Arrived from a homepage photo (e.g. testimonials.html#abby): scroll to and highlight that client
+  var target = location.hash ? document.getElementById(decodeURIComponent(location.hash.slice(1))) : null;
+  if (target && target.classList.contains('t-card')) {
+    target.classList.add('t-highlight');
+    var go = function () { target.scrollIntoView({ behavior: 'smooth', block: 'start' }); };
+    setTimeout(go, 50);
+    window.addEventListener('load', go, { once: true });
+  }
 })();
 </script>
 
