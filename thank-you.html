@@ -177,6 +177,21 @@
   .btn-contact:hover { background: var(--blue-light); }
 
   </style>
+<style id="cg-applied-css">
+  /* Applied Nutrition partner block (footer) */
+  .footer-applied { margin:1.75rem auto 1.5rem; }
+  .an-partner { display:inline-flex; align-items:center; gap:1.25rem; flex-wrap:wrap; justify-content:center; text-decoration:none;
+    padding:1.1rem 1.5rem; border:1px solid rgba(74,158,222,0.35); background:rgba(74,158,222,0.06); transition:border-color 0.2s, background 0.2s; }
+  .an-partner:hover { border-color:#4a9ede; background:rgba(74,158,222,0.12); }
+  .an-partner .an-logo { height:34px; width:auto; display:block; }
+  .an-partner .an-fallback { font-family:'Bebas Neue',sans-serif; font-size:1.5rem; letter-spacing:0.08em; color:#f0f4f8; }
+  .an-partner .an-text { display:flex; flex-direction:column; align-items:flex-start; gap:0.2rem; text-align:left; }
+  .an-partner .an-kicker { font-family:'Barlow Condensed',sans-serif; font-size:0.72rem; font-weight:700; letter-spacing:0.25em; text-transform:uppercase; color:#e74c3c; }
+  .an-partner .an-offer { color:#f0f4f8; font-size:0.95rem; }
+  .an-partner .an-code { display:inline-block; font-family:'Barlow Condensed',sans-serif; font-weight:700; letter-spacing:0.15em; font-size:1.05rem;
+    color:#fff; background:#c0392b; padding:0.1rem 0.6rem; margin-left:0.25rem; }
+  @media (max-width: 520px) { .an-partner .an-text { align-items:center; text-align:center; } }
+</style>
 </head>
 <body>
 
@@ -209,7 +224,7 @@
   <div class="footer-links">
     <a href="index.html#welcome">Home</a>
     <a href="index.html#about">About</a>
-    <a href="index.html#products">Packages</a>
+    <a href="packages.html">Packages</a>
     <a href="index.html#inquiry">Enquire</a>
     <a href="index.html#booking">Book a Call</a>
     <a href="index.html#location">Location</a>
@@ -232,9 +247,12 @@
     </a>
   </div>
   <div class="footer-applied">
-    <a href="https://appliednutrition.uk/?ref=nicmokel" target="_blank" rel="noopener" class="applied-nutrition-link" aria-label="Applied Nutrition Partner">
-      <img src="https://appliednutrition.uk/cdn/shop/files/AN_Full_Logo_White.png?v=1706271191" alt="Applied Nutrition" onerror="this.outerHTML='Applied Nutrition'">
-      <span>Use code <strong>CGPT20</strong> for discount</span>
+    <a href="https://appliednutrition.uk/?ref=nicmokel" target="_blank" rel="noopener sponsored" class="an-partner" aria-label="Shop Applied Nutrition with code CGPT20">
+      <img class="an-logo" src="https://appliednutrition.uk/cdn/shop/files/AN_Full_Logo_White.png?v=1706271191" alt="Applied Nutrition" onerror="this.outerHTML='&lt;span class=&quot;an-fallback&quot;&gt;Applied Nutrition&lt;/span&gt;'">
+      <span class="an-text">
+        <span class="an-kicker">Official Partner</span>
+        <span class="an-offer">Save with code <span class="an-code">CGPT20</span></span>
+      </span>
     </a>
   </div>
   <p class="footer-copy" style="margin-top:1rem;">© <script>document.write(new Date().getFullYear())</script> CG Performance Training. All rights reserved. Based in East Kilbride, Scotland.</p>

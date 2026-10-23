@@ -830,7 +830,47 @@
     }
     section { padding: 4rem 1.25rem; }
   }
-  </style>
+  
+  /* APPLIED NUTRITION PARTNER */
+  .partner-section { background:var(--navy); padding:6rem 2rem; position:relative; border-top:1px solid rgba(74,158,222,0.15); border-bottom:1px solid rgba(74,158,222,0.15); }
+  .partner-grid { display:grid; grid-template-columns:1.1fr 0.9fr; gap:4rem; align-items:center; }
+  .partner-copy p { color:var(--silver); line-height:1.75; font-size:1.05rem; margin-bottom:1.75rem; max-width:520px; }
+  .partner-copy p strong { color:var(--white); }
+  .partner-code { display:inline-flex; align-items:center; gap:0.9rem; flex-wrap:wrap; border:1px dashed rgba(74,158,222,0.6); background:rgba(74,158,222,0.07); padding:0.8rem 1rem; margin-bottom:1.75rem; }
+  .partner-code-label { font-family:'Barlow Condensed',sans-serif; font-size:0.8rem; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:var(--text-muted); }
+  .partner-code-value { font-family:'Bebas Neue',sans-serif; font-size:2rem; letter-spacing:0.12em; color:var(--white); line-height:1; }
+  .partner-copy-btn { background:var(--blue); color:#fff; border:none; padding:0.5rem 1rem; cursor:pointer; font-family:'Barlow Condensed',sans-serif; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; font-size:0.85rem; transition:background 0.2s; }
+  .partner-copy-btn:hover { background:var(--blue-light); }
+  .partner-copy .btn-primary { display:table; }
+  .partner-logo-panel { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1.25rem; min-height:280px; padding:2.5rem;
+    text-decoration:none; background:linear-gradient(135deg,var(--navy-mid),var(--navy-light)); border:1px solid rgba(74,158,222,0.25); position:relative; transition:border-color 0.2s, transform 0.2s; }
+  .partner-logo-panel::after { content:''; position:absolute; inset:10px; border:1px solid rgba(192,57,43,0.25); pointer-events:none; }
+  .partner-logo-panel:hover { border-color:var(--blue); transform:translateY(-3px); }
+  .partner-logo-panel img { width:80%; max-width:340px; height:auto; display:block; }
+  .partner-logo-fallback { font-family:'Bebas Neue',sans-serif; font-size:3rem; letter-spacing:0.06em; color:var(--white); text-align:center; line-height:1; }
+  .partner-logo-sub { font-family:'Barlow Condensed',sans-serif; font-size:0.8rem; font-weight:600; letter-spacing:0.2em; text-transform:uppercase; color:var(--text-muted); text-align:center; }
+  @media (max-width: 1150px) and (min-width: 769px) { .nav-brand-name { display:none; } nav ul { gap:1.4rem !important; } }
+  @media (max-width: 768px) {
+    .partner-section { padding:4rem 1.25rem; }
+    .partner-grid { grid-template-columns:1fr; gap:2.5rem; }
+    .partner-logo-panel { min-height:200px; order:-1; }
+  }
+</style>
+<style id="cg-applied-css">
+  /* Applied Nutrition partner block (footer) */
+  .footer-applied { margin:1.75rem auto 1.5rem; }
+  .an-partner { display:inline-flex; align-items:center; gap:1.25rem; flex-wrap:wrap; justify-content:center; text-decoration:none;
+    padding:1.1rem 1.5rem; border:1px solid rgba(74,158,222,0.35); background:rgba(74,158,222,0.06); transition:border-color 0.2s, background 0.2s; }
+  .an-partner:hover { border-color:#4a9ede; background:rgba(74,158,222,0.12); }
+  .an-partner .an-logo { height:34px; width:auto; display:block; }
+  .an-partner .an-fallback { font-family:'Bebas Neue',sans-serif; font-size:1.5rem; letter-spacing:0.08em; color:#f0f4f8; }
+  .an-partner .an-text { display:flex; flex-direction:column; align-items:flex-start; gap:0.2rem; text-align:left; }
+  .an-partner .an-kicker { font-family:'Barlow Condensed',sans-serif; font-size:0.72rem; font-weight:700; letter-spacing:0.25em; text-transform:uppercase; color:#e74c3c; }
+  .an-partner .an-offer { color:#f0f4f8; font-size:0.95rem; }
+  .an-partner .an-code { display:inline-block; font-family:'Barlow Condensed',sans-serif; font-weight:700; letter-spacing:0.15em; font-size:1.05rem;
+    color:#fff; background:#c0392b; padding:0.1rem 0.6rem; margin-left:0.25rem; }
+  @media (max-width: 520px) { .an-partner .an-text { align-items:center; text-align:center; } }
+</style>
 </head>
 <body>
 
@@ -872,7 +912,7 @@
     <span class="hero-eyebrow">East Kilbride · Scotland</span>
     <h1 class="hero-title">Train Harder.<br><span>Perform Better.</span><br>Live Stronger.</h1>
     <p class="hero-sub">Elite personal training tailored to your goals. Whether you're starting your journey or pushing to the next level, CG Performance Training delivers results.</p>
-    <a href="#products" class="btn-primary">View Packages</a>
+    <a href="packages.html" class="btn-primary">View Packages</a>
     <a href="#booking" class="btn-secondary">Free Consultation</a>
   </div>
 </section>
@@ -911,53 +951,25 @@
   </div>
 </section>
 
-<!-- PRODUCTS -->
-<section id="products">
-  <div class="container">
-    <span class="section-tag">Training Packages</span>
-    <h2 class="section-title">Choose Your <span>Package</span></h2>
-    <div class="divider"></div>
-    <div class="products-grid">
-      <!-- Foundation -->
-      <div class="product-card">
-        <div class="product-icon">💪</div>
-        <div class="product-name">Foundation</div>
-        <div class="product-price">£165</div>
-        <div class="product-price-note">per month</div>
-        <p class="product-desc">1 session a week plus your personalised programme in the app. Expert hands-on coaching with the structure to keep progressing between sessions.</p>
-        <div class="card-buttons">
-          <a href="foundation.html" class="btn-learn">Learn More</a>
-          <button class="btn-buy" onclick="buyProduct('foundation')">Buy Now</button>
-        </div>
+<!-- APPLIED NUTRITION PARTNER -->
+<section id="partner" class="partner-section">
+  <div class="container partner-grid">
+    <div class="partner-copy">
+      <span class="section-tag">Official Partner</span>
+      <h2 class="section-title">Fuel Your <span>Training</span></h2>
+      <div class="divider"></div>
+      <p>I've partnered with <strong>Applied Nutrition</strong> so you can get your protein, creatine, pre-workout and supplements at a discount. Use my code at checkout.</p>
+      <div class="partner-code">
+        <span class="partner-code-label">Discount code</span>
+        <span class="partner-code-value" id="anCode">CGPT20</span>
+        <button type="button" class="partner-copy-btn" id="anCopyBtn">Copy</button>
       </div>
-      <!-- Core -->
-      <div class="product-card featured">
-        <div class="product-icon">🔥</div>
-        <div class="product-name">Core</div>
-        <div class="product-price">£299</div>
-        <div class="product-price-note">per month</div>
-        <p class="product-desc">2 sessions a week, your programme in the app, and personalised nutrition targets — training and nutrition working together.</p>
-        <div class="card-buttons">
-          <a href="core.html" class="btn-learn">Learn More</a>
-          <button class="btn-buy" onclick="buyProduct('core')">Buy Now</button>
-        </div>
-      </div>
-      <!-- Online -->
-      <div class="product-card">
-        <div class="product-icon">📱</div>
-        <div class="product-name">Online</div>
-        <div class="product-price">£79</div>
-        <div class="product-price-note">per month</div>
-        <p class="product-desc">Your personalised programme, every workout tracked in the app, and a weekly check-in to keep you moving forward.</p>
-        <div class="card-buttons">
-          <a href="online.html" class="btn-learn">Learn More</a>
-          <button class="btn-buy" onclick="buyProduct('online')">Buy Now</button>
-        </div>
-      </div>
+      <a href="https://appliednutrition.uk/?ref=nicmokel" target="_blank" rel="noopener sponsored" class="btn-primary">Shop Applied Nutrition</a>
     </div>
-    <div style="text-align:center; margin-top:2.5rem;">
-      <a href="packages.html" class="btn-primary">View All Packages</a>
-    </div>
+    <a href="https://appliednutrition.uk/?ref=nicmokel" target="_blank" rel="noopener sponsored" class="partner-logo-panel" aria-label="Visit Applied Nutrition">
+      <img src="https://appliednutrition.uk/cdn/shop/files/AN_Full_Logo_White.png?v=1706271191" alt="Applied Nutrition" onerror="this.outerHTML='&lt;span class=&quot;partner-logo-fallback&quot;&gt;Applied Nutrition&lt;/span&gt;'">
+      <span class="partner-logo-sub">CG Performance Training &times; Applied Nutrition</span>
+    </a>
   </div>
 </section>
 
@@ -1139,7 +1151,7 @@
     <a href="#welcome">Home</a>
     <a href="#about">About</a>
     <a href="testimonials.html">Results</a>
-    <a href="#products">Packages</a>
+    <a href="packages.html">Packages</a>
     <a href="#inquiry">Enquire</a>
     <a href="#booking">Book a Call</a>
     <a href="#location">Location</a>
@@ -1162,9 +1174,12 @@
     </a>
   </div>
   <div class="footer-applied">
-    <a href="https://appliednutrition.uk/?ref=nicmokel" target="_blank" rel="noopener" class="applied-nutrition-link" aria-label="Applied Nutrition Partner">
-      <img src="https://appliednutrition.uk/cdn/shop/files/AN_Full_Logo_White.png?v=1706271191" alt="Applied Nutrition" onerror="this.outerHTML='Applied Nutrition'">
-      <span>Use code <strong>CGPT20</strong> for discount</span>
+    <a href="https://appliednutrition.uk/?ref=nicmokel" target="_blank" rel="noopener sponsored" class="an-partner" aria-label="Shop Applied Nutrition with code CGPT20">
+      <img class="an-logo" src="https://appliednutrition.uk/cdn/shop/files/AN_Full_Logo_White.png?v=1706271191" alt="Applied Nutrition" onerror="this.outerHTML='&lt;span class=&quot;an-fallback&quot;&gt;Applied Nutrition&lt;/span&gt;'">
+      <span class="an-text">
+        <span class="an-kicker">Official Partner</span>
+        <span class="an-offer">Save with code <span class="an-code">CGPT20</span></span>
+      </span>
     </a>
   </div>
   <p class="footer-copy" style="margin-top:1rem;">© <script>document.write(new Date().getFullYear())</script> CG Performance Training. All rights reserved. Based in East Kilbride, Scotland.</p>
@@ -1321,6 +1336,18 @@ function declineCookies() {
   }
   nav.querySelectorAll('a').forEach(function(a) {
     a.addEventListener('click', window.closeMobileNav);
+  });
+})();
+</script>
+<script>
+// Copy Applied Nutrition code
+(function () {
+  var b = document.getElementById('anCopyBtn');
+  if (!b) return;
+  b.addEventListener('click', function () {
+    var code = document.getElementById('anCode').textContent.trim();
+    var done = function () { b.textContent = 'Copied!'; setTimeout(function () { b.textContent = 'Copy'; }, 1800); };
+    if (navigator.clipboard) navigator.clipboard.writeText(code).then(done, done); else done();
   });
 })();
 </script>

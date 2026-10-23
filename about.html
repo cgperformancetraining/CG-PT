@@ -326,33 +326,75 @@
     flex-shrink: 0;
   }
 </style>
+<style id="cg-nav-css">
+  /* Shared site navigation (same as homepage) */
+  nav.cg-nav { display:flex; align-items:center; justify-content:space-between; padding:0.75rem 2rem; z-index:100;
+    background:rgba(13,27,42,0.95); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border-bottom:1px solid rgba(74,158,222,0.2); }
+  nav.cg-nav .cg-brand { display:flex; align-items:center; gap:0.75rem; text-decoration:none; }
+  nav.cg-nav .cg-brand img { height:52px; width:auto; display:block; }
+  nav.cg-nav .cg-brand span { font-family:'Bebas Neue',sans-serif; font-size:1.3rem; letter-spacing:0.15em; color:#f0f4f8; white-space:nowrap; }
+  nav.cg-nav ul.cg-links { list-style:none; display:flex; gap:2rem; margin:0; padding:0; }
+  nav.cg-nav ul.cg-links li a { color:#b8c5d0; text-decoration:none; font-family:'Barlow',sans-serif; font-size:0.85rem; font-weight:600;
+    letter-spacing:0.1em; text-transform:uppercase; transition:color 0.2s; }
+  nav.cg-nav ul.cg-links li a:hover, nav.cg-nav ul.cg-links li a.active { color:#6db8f0; }
+  nav.cg-nav .cg-burger { display:none; flex-direction:column; justify-content:center; gap:5px; width:36px; height:36px;
+    background:none; border:none; cursor:pointer; padding:4px; }
+  nav.cg-nav .cg-burger span { display:block; width:100%; height:2px; background:#b8c5d0; border-radius:2px; }
+  .cg-mobile { display:none; position:fixed; inset:0; background:rgba(13,27,42,0.98); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+    z-index:1000; flex-direction:column; align-items:center; justify-content:center; }
+  .cg-mobile.open { display:flex; }
+  .cg-mobile a { display:block; width:100%; text-align:center; color:#b8c5d0; text-decoration:none; font-family:'Bebas Neue',sans-serif;
+    font-size:2.2rem; letter-spacing:0.2em; text-transform:uppercase; padding:0.8rem 2rem; border-bottom:1px solid rgba(74,158,222,0.15); }
+  .cg-mobile a:first-of-type { border-top:1px solid rgba(74,158,222,0.15); }
+  .cg-mobile a:hover, .cg-mobile a.active { color:#6db8f0; }
+  .cg-mobile .cg-close { position:absolute; top:1.25rem; right:1.5rem; width:44px; height:44px; background:none;
+    border:1px solid rgba(74,158,222,0.35); color:#b8c5d0; font-size:1.6rem; line-height:1; cursor:pointer; }
+  @media (max-width: 1150px) { nav.cg-nav ul.cg-links { gap:1.4rem; } nav.cg-nav .cg-brand span { display:none; } }
+  @media (max-width: 768px) {
+    nav.cg-nav { padding:0.75rem 1.25rem; }
+    nav.cg-nav ul.cg-links { display:none; }
+    nav.cg-nav .cg-burger { display:flex; }
+    nav.cg-nav .cg-brand span { display:inline; font-size:1.05rem; }
+  }
+  @media (max-width: 400px) { nav.cg-nav .cg-brand span { display:none; } }
+</style>
+<style id="cg-applied-css">
+  /* Applied Nutrition partner block (footer) */
+  .footer-applied { margin:1.75rem auto 1.5rem; }
+  .an-partner { display:inline-flex; align-items:center; gap:1.25rem; flex-wrap:wrap; justify-content:center; text-decoration:none;
+    padding:1.1rem 1.5rem; border:1px solid rgba(74,158,222,0.35); background:rgba(74,158,222,0.06); transition:border-color 0.2s, background 0.2s; }
+  .an-partner:hover { border-color:#4a9ede; background:rgba(74,158,222,0.12); }
+  .an-partner .an-logo { height:34px; width:auto; display:block; }
+  .an-partner .an-fallback { font-family:'Bebas Neue',sans-serif; font-size:1.5rem; letter-spacing:0.08em; color:#f0f4f8; }
+  .an-partner .an-text { display:flex; flex-direction:column; align-items:flex-start; gap:0.2rem; text-align:left; }
+  .an-partner .an-kicker { font-family:'Barlow Condensed',sans-serif; font-size:0.72rem; font-weight:700; letter-spacing:0.25em; text-transform:uppercase; color:#e74c3c; }
+  .an-partner .an-offer { color:#f0f4f8; font-size:0.95rem; }
+  .an-partner .an-code { display:inline-block; font-family:'Barlow Condensed',sans-serif; font-weight:700; letter-spacing:0.15em; font-size:1.05rem;
+    color:#fff; background:#c0392b; padding:0.1rem 0.6rem; margin-left:0.25rem; }
+  @media (max-width: 520px) { .an-partner .an-text { align-items:center; text-align:center; } }
+</style>
 </head>
 <body>
 
-<nav>
-  <a href="index.html" class="nav-logo-group">
-    <img src="images/logo.png" class="logo" alt="CG Performance Training">
-    <span class="nav-brand-name">CG PERFORMANCE TRAINING</span>
-  </a>
-  <ul>
+<nav class="cg-nav" aria-label="Main">
+  <a href="index.html" class="cg-brand"><img src="images/logo.png" alt="CG Performance Training"><span>CG PERFORMANCE TRAINING</span></a>
+  <ul class="cg-links">
     <li><a href="index.html">Home</a></li>
     <li><a href="about.html" class="active">About</a></li>
     <li><a href="testimonials.html">Results</a></li>
-    <li><a href="index.html#products">Packages</a></li>
+    <li><a href="packages.html">Packages</a></li>
     <li><a href="index.html#inquiry">Enquire</a></li>
     <li><a href="index.html#booking">Book</a></li>
     <li><a href="index.html#location">Location</a></li>
   </ul>
-  <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu">
-    <span></span><span></span><span></span>
-  </button>
+  <button class="cg-burger" id="cgNavBtn" aria-label="Open menu" aria-expanded="false" aria-controls="cgMobileNav"><span></span><span></span><span></span></button>
 </nav>
-<div class="mobile-nav" id="mobileNav">
-  <button class="mobile-nav-close" id="mobileNavClose">&times;</button>
+<div class="cg-mobile" id="cgMobileNav">
+  <button class="cg-close" id="cgNavClose" aria-label="Close menu">&times;</button>
   <a href="index.html">Home</a>
-  <a href="about.html">About</a>
+  <a href="about.html" class="active">About</a>
   <a href="testimonials.html">Results</a>
-  <a href="index.html#products">Packages</a>
+  <a href="packages.html">Packages</a>
   <a href="index.html#inquiry">Enquire</a>
   <a href="index.html#booking">Book</a>
   <a href="index.html#location">Location</a>
@@ -486,7 +528,7 @@
     <div class="divider" style="margin:0 auto 1.5rem;"></div>
     <p style="color:var(--silver);max-width:550px;margin:0 auto 2rem;line-height:1.7;">If my story resonates with you, let's talk. Whether you want to lose weight, build strength, or just start somewhere — I've been where you are. I know what it takes.</p>
     <a href="index.html#booking" class="btn-primary">Book a Free Call</a>
-    <a href="index.html#products" class="btn-secondary">View Packages</a>
+    <a href="packages.html" class="btn-secondary">View Packages</a>
   </div>
 </section>
 
@@ -499,7 +541,7 @@
     <a href="index.html#welcome">Home</a>
     <a href="index.html#about">About</a>
     <a href="testimonials.html">Results</a>
-    <a href="index.html#products">Packages</a>
+    <a href="packages.html">Packages</a>
     <a href="index.html#inquiry">Enquire</a>
     <a href="index.html#booking">Book a Call</a>
     <a href="index.html#location">Location</a>
@@ -522,9 +564,12 @@
     </a>
   </div>
   <div class="footer-applied">
-    <a href="https://appliednutrition.uk/?ref=nicmokel" target="_blank" rel="noopener" class="applied-nutrition-link" aria-label="Applied Nutrition Partner">
-      <img src="https://appliednutrition.uk/cdn/shop/files/AN_Full_Logo_White.png?v=1706271191" alt="Applied Nutrition" onerror="this.outerHTML='Applied Nutrition'">
-      <span>Use code <strong>CGPT20</strong> for discount</span>
+    <a href="https://appliednutrition.uk/?ref=nicmokel" target="_blank" rel="noopener sponsored" class="an-partner" aria-label="Shop Applied Nutrition with code CGPT20">
+      <img class="an-logo" src="https://appliednutrition.uk/cdn/shop/files/AN_Full_Logo_White.png?v=1706271191" alt="Applied Nutrition" onerror="this.outerHTML='&lt;span class=&quot;an-fallback&quot;&gt;Applied Nutrition&lt;/span&gt;'">
+      <span class="an-text">
+        <span class="an-kicker">Official Partner</span>
+        <span class="an-offer">Save with code <span class="an-code">CGPT20</span></span>
+      </span>
     </a>
   </div>
   <p class="footer-copy" style="margin-top:1rem;">© <script>document.write(new Date().getFullYear())</script> CG Performance Training. All rights reserved. Based in East Kilbride, Scotland.</p>
@@ -618,6 +663,17 @@ function declineCookies() {
   localStorage.setItem('cgpt_cookie_consent', 'declined');
   document.getElementById('cookieBanner').style.display = 'none';
 }
+</script>
+<script>
+(function () {
+  var btn = document.getElementById('cgNavBtn'), menu = document.getElementById('cgMobileNav'), close = document.getElementById('cgNavClose');
+  if (!btn || !menu) return;
+  function shut() { menu.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); document.body.style.overflow = ''; }
+  btn.addEventListener('click', function () { menu.classList.add('open'); btn.setAttribute('aria-expanded', 'true'); document.body.style.overflow = 'hidden'; });
+  close.addEventListener('click', shut);
+  menu.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', shut); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') shut(); });
+})();
 </script>
 </body>
 </html>
