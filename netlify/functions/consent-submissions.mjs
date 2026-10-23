@@ -1,4 +1,5 @@
-// Admin API for photo consent submissions.
+// Admin API for form submissions: photo consent forms and website enquiries.
+// Pick which with ?form=consent (default) or ?form=enquiry
 // Runs on Netlify automatically — no npm or build step needed.
 //
 // Needs two environment variables, set in the Netlify dashboard
@@ -8,7 +9,7 @@
 
 import { createHash, timingSafeEqual } from 'node:crypto';
 
-const FORM_NAME = 'photo-consent';
+const FORMS = { consent: 'photo-consent', enquiry: 'enquiry' };
 const API = 'https://api.netlify.com/api/v1';
 
 const json = (body, status = 200) =>
@@ -36,10 +37,10 @@ async function netlify(path, token, options = {}) {
   return res.status === 204 ? null : res.json();
 }
 
-async function findForm(token) {
+async function findForm(token, formName) {
   const siteId = process.env.SITE_ID;
   const forms = await netlify(siteId ? `/sites/${siteId}/forms` : '/forms', token);
-  return forms.find((f) => f.name === FORM_NAME && (!siteId || f.site_id === siteId));
+  return forms.find((f) => f.name === formName && (!siteId || f.site_id === siteId));
 }
 
 async function allSubmissions(formId, token) {
@@ -61,16 +62,20 @@ export default async (req) => {
   const token = process.env.NETLIFY_API_TOKEN;
   if (!token) return json({ error: 'NETLIFY_API_TOKEN is not set in Netlify environment variables.' }, 500);
 
+  const which = new URL(req.url).searchParams.get('form') || 'consent';
+  const formName = FORMS[which];
+  if (!formName) return json({ error: 'Unknown form' }, 400);
+
   try {
-    const form = await findForm(token);
-    if (!form) return json({ submissions: [], note: 'No consent forms have been submitted yet.' });
+    const form = await findForm(token, formName);
+    if (!form) return json({ submissions: [], note: 'Nothing has been submitted yet.' });
 
     if (req.method === 'DELETE') {
       const id = new URL(req.url).searchParams.get('id');
       if (!id || !/^[a-f0-9]+$/i.test(id)) return json({ error: 'Missing submission id' }, 400);
       // Make sure the id belongs to this form before deleting
       const subs = await allSubmissions(form.id, token);
-      if (!subs.some((s) => s.id === id)) return json({ error: 'Not a consent submission' }, 400);
+      if (!subs.some((s) => s.id === id)) return json({ error: 'Submission not found' }, 400);
       await netlify(`/submissions/${id}`, token, { method: 'DELETE' });
       return json({ deleted: id });
     }

@@ -843,6 +843,7 @@
   <ul>
     <li><a href="#welcome">Home</a></li>
     <li><a href="about.html">About</a></li>
+    <li><a href="testimonials.html">Results</a></li>
     <li><a href="packages.html">Packages</a></li>
     <li><a href="#inquiry">Enquire</a></li>
     <li><a href="#booking">Book</a></li>
@@ -856,6 +857,7 @@
   <button class="mobile-nav-close" id="mobileNavClose">&times;</button>
   <a href="#welcome" onclick="closeMobileNav()">Home</a>
   <a href="about.html" onclick="closeMobileNav()">About</a>
+  <a href="testimonials.html" onclick="closeMobileNav()">Results</a>
   <a href="packages.html" onclick="closeMobileNav()">Packages</a>
   <a href="#inquiry" onclick="closeMobileNav()">Enquire</a>
   <a href="#booking" onclick="closeMobileNav()">Book</a>
@@ -977,22 +979,24 @@
         </ul>
       </div>
       <div>
-        <form id="inquiryForm">
+        <form id="inquiryForm" name="enquiry" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+          <input type="hidden" name="form-name" value="enquiry">
+          <p style="display:none"><label>Leave this empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
           <div class="form-group">
             <label for="name">Full Name</label>
-            <input type="text" id="name" placeholder="Your name" required>
+            <input type="text" id="name" name="name" placeholder="Your name" required>
           </div>
           <div class="form-group">
             <label for="age">Age</label>
-            <input type="number" id="age" placeholder="Your age" min="16" max="80" required>
+            <input type="number" id="age" name="age" placeholder="Your age" min="16" max="80" required>
           </div>
           <div class="form-group">
             <label for="goals">Your Goals</label>
-            <textarea id="goals" placeholder="Tell me about your fitness goals — weight loss, muscle gain, athletic performance, general fitness..." required></textarea>
+            <textarea id="goals" name="goals" placeholder="Tell me about your fitness goals — weight loss, muscle gain, athletic performance, general fitness..." required></textarea>
           </div>
           <div class="form-group">
             <label for="experience">Fitness Experience Level</label>
-            <select id="experience" required>
+            <select id="experience" name="experience" required>
               <option value="" disabled selected>Select your level</option>
               <option value="beginner">Beginner — New to structured training</option>
               <option value="intermediate">Intermediate — 1–3 years experience</option>
@@ -1003,7 +1007,7 @@
             <p class="contact-group-label">Contact Info <span>— provide at least one</span></p>
             <div class="form-group">
               <label for="email">Email Address</label>
-              <input type="email" id="email" placeholder="your@email.com">
+              <input type="email" id="email" name="email" placeholder="your@email.com">
             </div>
             <div class="form-group" style="margin-bottom:0">
               <label for="phone">Phone Number</label>
@@ -1058,7 +1062,7 @@
                   <option value="+380">🇺🇦 +380</option>
                   <option value="+971">🇦🇪 +971</option>
                 </select>
-                <input type="tel" id="phone" placeholder="7700 000000">
+                <input type="tel" id="phone" name="phone" placeholder="7700 000000">
               </div>
             </div>
             <p class="contact-group-error" id="contactError">Please enter an email address or phone number.</p>
@@ -1134,6 +1138,7 @@
   <div class="footer-links">
     <a href="#welcome">Home</a>
     <a href="#about">About</a>
+    <a href="testimonials.html">Results</a>
     <a href="#products">Packages</a>
     <a href="#inquiry">Enquire</a>
     <a href="#booking">Book a Call</a>
@@ -1169,7 +1174,7 @@
 <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
 
 <script>
-// Inquiry form handler using EmailJS
+// Enquiry form: saved to Netlify Forms (shows on admin.html) and emailed via Web3Forms
 document.getElementById('inquiryForm').addEventListener('submit', async function(e) {
   e.preventDefault();
   const btn = this.querySelector('button[type=submit]');
@@ -1193,7 +1198,21 @@ document.getElementById('inquiryForm').addEventListener('submit', async function
   btn.textContent = 'Sending...';
   btn.disabled = true;
 
-  try {
+  // 1) Save to Netlify Forms so it appears on the admin page
+  const saveToAdmin = fetch('/', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      'form-name': 'enquiry',
+      'bot-field': this.querySelector('[name="bot-field"]').value,
+      name, age, goals, experience,
+      email: email || 'Not provided',
+      phone: phone || 'Not provided'
+    }).toString()
+  }).then(r => r.ok).catch(() => false);
+
+  // 2) Email notification via Web3Forms
+  const sendEmail = (async () => {
     const res = await fetch('https://api.web3forms.com/submit', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
@@ -1210,12 +1229,17 @@ document.getElementById('inquiryForm').addEventListener('submit', async function
       })
     });
     const data = await res.json();
-    if (data.success) {
+    return !!data.success;
+  })().catch(() => false);
+
+  try {
+    const [saved, emailed] = await Promise.all([saveToAdmin, sendEmail]);
+    if (saved || emailed) {
       status.className = 'form-status success';
       status.textContent = "✓ Enquiry sent! I'll be in touch soon.";
       this.reset();
     } else {
-      throw new Error(data.message);
+      throw new Error('Enquiry not sent');
     }
   } catch(err) {
     status.className = 'form-status error';

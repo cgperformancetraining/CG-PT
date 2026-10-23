@@ -85,6 +85,18 @@
   .detail dt { color: var(--text-muted); font-size: 0.85rem; }
   .detail dd { color: var(--white); overflow-wrap: anywhere; }
   .detail .actions { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+  .tabs { display: flex; gap: 0.5rem; margin-bottom: 1.25rem; border-bottom: 1px solid var(--line); }
+  .tab {
+    background: none; border: none; border-bottom: 3px solid transparent; color: var(--text-muted);
+    font-family: 'Barlow Condensed', sans-serif; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    font-size: 1rem; padding: 0.7rem 1rem; margin-bottom: -1px;
+  }
+  .tab:hover { color: var(--white); }
+  .tab.active { color: var(--white); border-bottom-color: var(--blue); }
+  .tab .n { display: inline-block; min-width: 1.5em; margin-left: 0.4rem; padding: 0 0.4em; border-radius: 99px; background: var(--navy-light); font-size: 0.8rem; color: var(--silver); }
+  .chip.info { color: var(--blue-light); border-color: rgba(74,158,222,0.5); }
+  .detail dd.long { white-space: pre-wrap; }
+  @media print { .tabs { display: none !important; } }
   .empty { text-align: center; color: var(--text-muted); padding: 3rem 1rem; border: 1px dashed var(--line); border-radius: 4px; }
 
   @media (max-width: 760px) {
@@ -94,6 +106,7 @@
     .detail dl { grid-template-columns: 1fr; gap: 0.15rem; }
     .detail dd { margin-bottom: 0.6rem; }
     header .title { display: none; }
+    .tab { font-size: 0.9rem; padding: 0.7rem 0.6rem; white-space: nowrap; }
   }
 
   /* PRINT: just the opened record */
@@ -113,7 +126,7 @@
 <header>
   <div class="left">
     <a href="index.html"><img src="images/logo.png" alt="CG Performance Training"></a>
-    <span class="title">Consent Forms</span>
+    <span class="title">Admin</span>
   </div>
   <button class="btn ghost" id="logoutBtn" hidden>Log out</button>
 </header>
@@ -121,7 +134,7 @@
 <section class="login" id="loginView">
   <form class="login-card" id="loginForm">
     <h1>Admin <span>Login</span></h1>
-    <p>Photo consent form submissions</p>
+    <p>Enquiries &amp; consent forms</p>
     <label for="password">Password</label>
     <input type="password" id="password" autocomplete="current-password" required autofocus>
     <button class="btn" type="submit" id="loginBtn">Log in</button>
@@ -130,17 +143,14 @@
 </section>
 
 <main id="dashView" hidden>
+  <div class="tabs" role="tablist">
+    <button class="tab active" data-mode="enquiry" role="tab">Enquiries <span class="n" id="n-enquiry"></span></button>
+    <button class="tab" data-mode="consent" role="tab">Consent forms <span class="n" id="n-consent"></span></button>
+  </div>
   <div class="stats" id="stats"></div>
   <div class="toolbar">
     <input type="search" id="search" placeholder="Search name, email or phone…" aria-label="Search">
-    <select id="filter" aria-label="Filter">
-      <option value="all">All submissions</option>
-      <option value="website">Allowed on website</option>
-      <option value="social">Allowed on social media</option>
-      <option value="marketing">Allowed in marketing</option>
-      <option value="private">Private only (no sharing)</option>
-      <option value="minor">Under 18</option>
-    </select>
+    <select id="filter" aria-label="Filter"></select>
     <button class="btn ghost" id="refreshBtn">Refresh</button>
     <button class="btn" id="csvBtn">Export CSV</button>
   </div>
@@ -153,7 +163,8 @@
   var API = '/api/consent-submissions';
   var KEY = 'cgpt_admin_pw';
   var password = null;
-  var data = [];
+  var mode = 'enquiry';
+  var store_data = { enquiry: [], consent: [] };
 
   var $ = function (id) { return document.getElementById(id); };
   var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
@@ -163,41 +174,128 @@
     clear: function () { try { sessionStorage.removeItem(KEY); } catch (e) {} }
   };
 
-  var FIELDS = [
-    ['full_name', 'Full name'], ['email', 'Email'], ['phone', 'Phone'], ['coaching_type', 'Coaching type'],
-    ['over_18', '18 or over'], ['guardian_name', 'Parent / guardian'],
-    ['use_website', 'Website'], ['use_social_media', 'Social media'], ['use_marketing', 'Marketing & advertising'],
-    ['face_visibility', 'Face'], ['name_usage', 'Name'], ['restrictions', 'Other restrictions'],
-    ['declaration', 'Declaration'], ['signature', 'Signature'], ['signed_date', 'Date signed'], ['created_at', 'Submitted']
-  ];
-
   function fmtDate(iso) {
     if (!iso) return '';
     var d = new Date(iso);
     return isNaN(d) ? iso : d.toLocaleString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
   }
+  function isYes(v) { return v === 'Yes'; }
+  function sharesAny(s) { return isYes(s.use_website) || isYes(s.use_social_media) || isYes(s.use_marketing); }
+  function chip(label, val) { return '<span class="chip ' + (isYes(val) ? 'yes' : 'no') + '">' + label + '</span>'; }
+  function daysAgo(iso) { return (Date.now() - new Date(iso).getTime()) / 86400000; }
+  function cap(v) { return v ? String(v).charAt(0).toUpperCase() + String(v).slice(1) : v; }
+  function contactable(v) { return v && v !== 'Not provided'; }
 
-  function call(method, query) {
-    return fetch(API + (query || ''), { method: method, headers: { Authorization: 'Bearer ' + password } })
+  /* ---------- Settings for each form type ---------- */
+  var MODES = {
+    consent: {
+      title: 'Consent forms',
+      fields: [
+        ['full_name', 'Full name'], ['email', 'Email'], ['phone', 'Phone'], ['coaching_type', 'Coaching type'],
+        ['over_18', '18 or over'], ['guardian_name', 'Parent / guardian'],
+        ['use_website', 'Website'], ['use_social_media', 'Social media'], ['use_marketing', 'Marketing & advertising'],
+        ['face_visibility', 'Face'], ['name_usage', 'Name'], ['restrictions', 'Other restrictions'],
+        ['declaration', 'Declaration'], ['signature', 'Signature'], ['signed_date', 'Date signed'], ['created_at', 'Submitted']
+      ],
+      search: ['full_name', 'email', 'phone', 'signature'],
+      filters: [
+        ['all', 'All submissions', null],
+        ['website', 'Allowed on website', function (s) { return isYes(s.use_website); }],
+        ['social', 'Allowed on social media', function (s) { return isYes(s.use_social_media); }],
+        ['marketing', 'Allowed in marketing', function (s) { return isYes(s.use_marketing); }],
+        ['private', 'Private only (no sharing)', function (s) { return !sharesAny(s); }],
+        ['minor', 'Under 18', function (s) { return s.over_18 === 'No'; }]
+      ],
+      stats: [
+        ['Total forms', null],
+        ['Website OK', function (s) { return isYes(s.use_website); }],
+        ['Social OK', function (s) { return isYes(s.use_social_media); }],
+        ['Marketing OK', function (s) { return isYes(s.use_marketing); }],
+        ['Private only', function (s) { return !sharesAny(s); }]
+      ],
+      name: function (s) { return s.full_name; },
+      sub: function (s) { return s.email; },
+      chips: function (s) {
+        var face = s.face_visibility && s.face_visibility.indexOf('hidden') > -1 ? '<span class="chip warn">Hide face</span>' : '';
+        var minor = s.over_18 === 'No' ? '<span class="chip warn">Under 18</span>' : '';
+        return chip('Website', s.use_website) + chip('Social', s.use_social_media) + chip('Marketing', s.use_marketing) + face + minor;
+      },
+      empty: 'No consent forms submitted yet.<br>Share <strong>cg-pt.co.uk/consent.html</strong> with your clients.',
+      deleteLabel: 'Delete (consent withdrawn)',
+      deleteWord: 'consent form',
+      csvName: 'photo-consent-forms'
+    },
+    enquiry: {
+      title: 'Enquiries',
+      fields: [
+        ['name', 'Name'], ['email', 'Email'], ['phone', 'Phone'], ['age', 'Age'],
+        ['experience', 'Experience level'], ['goals', 'Goals'], ['created_at', 'Submitted']
+      ],
+      longFields: ['goals'],
+      search: ['name', 'email', 'phone', 'goals'],
+      filters: [
+        ['all', 'All enquiries', null],
+        ['week', 'Last 7 days', function (s) { return daysAgo(s.created_at) <= 7; }],
+        ['month', 'Last 30 days', function (s) { return daysAgo(s.created_at) <= 30; }],
+        ['beginner', 'Beginner', function (s) { return s.experience === 'beginner'; }],
+        ['intermediate', 'Intermediate', function (s) { return s.experience === 'intermediate'; }],
+        ['advanced', 'Advanced', function (s) { return s.experience === 'advanced'; }]
+      ],
+      stats: [
+        ['Total enquiries', null],
+        ['Last 7 days', function (s) { return daysAgo(s.created_at) <= 7; }],
+        ['Last 30 days', function (s) { return daysAgo(s.created_at) <= 30; }],
+        ['Beginners', function (s) { return s.experience === 'beginner'; }],
+        ['Int. / Advanced', function (s) { return s.experience === 'intermediate' || s.experience === 'advanced'; }]
+      ],
+      name: function (s) { return s.name; },
+      sub: function (s) { return [contactable(s.email) ? s.email : '', contactable(s.phone) ? s.phone : ''].filter(Boolean).join(' · '); },
+      chips: function (s) {
+        var c = s.experience ? '<span class="chip info">' + esc(cap(s.experience)) + '</span>' : '';
+        if (s.age) c += '<span class="chip info">Age ' + esc(s.age) + '</span>';
+        if (daysAgo(s.created_at) <= 2) c += '<span class="chip yes">New</span>';
+        return c;
+      },
+      display: function (key, v) { return key === 'experience' ? cap(v) : v; },
+      empty: 'No enquiries yet.<br>New enquiries from the form on your homepage will appear here.',
+      deleteLabel: 'Delete enquiry',
+      deleteWord: 'enquiry',
+      csvName: 'enquiries'
+    }
+  };
+
+  function cfg() { return MODES[mode]; }
+  function data() { return store_data[mode]; }
+  function value(s, key) {
+    if (key === 'created_at') return fmtDate(s.created_at);
+    var v = s[key];
+    return cfg().display ? cfg().display(key, v) : v;
+  }
+
+  function call(method, which, query) {
+    return fetch(API + '?form=' + which + (query || ''), { method: method, headers: { Authorization: 'Bearer ' + password } })
       .then(function (r) { return r.json().catch(function () { return {}; }).then(function (b) { b._status = r.status; return b; }); });
   }
+  function sortNewest(list) { return (list || []).sort(function (a, b) { return new Date(b.created_at) - new Date(a.created_at); }); }
 
   function login(pw, silent) {
     password = pw;
     $('loginBtn').disabled = true;
     $('loginErr').hidden = true;
-    return call('GET').then(function (res) {
+    return Promise.all([call('GET', 'enquiry'), call('GET', 'consent')]).then(function (res) {
       $('loginBtn').disabled = false;
-      if (res._status === 401) {
+      if (res[0]._status === 401 || res[1]._status === 401) {
         store.clear();
         if (!silent) { $('loginErr').textContent = 'Incorrect password.'; $('loginErr').hidden = false; }
         return;
       }
-      if (res.error) { $('loginErr').textContent = res.error; $('loginErr').hidden = false; return; }
+      var err = res[0].error || res[1].error;
+      if (err) { $('loginErr').textContent = err; $('loginErr').hidden = false; return; }
       store.set(pw);
-      data = (res.submissions || []).sort(function (a, b) { return new Date(b.created_at) - new Date(a.created_at); });
+      store_data.enquiry = sortNewest(res[0].submissions);
+      store_data.consent = sortNewest(res[1].submissions);
       $('loginView').hidden = true; $('dashView').hidden = false; $('logoutBtn').hidden = false;
-      render();
+      setMode(mode);
     }).catch(function () {
       $('loginBtn').disabled = false;
       $('loginErr').textContent = 'Could not reach the server. Check your connection and try again.';
@@ -205,58 +303,60 @@
     });
   }
 
-  function isYes(v) { return v === 'Yes'; }
-  function sharesAny(s) { return isYes(s.use_website) || isYes(s.use_social_media) || isYes(s.use_marketing); }
+  function setMode(m) {
+    mode = m;
+    document.querySelectorAll('.tab').forEach(function (t) {
+      var on = t.getAttribute('data-mode') === m;
+      t.classList.toggle('active', on);
+      t.setAttribute('aria-selected', on);
+    });
+    $('filter').innerHTML = cfg().filters.map(function (f) { return '<option value="' + f[0] + '">' + esc(f[1]) + '</option>'; }).join('');
+    $('search').value = '';
+    $('search').placeholder = mode === 'enquiry' ? 'Search name, email, phone or goals…' : 'Search name, email or phone…';
+    render();
+  }
 
   function renderStats() {
-    var n = function (fn) { return data.filter(fn).length; };
-    var items = [
-      [data.length, 'Total forms'],
-      [n(function (s) { return isYes(s.use_website); }), 'Website OK'],
-      [n(function (s) { return isYes(s.use_social_media); }), 'Social OK'],
-      [n(function (s) { return isYes(s.use_marketing); }), 'Marketing OK'],
-      [n(function (s) { return !sharesAny(s); }), 'Private only']
-    ];
-    $('stats').innerHTML = items.map(function (i) { return '<div class="stat"><b>' + i[0] + '</b><span>' + i[1] + '</span></div>'; }).join('');
+    var list = data();
+    $('stats').innerHTML = cfg().stats.map(function (st) {
+      var n = st[1] ? list.filter(st[1]).length : list.length;
+      return '<div class="stat"><b>' + n + '</b><span>' + esc(st[0]) + '</span></div>';
+    }).join('');
+    $('n-enquiry').textContent = store_data.enquiry.length;
+    $('n-consent').textContent = store_data.consent.length;
   }
 
   function filtered() {
     var q = $('search').value.trim().toLowerCase();
     var f = $('filter').value;
-    return data.filter(function (s) {
-      if (q && [s.full_name, s.email, s.phone, s.signature].join(' ').toLowerCase().indexOf(q) === -1) return false;
-      if (f === 'website') return isYes(s.use_website);
-      if (f === 'social') return isYes(s.use_social_media);
-      if (f === 'marketing') return isYes(s.use_marketing);
-      if (f === 'private') return !sharesAny(s);
-      if (f === 'minor') return s.over_18 === 'No';
-      return true;
+    var test = null;
+    cfg().filters.forEach(function (x) { if (x[0] === f) test = x[2]; });
+    return data().filter(function (s) {
+      if (q && cfg().search.map(function (k) { return s[k]; }).join(' ').toLowerCase().indexOf(q) === -1) return false;
+      return test ? test(s) : true;
     });
   }
 
-  function chip(label, val) { return '<span class="chip ' + (isYes(val) ? 'yes' : 'no') + '">' + label + '</span>'; }
-
   function render() {
     renderStats();
-    var rows = filtered();
-    $('count').textContent = rows.length + ' of ' + data.length + ' submission' + (data.length === 1 ? '' : 's');
-    if (!data.length) { $('list').innerHTML = '<div class="empty">No consent forms submitted yet.<br>Share <strong>cg-pt.co.uk/consent.html</strong> with your clients.</div>'; return; }
-    if (!rows.length) { $('list').innerHTML = '<div class="empty">No submissions match your search.</div>'; return; }
+    var c = cfg(), list = data(), rows = filtered();
+    $('count').textContent = rows.length + ' of ' + list.length + ' ' + (mode === 'enquiry' ? (list.length === 1 ? 'enquiry' : 'enquiries') : 'submission' + (list.length === 1 ? '' : 's'));
+    if (!list.length) { $('list').innerHTML = '<div class="empty">' + c.empty + '</div>'; return; }
+    if (!rows.length) { $('list').innerHTML = '<div class="empty">Nothing matches your search.</div>'; return; }
     $('list').innerHTML = rows.map(function (s) {
-      var dl = FIELDS.map(function (f) {
-        var v = f[0] === 'created_at' ? fmtDate(s.created_at) : s[f[0]];
+      var dl = c.fields.map(function (f) {
+        var v = value(s, f[0]);
         if (!v && f[0] === 'guardian_name') return '';
-        return '<dt>' + esc(f[1]) + '</dt><dd>' + (esc(v) || '—') + '</dd>';
+        var long = c.longFields && c.longFields.indexOf(f[0]) > -1 ? ' class="long"' : '';
+        return '<dt>' + esc(f[1]) + '</dt><dd' + long + '>' + (esc(v) || '—') + '</dd>';
       }).join('');
-      var faceChip = s.face_visibility && s.face_visibility.indexOf('hidden') > -1 ? '<span class="chip warn">Hide face</span>' : '';
-      var minorChip = s.over_18 === 'No' ? '<span class="chip warn">Under 18</span>' : '';
       return '<details class="card" data-id="' + esc(s.id) + '"><summary>' +
-        '<div><div class="name">' + esc(s.full_name || '(no name)') + '</div><div class="sub">' + esc(s.email) + '</div></div>' +
+        '<div><div class="name">' + esc(c.name(s) || '(no name)') + '</div><div class="sub">' + esc(c.sub(s)) + '</div></div>' +
         '<div class="sub">Submitted ' + esc(fmtDate(s.created_at)) + '</div>' +
-        '<div class="chips">' + chip('Website', s.use_website) + chip('Social', s.use_social_media) + chip('Marketing', s.use_marketing) + faceChip + minorChip + '</div>' +
+        '<div class="chips">' + c.chips(s) + '</div>' +
         '</summary><div class="detail"><dl>' + dl + '</dl><div class="actions">' +
         '<button class="btn ghost" data-act="print">Print / Save PDF</button>' +
-        '<button class="btn danger" data-act="delete">Delete (consent withdrawn)</button>' +
+        '<button class="btn danger" data-act="delete">' + esc(c.deleteLabel) + '</button>' +
         '</div></div></details>';
     }).join('');
   }
@@ -272,35 +372,40 @@
       card.classList.remove('printing');
       return;
     }
-    var rec = data.find(function (s) { return s.id === id; });
-    if (!confirm('Permanently delete the consent form for ' + (rec && rec.full_name || 'this client') + '?\n\nThis cannot be undone.')) return;
+    var which = mode;
+    var rec = data().find(function (s) { return s.id === id; });
+    var who = rec && cfg().name(rec) || 'this person';
+    if (!confirm('Permanently delete the ' + cfg().deleteWord + ' from ' + who + '?\n\nThis cannot be undone.')) return;
     btn.disabled = true;
-    call('DELETE', '?id=' + encodeURIComponent(id)).then(function (res) {
+    call('DELETE', which, '&id=' + encodeURIComponent(id)).then(function (res) {
       if (res.error) { alert(res.error); btn.disabled = false; return; }
-      data = data.filter(function (s) { return s.id !== id; });
+      store_data[which] = store_data[which].filter(function (s) { return s.id !== id; });
       render();
     });
   });
 
+  document.querySelectorAll('.tab').forEach(function (t) {
+    t.addEventListener('click', function () { setMode(t.getAttribute('data-mode')); });
+  });
   $('loginForm').addEventListener('submit', function (e) { e.preventDefault(); login($('password').value); });
   $('search').addEventListener('input', render);
   $('filter').addEventListener('change', render);
   $('refreshBtn').addEventListener('click', function () { login(password, true); });
   $('logoutBtn').addEventListener('click', function () {
-    store.clear(); password = null; data = [];
+    store.clear(); password = null; store_data = { enquiry: [], consent: [] };
     $('dashView').hidden = true; $('logoutBtn').hidden = true; $('loginView').hidden = false;
     $('password').value = ''; $('list').innerHTML = '';
   });
 
   $('csvBtn').addEventListener('click', function () {
-    var rows = filtered();
+    var c = cfg(), rows = filtered();
     var cell = function (v) { v = String(v == null ? '' : v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; };
-    var csv = [FIELDS.map(function (f) { return cell(f[1]); }).join(',')]
-      .concat(rows.map(function (s) { return FIELDS.map(function (f) { return cell(f[0] === 'created_at' ? fmtDate(s.created_at) : s[f[0]]); }).join(','); }))
+    var csv = [c.fields.map(function (f) { return cell(f[1]); }).join(',')]
+      .concat(rows.map(function (s) { return c.fields.map(function (f) { return cell(value(s, f[0])); }).join(','); }))
       .join('\r\n');
     var a = document.createElement('a');
     a.href = URL.createObjectURL(new Blob(['﻿' + csv], { type: 'text/csv' }));
-    a.download = 'photo-consent-forms-' + new Date().toISOString().slice(0, 10) + '.csv';
+    a.download = c.csvName + '-' + new Date().toISOString().slice(0, 10) + '.csv';
     a.click();
     URL.revokeObjectURL(a.href);
   });
