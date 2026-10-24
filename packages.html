@@ -209,6 +209,7 @@
     display: flex;
     flex-direction: column;
     transition: border-color 0.3s, transform 0.3s;
+    cursor: pointer;
     clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px));
   }
   .product-card:hover {
@@ -536,6 +537,17 @@ function buyProduct(product) {
   var url = stripeLinks[product];
   if (url) { window.location.href = url; }
 }
+
+// Clicking anywhere on a card opens that package's Learn More page.
+// Clicks on the Buy Now / Learn More buttons still do their own thing.
+document.querySelectorAll('.product-card').forEach(function (card) {
+  var learn = card.querySelector('.btn-learn');
+  if (!learn) return;
+  card.addEventListener('click', function (e) {
+    if (e.target.closest('a, button')) return;
+    window.location.href = learn.getAttribute('href');
+  });
+});
 </script>
 
 <!-- Cookie consent banner -->
