@@ -909,6 +909,7 @@
   @media (max-width: 520px) { .an-partner .an-text { align-items:center; text-align:center; } }
 </style>
 <link rel="stylesheet" href="motion.css">
+<link rel="stylesheet" href="black-friday.css">
 </head>
 <body>
 
@@ -953,6 +954,33 @@
     <div class="hero-ctas">
       <a href="packages.html" class="hero-btn hero-btn-primary">View Packages <span aria-hidden="true">&rarr;</span></a>
       <a href="#booking" class="hero-btn hero-btn-secondary">Free Consultation</a>
+    </div>
+  </div>
+</section>
+
+<!-- BLACK FRIDAY OFFER: hides itself automatically when the countdown ends -->
+<section class="bf" id="black-friday" data-ends="2026-11-28T00:00:00Z">
+  <div class="bf-inner">
+    <div class="bf-copy">
+      <span class="bf-tag">Black Friday Offer</span>
+      <h2 class="bf-title">6 Months of Training <span>for the Price of 4</span></h2>
+      <p class="bf-desc">2 x 1-2-1 sessions a week for 6 months at JD Gyms East Kilbride, for one payment of &pound;1,196.</p>
+      <div class="bf-price">
+        <span class="bf-now">&pound;1,196</span>
+        <span class="bf-was">&pound;1,794</span>
+        <span class="bf-save">Save &pound;598</span>
+      </div>
+    </div>
+    <div class="bf-side">
+      <p class="bf-ends">Offer ends in</p>
+      <div class="bf-clock" role="timer" aria-label="Time left on the Black Friday offer">
+        <div><b data-bf="d">--</b><span>Days</span></div>
+        <div><b data-bf="h">--</b><span>Hours</span></div>
+        <div><b data-bf="m">--</b><span>Minutes</span></div>
+        <div><b data-bf="s">--</b><span>Seconds</span></div>
+      </div>
+      <a href="https://buy.stripe.com/eVq00laiN7wo5LAfb39Zm0g" class="bf-buy">Buy Now</a>
+      <p class="bf-small">Ends at midnight on Friday 27 November. No refunds. Sessions not booked each week are lost. <a href="terms.html#black-friday">Offer terms</a></p>
     </div>
   </div>
 </section>
@@ -1420,5 +1448,6 @@ function declineCookies() {
 })();
 </script>
 <script src="motion.js"></script>
+<script src="black-friday.js"></script>
 </body>
 </html>

@@ -1,0 +1,29 @@
+/* CG Performance Training: Black Friday offer block (homepage + packages page).
+   The block hides itself when the countdown ends (see black-friday.js). */
+.bf { padding:4rem 2rem; background:#080f17; border-top:3px solid #c0392b; border-bottom:1px solid rgba(74,158,222,0.2); }
+.bf[hidden] { display:none; }
+.bf-inner { max-width:1100px; margin:0 auto; display:grid; grid-template-columns:1.15fr 0.85fr; gap:3rem; align-items:center; }
+.bf-inner > * { min-width:0; }
+.bf-tag { display:inline-block; background:#c0392b; color:#fff; font-family:'Barlow Condensed',sans-serif; font-size:0.9rem; font-weight:700; letter-spacing:0.25em; text-transform:uppercase; padding:0.35rem 0.9rem; margin-bottom:1.1rem; }
+.bf-title { font-family:'Bebas Neue',sans-serif; font-weight:400; font-size:clamp(2.6rem, 5.5vw, 4.4rem); line-height:0.98; color:#f0f4f8; margin:0 0 1rem; }
+.bf-title span { display:block; color:#4a9ede; }
+.bf-desc { color:#b8c5d0; font-size:1.1rem; line-height:1.7; max-width:520px; margin:0 0 1.5rem; }
+.bf-price { display:flex; align-items:baseline; gap:1rem; flex-wrap:wrap; }
+.bf-now { font-family:'Bebas Neue',sans-serif; font-size:3.4rem; line-height:1; color:#f0f4f8; }
+.bf-was { font-size:1.2rem; color:#7a96b0; text-decoration:line-through; }
+.bf-save { font-family:'Barlow Condensed',sans-serif; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; font-size:0.95rem; color:#e74c3c; border:1px solid rgba(231,76,60,0.6); padding:0.25rem 0.7rem; }
+.bf-side { background:#162032; border:1px solid rgba(74,158,222,0.25); padding:2rem; text-align:center; }
+.bf-ends { font-family:'Barlow Condensed',sans-serif; font-size:0.9rem; font-weight:700; letter-spacing:0.25em; text-transform:uppercase; color:#7a96b0; margin:0 0 1rem; }
+.bf-clock { display:grid; grid-template-columns:repeat(4,1fr); gap:0.6rem; margin-bottom:1.5rem; }
+.bf-clock div { background:#0d1b2a; border:1px solid rgba(74,158,222,0.25); padding:0.9rem 0.25rem 0.7rem; }
+.bf-clock b { display:block; font-family:'Bebas Neue',sans-serif; font-weight:400; font-size:clamp(2.2rem, 5vw, 3rem); line-height:1; color:#f0f4f8; font-variant-numeric:tabular-nums; }
+.bf-clock span { display:block; margin-top:0.35rem; font-family:'Barlow Condensed',sans-serif; font-size:0.75rem; font-weight:600; letter-spacing:0.15em; text-transform:uppercase; color:#7a96b0; }
+.bf-buy { display:block; background:#c0392b; color:#fff; text-decoration:none; font-family:'Barlow Condensed',sans-serif; font-size:1.25rem; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; padding:1.1rem 1.5rem; transition:background 0.2s, transform 0.2s; }
+.bf-buy:hover { background:#e74c3c; transform:translateY(-2px); }
+.bf-small { margin:1rem 0 0; font-size:0.85rem; line-height:1.6; color:#7a96b0; }
+.bf-small a { color:#6db8f0; }
+@media (max-width:860px) {
+  .bf { padding:3rem 1.25rem; }
+  .bf-inner { grid-template-columns:1fr; gap:2rem; }
+  .bf-side { padding:1.5rem 1.1rem; }
+}

@@ -14,7 +14,7 @@
   <link rel="icon" type="image/png" href="images/CG%20PT%20Favicon.png">
   <link rel="apple-touch-icon" href="images/CG%20PT%20Favicon.png">
 <title>Personal Training Packages East Kilbride &amp; Online | CG Performance Training</title>
-<meta name="description" content="All CG Performance Training packages: in-person coaching at JD Gyms East Kilbride from £199/month, online coaching from £79/month, and the £25 Starter Kit.">
+<meta name="description" content="All CG Performance Training packages: in-person coaching at JD Gyms East Kilbride from £199/month, and online coaching from £79/month.">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://cg-pt.co.uk/packages">
 
@@ -367,6 +367,7 @@
   @media (max-width: 520px) { .an-partner .an-text { align-items:center; text-align:center; } }
 </style>
 <link rel="stylesheet" href="motion.css">
+<link rel="stylesheet" href="black-friday.css">
 </head>
 <body>
 <nav class="cg-nav" aria-label="Main">
@@ -398,6 +399,33 @@
   <h1>Choose Your <span>Package</span></h1>
   <p class="tagline">Coaching in person at JD Gyms East Kilbride, or online from anywhere. Every plan is built around your goals.</p>
 </div>
+
+<!-- BLACK FRIDAY OFFER: hides itself automatically when the countdown ends -->
+<section class="bf" id="black-friday" data-ends="2026-11-28T00:00:00Z">
+  <div class="bf-inner">
+    <div class="bf-copy">
+      <span class="bf-tag">Black Friday Offer</span>
+      <h2 class="bf-title">6 Months of Training <span>for the Price of 4</span></h2>
+      <p class="bf-desc">2 x 1-2-1 sessions a week for 6 months at JD Gyms East Kilbride, for one payment of &pound;1,196.</p>
+      <div class="bf-price">
+        <span class="bf-now">&pound;1,196</span>
+        <span class="bf-was">&pound;1,794</span>
+        <span class="bf-save">Save &pound;598</span>
+      </div>
+    </div>
+    <div class="bf-side">
+      <p class="bf-ends">Offer ends in</p>
+      <div class="bf-clock" role="timer" aria-label="Time left on the Black Friday offer">
+        <div><b data-bf="d">--</b><span>Days</span></div>
+        <div><b data-bf="h">--</b><span>Hours</span></div>
+        <div><b data-bf="m">--</b><span>Minutes</span></div>
+        <div><b data-bf="s">--</b><span>Seconds</span></div>
+      </div>
+      <a href="https://buy.stripe.com/eVq00laiN7wo5LAfb39Zm0g" class="bf-buy">Buy Now</a>
+      <p class="bf-small">Ends at midnight on Friday 27 November. No refunds. Sessions not booked each week are lost. <a href="terms.html#black-friday">Offer terms</a></p>
+    </div>
+  </div>
+</section>
 
 <div class="products-wrap">
   <h3 class="products-subhead">In-Person Coaching <span>· JD Gyms East Kilbride</span></h3>
@@ -464,18 +492,6 @@
       <div class="card-buttons">
         <a href="online-plus.html" class="btn-learn">Learn More</a>
         <button class="btn-buy" onclick="buyProduct('online-plus')">Buy Now</button>
-      </div>
-    </div>
-    <!-- Starter Kit -->
-    <div class="product-card">
-      <div class="product-icon">🚀</div>
-      <div class="product-name">Starter Kit</div>
-      <div class="product-price">£25</div>
-      <div class="product-price-note">One-time payment</div>
-      <p class="product-desc">Everything you need to get started on your fitness journey. Includes a personalised workout plan, nutrition guidance, and goal-setting framework.</p>
-      <div class="card-buttons">
-        <a href="starter-kit.html" class="btn-learn">Learn More</a>
-        <button class="btn-buy" onclick="buyProduct('starter-kit')">Buy Now</button>
       </div>
     </div>
   </div>
@@ -593,5 +609,6 @@ function declineCookies() {
 })();
 </script>
 <script src="motion.js"></script>
+<script src="black-friday.js"></script>
 </body>
 </html>
