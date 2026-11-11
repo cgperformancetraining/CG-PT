@@ -103,9 +103,10 @@
       ticking = false;
       var y = window.scrollY || 0, vh = window.innerHeight || 800;
       if (inner && hero) {
-        var p = Math.max(0, Math.min(y / (hero.offsetHeight * 0.85), 1));
+        var h = hero.offsetHeight;
+        var p = Math.max(0, Math.min((y - h * 0.6) / (h * 0.4), 1)); // stay fully visible for the first 60% of the header, then ease away
         inner.style.transform = 'translate3d(0,' + (p * 70) + 'px,0) scale(' + (1 - p * 0.06) + ')';
-        inner.style.opacity = String(1 - p * 0.9);
+        inner.style.opacity = String(1 - p * 0.7);
       }
       if (photo) {
         var r = photo.getBoundingClientRect();
