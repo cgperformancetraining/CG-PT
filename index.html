@@ -1449,5 +1449,110 @@ function declineCookies() {
 </script>
 <script src="motion.js"></script>
 <script src="black-friday.js"></script>
+
+<!-- Email list popup: shown once per visitor -->
+<style>
+  .ep-overlay { position: fixed; inset: 0; z-index: 10000; background: rgba(5,12,20,0.75); display: none; align-items: center; justify-content: center; padding: 1.25rem; opacity: 0; transition: opacity 0.3s; }
+  .ep-overlay.open { display: flex; }
+  .ep-overlay.show { opacity: 1; }
+  .ep-box { position: relative; width: 100%; max-width: 440px; background: #162032; border: 1px solid rgba(74,158,222,0.4); border-top: 4px solid #4a9ede; border-radius: 4px; padding: 2.25rem 1.75rem 1.75rem; text-align: center; font-family: 'Barlow', sans-serif; color: #f0f4f8; transform: translateY(12px); transition: transform 0.3s; }
+  .ep-overlay.show .ep-box { transform: none; }
+  .ep-close { position: absolute; top: 0.6rem; right: 0.6rem; width: 40px; height: 40px; background: none; border: none; color: #b8c5d0; font-size: 1.7rem; line-height: 1; cursor: pointer; }
+  .ep-close:hover { color: #fff; }
+  .ep-tag { display: block; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 0.8rem; letter-spacing: 0.3em; text-transform: uppercase; color: #e74c3c; margin-bottom: 0.4rem; }
+  .ep-box h2 { font-family: 'Bebas Neue', sans-serif; font-size: 2.4rem; letter-spacing: 0.03em; line-height: 1; margin: 0 0 0.6rem; color: #f0f4f8; }
+  .ep-box h2 span { color: #4a9ede; }
+  .ep-box p { color: #b8c5d0; font-size: 0.97rem; line-height: 1.55; margin: 0 0 1.2rem; }
+  .ep-box input[type=text], .ep-box input[type=email] { width: 100%; background: #0d1b2a; border: 1px solid rgba(74,158,222,0.35); color: #f0f4f8; font-family: inherit; font-size: 1rem; padding: 0.8rem 0.9rem; border-radius: 3px; margin-bottom: 0.7rem; box-sizing: border-box; }
+  .ep-box input:focus { outline: none; border-color: #4a9ede; }
+  .ep-box button[type=submit] { width: 100%; background: #4a9ede; color: #fff; border: none; padding: 0.95rem; border-radius: 3px; cursor: pointer; font-family: 'Barlow Condensed', sans-serif; font-weight: 700; font-size: 1.05rem; letter-spacing: 0.12em; text-transform: uppercase; }
+  .ep-box button[type=submit]:hover { background: #6db8f0; }
+  .ep-box button[type=submit]:disabled { opacity: 0.6; cursor: wait; }
+  .ep-small { font-size: 0.78rem !important; color: #7a96b0 !important; margin: 0.9rem 0 0 !important; }
+  .ep-small a { color: #6db8f0; }
+  .ep-err { color: #e74c3c !important; font-size: 0.88rem !important; margin: 0 0 0.7rem !important; }
+  .ep-hp { position: absolute; left: -9999px; }
+</style>
+<div class="ep-overlay" id="emailPopup" role="dialog" aria-modal="true" aria-labelledby="epTitle">
+  <div class="ep-box">
+    <button type="button" class="ep-close" id="epClose" aria-label="Close">&times;</button>
+    <div id="epFormWrap">
+      <span class="ep-tag">Deals &amp; Updates</span>
+      <h2 id="epTitle">Don't Miss <span>An Offer</span></h2>
+      <p>Join the CG Performance Training email list to be first to hear about deals, new plans and training tips.</p>
+      <form name="email-list" id="epForm" method="POST" data-netlify="true" netlify-honeypot="bot-field" novalidate>
+        <input type="hidden" name="form-name" value="email-list">
+        <p class="ep-hp"><label>Leave this empty: <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
+        <input type="hidden" name="source" value="Homepage popup">
+        <input type="text" name="first_name" placeholder="First name" autocomplete="given-name" aria-label="First name">
+        <input type="email" name="email" id="epEmail" placeholder="Email address" autocomplete="email" required aria-label="Email address">
+        <p class="ep-err" id="epErr" hidden></p>
+        <button type="submit" id="epBtn">Sign Me Up</button>
+      </form>
+      <p class="ep-small">No spam. Unsubscribe any time. See our <a href="privacy.html">Privacy Policy</a>.</p>
+    </div>
+    <div id="epThanks" hidden>
+      <span class="ep-tag">You're In</span>
+      <h2>Thanks For <span>Signing Up</span></h2>
+      <p>You'll be the first to hear about our next deal.</p>
+      <button type="submit" id="epDone" style="width:100%;background:#4a9ede;color:#fff;border:none;padding:0.95rem;border-radius:3px;cursor:pointer;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:1.05rem;letter-spacing:0.12em;text-transform:uppercase;">Close</button>
+    </div>
+  </div>
+</div>
+<script>
+(function () {
+  var KEY = 'cgpt_email_popup';
+  var pop = document.getElementById('emailPopup');
+  try { if (localStorage.getItem(KEY)) return; } catch (e) { return; } // only ever shown once
+  var shown = false;
+  function open() {
+    if (shown) return;
+    shown = true;
+    try { localStorage.setItem(KEY, 'shown'); } catch (e) {}
+    pop.classList.add('open');
+    requestAnimationFrame(function () { pop.classList.add('show'); });
+    window.removeEventListener('scroll', onScroll);
+  }
+  function close() {
+    pop.classList.remove('show');
+    setTimeout(function () { pop.classList.remove('open'); }, 300);
+  }
+  function onScroll() {
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    if (h > 0 && window.scrollY / h > 0.4) open();
+  }
+  // Show after 10 seconds, or once they've scrolled 40% of the page, whichever is first
+  setTimeout(open, 10000);
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  document.getElementById('epClose').addEventListener('click', close);
+  document.getElementById('epDone').addEventListener('click', close);
+  pop.addEventListener('click', function (e) { if (e.target === pop) close(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && pop.classList.contains('open')) close(); });
+
+  var form = document.getElementById('epForm'), err = document.getElementById('epErr'), btn = document.getElementById('epBtn');
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var email = document.getElementById('epEmail');
+    if (!email.value.trim() || !email.checkValidity()) {
+      err.textContent = 'Please enter a valid email address.'; err.hidden = false; email.focus(); return;
+    }
+    err.hidden = true; btn.disabled = true; btn.textContent = 'Signing up…';
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams(new FormData(form)).toString()
+    }).then(function (r) {
+      if (!r.ok) throw new Error(r.status);
+      try { localStorage.setItem(KEY, 'subscribed'); } catch (e2) {}
+      document.getElementById('epFormWrap').hidden = true;
+      document.getElementById('epThanks').hidden = false;
+    }).catch(function () {
+      err.textContent = 'Sorry, something went wrong. Please try again.'; err.hidden = false;
+      btn.disabled = false; btn.textContent = 'Sign Me Up';
+    });
+  });
+})();
+</script>
 </body>
 </html>

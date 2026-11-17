@@ -85,7 +85,7 @@
   .detail dt { color: var(--text-muted); font-size: 0.85rem; }
   .detail dd { color: var(--white); overflow-wrap: anywhere; }
   .detail .actions { display: flex; gap: 0.6rem; flex-wrap: wrap; }
-  .tabs { display: flex; gap: 0.5rem; margin-bottom: 1.25rem; border-bottom: 1px solid var(--line); }
+  .tabs { display: flex; gap: 0.5rem; margin-bottom: 1.25rem; border-bottom: 1px solid var(--line); overflow-x: auto; }
   .tab {
     background: none; border: none; border-bottom: 3px solid transparent; color: var(--text-muted);
     font-family: 'Barlow Condensed', sans-serif; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
@@ -96,6 +96,8 @@
   .tab .n { display: inline-block; min-width: 1.5em; margin-left: 0.4rem; padding: 0 0.4em; border-radius: 99px; background: var(--navy-light); font-size: 0.8rem; color: var(--silver); }
   .chip.info { color: var(--blue-light); border-color: rgba(74,158,222,0.5); }
   .detail dd.long { white-space: pre-wrap; }
+  .detail dd img.sig { background: #fff; border-radius: 3px; max-width: 320px; width: 100%; display: block; }
+  .chip.unpaid { color: var(--red-bright); border-color: rgba(231,76,60,0.5); }
   @media print { .tabs { display: none !important; } }
   .empty { text-align: center; color: var(--text-muted); padding: 3rem 1rem; border: 1px dashed var(--line); border-radius: 4px; }
 
@@ -134,7 +136,7 @@
 <section class="login" id="loginView">
   <form class="login-card" id="loginForm">
     <h1>Admin <span>Login</span></h1>
-    <p>Enquiries, contracts &amp; consent forms</p>
+    <p>Enquiries, contracts, email list &amp; consent forms</p>
     <label for="password">Password</label>
     <input type="password" id="password" autocomplete="current-password" required autofocus>
     <button class="btn" type="submit" id="loginBtn">Log in</button>
@@ -146,6 +148,7 @@
   <div class="tabs" role="tablist">
     <button class="tab active" data-mode="enquiry" role="tab">Enquiries <span class="n" id="n-enquiry"></span></button>
     <button class="tab" data-mode="contract" role="tab">Contracts <span class="n" id="n-contract"></span></button>
+    <button class="tab" data-mode="emails" role="tab">Email List <span class="n" id="n-emails"></span></button>
     <button class="tab" data-mode="consent" role="tab">Consent forms <span class="n" id="n-consent"></span></button>
   </div>
   <div class="stats" id="stats"></div>
@@ -165,8 +168,9 @@
   var KEY = 'cgpt_admin_pw';
   var password = null;
   var mode = 'enquiry';
-  var store_data = { enquiry: [], contract: [], consent: [] };
-  var ORDER = ['enquiry', 'contract', 'consent'];
+  var store_data = { enquiry: [], contract: [], emails: [], consent: [] };
+  var ORDER = ['enquiry', 'contract', 'emails', 'consent'];
+  var payments = {}; // contract_ref -> payment confirmation (from the thank-you pages)
 
   var $ = function (id) { return document.getElementById(id); };
   var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
@@ -188,6 +192,13 @@
   function parseDay(v) { var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(v || ''); return m ? new Date(+m[1], m[2] - 1, +m[3]) : null; }
   function niceDay(v) { var d = parseDay(v); return d ? d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : v; }
   function inMinTerm(s) { var d = parseDay(s.minimum_term_end); return !!d && d > new Date(); }
+  function payment(s) { return s.contract_ref ? payments[s.contract_ref] : null; }
+  function isPaid(s) { return !!payment(s); }
+  function payStatus(s) {
+    if (!s.contract_ref) return 'Not tracked (signed before payment tracking)';
+    var p = payment(s);
+    return p ? 'Paid — reached thank-you page ' + fmtDate(p.created_at) : 'Not paid — has not reached the thank-you page';
+  }
   function isInPerson(s) { return ['foundation', 'core', 'performance'].indexOf(s.plan) > -1; }
   function cap(v) { return v ? String(v).charAt(0).toUpperCase() + String(v).slice(1) : v; }
   function contactable(v) { return v && v !== 'Not provided'; }
@@ -235,17 +246,20 @@
       title: 'Contracts',
       fields: [
         ['full_name', 'Full name'], ['email', 'Email'], ['phone', 'Phone'], ['address', 'Address'],
+        ['payment_status', 'Payment'], ['contract_ref', 'Contract ref'],
         ['plan_name', 'Plan'], ['monthly_price', 'Monthly payment'], ['start_date', 'Start date'],
         ['minimum_term_end', 'Minimum term ends'], ['over_18', '18 or over'],
         ['agree_minimum_term', '3-month minimum + 30 days notice'], ['agree_start_now', 'Start now (cooling-off)'],
         ['agree_health', 'Health declaration'], ['agree_contract', 'Agreed to contract'],
-        ['signature', 'Signature'], ['signed_date', 'Date signed'], ['contract_version', 'Contract version'],
+        ['signature_image', 'Signature'], ['signature', 'Print name'], ['signed_date', 'Date signed'], ['contract_version', 'Contract version'],
         ['created_at', 'Submitted'], ['contract_terms', 'Contract signed (full text)']
       ],
       longFields: ['contract_terms'],
       search: ['full_name', 'email', 'phone', 'signature', 'plan_name'],
       filters: [
         ['all', 'All contracts', null],
+        ['paid', 'Paid', isPaid],
+        ['unpaid', 'Not paid', function (s) { return !isPaid(s); }],
         ['minterm', 'In minimum term', inMinTerm],
         ['rolling', 'Past minimum term (30 days notice)', function (s) { return !inMinTerm(s); }],
         ['foundation', 'Foundation', function (s) { return s.plan === 'foundation'; }],
@@ -256,25 +270,60 @@
       ],
       stats: [
         ['Total contracts', null],
+        ['Paid', isPaid],
+        ['Not paid', function (s) { return !isPaid(s); }],
         ['In minimum term', inMinTerm],
-        ['Past minimum term', function (s) { return !inMinTerm(s); }],
-        ['In person', isInPerson],
-        ['Online', function (s) { return !isInPerson(s); }]
+        ['Past minimum term', function (s) { return !inMinTerm(s); }]
       ],
       name: function (s) { return s.full_name; },
       sub: function (s) { return [s.plan_name, s.monthly_price ? s.monthly_price + '/month' : '', s.email].filter(Boolean).join(' · '); },
       chips: function (s) {
-        var c = s.plan_name ? '<span class="chip info">' + esc(s.plan_name) + '</span>' : '';
+        var c = !s.contract_ref ? '<span class="chip no">Payment not tracked</span>'
+          : isPaid(s) ? '<span class="chip yes">Paid</span>' : '<span class="chip unpaid">Not paid</span>';
+        if (s.plan_name) c += '<span class="chip info">' + esc(s.plan_name) + '</span>';
         c += inMinTerm(s)
           ? '<span class="chip warn">Min. term to ' + esc(niceDay(s.minimum_term_end)) + '</span>'
           : '<span class="chip yes">30 days notice</span>';
         return c;
       },
-      display: function (key, v) { return /^(start_date|minimum_term_end|signed_date)$/.test(key) ? niceDay(v) : v; },
+      display: function (key, v, s) {
+        if (key === 'payment_status') return payStatus(s);
+        return /^(start_date|minimum_term_end|signed_date)$/.test(key) ? niceDay(v) : v;
+      },
+      html: function (key, v) {
+        // Drawn signature: only ever show a genuine PNG image
+        if (key === 'signature_image' && /^data:image\/png;base64,[A-Za-z0-9+\/=]+$/.test(v || '')) return '<img class="sig" src="' + v + '" alt="Signature">';
+        return null;
+      },
+      noCsv: ['signature_image', 'contract_terms'],
       empty: 'No contracts signed yet.<br>Clients sign at <strong>cg-pt.co.uk/contract.html</strong> when they press Get Started on a monthly plan.',
       deleteLabel: 'Delete contract',
       deleteWord: 'contract',
       csvName: 'client-contracts'
+    },
+    emails: {
+      title: 'Email List',
+      fields: [['first_name', 'First name'], ['email', 'Email'], ['source', 'Signed up from'], ['created_at', 'Signed up']],
+      search: ['first_name', 'email'],
+      filters: [
+        ['all', 'Everyone', null],
+        ['week', 'Last 7 days', function (s) { return daysAgo(s.created_at) <= 7; }],
+        ['month', 'Last 30 days', function (s) { return daysAgo(s.created_at) <= 30; }]
+      ],
+      stats: [
+        ['On the list', null],
+        ['Last 7 days', function (s) { return daysAgo(s.created_at) <= 7; }],
+        ['Last 30 days', function (s) { return daysAgo(s.created_at) <= 30; }],
+        ['With a name', function (s) { return !!s.first_name; }],
+        ['This year', function (s) { return new Date(s.created_at).getFullYear() === new Date().getFullYear(); }]
+      ],
+      name: function (s) { return s.email; },
+      sub: function (s) { return s.first_name || ''; },
+      chips: function (s) { return daysAgo(s.created_at) <= 2 ? '<span class="chip yes">New</span>' : ''; },
+      empty: 'No one on your email list yet.<br>New sign-ups from the homepage popup will appear here.',
+      deleteLabel: 'Remove (unsubscribed)',
+      deleteWord: 'email sign-up',
+      csvName: 'email-list'
     },
     enquiry: {
       title: 'Enquiries',
@@ -320,7 +369,7 @@
   function value(s, key) {
     if (key === 'created_at') return fmtDate(s.created_at);
     var v = s[key];
-    return cfg().display ? cfg().display(key, v) : v;
+    return cfg().display ? cfg().display(key, v, s) : v;
   }
 
   function call(method, which, query) {
@@ -333,7 +382,7 @@
     password = pw;
     $('loginBtn').disabled = true;
     $('loginErr').hidden = true;
-    return Promise.all(ORDER.map(function (f) { return call('GET', f); })).then(function (res) {
+    return Promise.all(ORDER.concat('payment').map(function (f) { return call('GET', f); })).then(function (res) {
       $('loginBtn').disabled = false;
       if (res.some(function (r) { return r._status === 401; })) {
         store.clear();
@@ -344,6 +393,10 @@
       if (err) { $('loginErr').textContent = err; $('loginErr').hidden = false; return; }
       store.set(pw);
       ORDER.forEach(function (f, i) { store_data[f] = sortNewest(res[i].submissions); });
+      payments = {};
+      sortNewest(res[ORDER.length].submissions).reverse().forEach(function (p) {
+        if (p.contract_ref && !payments[p.contract_ref]) payments[p.contract_ref] = p; // keep the first visit
+      });
       $('loginView').hidden = true; $('dashView').hidden = false; $('logoutBtn').hidden = false;
       setMode(mode);
     }).catch(function () {
@@ -362,7 +415,7 @@
     });
     $('filter').innerHTML = cfg().filters.map(function (f) { return '<option value="' + f[0] + '">' + esc(f[1]) + '</option>'; }).join('');
     $('search').value = '';
-    $('search').placeholder = mode === 'enquiry' ? 'Search name, email, phone or goals…' : mode === 'contract' ? 'Search name, email, phone or plan…' : 'Search name, email or phone…';
+    $('search').placeholder = mode === 'enquiry' ? 'Search name, email, phone or goals…' : mode === 'contract' ? 'Search name, email, phone or plan…' : mode === 'emails' ? 'Search name or email…' : 'Search name, email or phone…';
     render();
   }
 
@@ -389,7 +442,7 @@
   function render() {
     renderStats();
     var c = cfg(), list = data(), rows = filtered();
-    $('count').textContent = rows.length + ' of ' + list.length + ' ' + (mode === 'enquiry' ? (list.length === 1 ? 'enquiry' : 'enquiries') : mode === 'contract' ? 'contract' + (list.length === 1 ? '' : 's') : 'submission' + (list.length === 1 ? '' : 's'));
+    $('count').textContent = rows.length + ' of ' + list.length + ' ' + (mode === 'enquiry' ? (list.length === 1 ? 'enquiry' : 'enquiries') : mode === 'contract' ? 'contract' + (list.length === 1 ? '' : 's') : mode === 'emails' ? 'subscriber' + (list.length === 1 ? '' : 's') : 'submission' + (list.length === 1 ? '' : 's'));
     if (!list.length) { $('list').innerHTML = '<div class="empty">' + c.empty + '</div>'; return; }
     if (!rows.length) { $('list').innerHTML = '<div class="empty">Nothing matches your search.</div>'; return; }
     $('list').innerHTML = rows.map(function (s) {
@@ -397,7 +450,8 @@
         var v = value(s, f[0]);
         if (!v && f[0] === 'guardian_name') return '';
         var long = c.longFields && c.longFields.indexOf(f[0]) > -1 ? ' class="long"' : '';
-        return '<dt>' + esc(f[1]) + '</dt><dd' + long + '>' + (esc(v) || '—') + '</dd>';
+        var raw = c.html ? c.html(f[0], s[f[0]]) : null;
+        return '<dt>' + esc(f[1]) + '</dt><dd' + long + '>' + (raw || esc(v) || '—') + '</dd>';
       }).join('');
       return '<details class="card" data-id="' + esc(s.id) + '"><summary>' +
         '<div><div class="name">' + esc(c.name(s) || '(no name)') + '</div><div class="sub">' + esc(c.sub(s)) + '</div></div>' +
@@ -441,16 +495,17 @@
   $('filter').addEventListener('change', render);
   $('refreshBtn').addEventListener('click', function () { login(password, true); });
   $('logoutBtn').addEventListener('click', function () {
-    store.clear(); password = null; store_data = { enquiry: [], contract: [], consent: [] };
+    store.clear(); password = null; store_data = { enquiry: [], contract: [], emails: [], consent: [] };
     $('dashView').hidden = true; $('logoutBtn').hidden = true; $('loginView').hidden = false;
     $('password').value = ''; $('list').innerHTML = '';
   });
 
   $('csvBtn').addEventListener('click', function () {
     var c = cfg(), rows = filtered();
+    var cols = c.fields.filter(function (f) { return !(c.noCsv && c.noCsv.indexOf(f[0]) > -1); });
     var cell = function (v) { v = String(v == null ? '' : v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; };
-    var csv = [c.fields.map(function (f) { return cell(f[1]); }).join(',')]
-      .concat(rows.map(function (s) { return c.fields.map(function (f) { return cell(value(s, f[0])); }).join(','); }))
+    var csv = [cols.map(function (f) { return cell(f[1]); }).join(',')]
+      .concat(rows.map(function (s) { return cols.map(function (f) { return cell(value(s, f[0])); }).join(','); }))
       .join('\r\n');
     var a = document.createElement('a');
     a.href = URL.createObjectURL(new Blob(['﻿' + csv], { type: 'text/csv' }));

@@ -14,7 +14,7 @@
   <link rel="icon" type="image/png" href="images/CG%20PT%20Favicon.png">
   <link rel="apple-touch-icon" href="images/CG%20PT%20Favicon.png">
 <title>Client Contract | CG Performance Training</title>
-<meta name="description" content="Client agreement for CG Performance Training monthly coaching plans.">
+<meta name="description" content="Client contract for CG Performance Training monthly coaching plans.">
 <meta name="robots" content="noindex, nofollow">
 <link rel="canonical" href="https://cg-pt.co.uk/contract.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -331,7 +331,17 @@
   .contract a { color: #1f6fb2; }
   .contract .signed-block { border-top: 2px solid #0d1b2a; margin-top: 1.5rem; padding-top: 1rem; }
   .contract .signed-block .sig { font-family: 'Barlow Condensed', sans-serif; font-style: italic; font-size: 1.6rem; }
-  .success-actions { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; margin: 1.25rem 0 0.75rem; }
+  .sig-pad { position: relative; background: #fff; border: 1px solid rgba(74,158,222,0.5); border-radius: 3px; height: 190px; touch-action: none; }
+  .sig-pad canvas { position: absolute; inset: 0; width: 100%; height: 100%; cursor: crosshair; touch-action: none; display: block; }
+  .sig-placeholder { position: absolute; left: 1.25rem; top: 50%; transform: translateY(-50%); color: #b4c0cb; font-family: 'Barlow Condensed', sans-serif; font-size: 1.6rem; font-style: italic; pointer-events: none; }
+  .sig-line { position: absolute; left: 1.25rem; right: 1.25rem; bottom: 42px; border-bottom: 1px dashed #b4c0cb; pointer-events: none; }
+  .sig-pad.invalid { outline: 2px solid var(--red-bright); outline-offset: 2px; }
+  .sig-tools { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
+  .sig-clear { padding: 0.45rem 1rem; font-size: 0.8rem; margin-top: 0.4rem; flex-shrink: 0; }
+  .content input[readonly] { opacity: 0.8; }
+  .contract .part { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 0.05em; color: #4a9ede; margin: 2rem 0 0; border-top: 2px solid #0d1b2a; padding-top: 1rem; }
+  .contract .signed-block img { max-width: 320px; width: 100%; display: block; border-bottom: 1px solid #0d1b2a; }
+  .success-actions { display: flex; align-items: center; gap: 0.75rem; justify-content: center; flex-wrap: wrap; margin: 1.25rem 0 0.75rem; }
   .btn-ghost {
     background: transparent; color: var(--silver); border: 1px solid rgba(74,158,222,0.5); cursor: pointer;
     font-family: 'Barlow Condensed', sans-serif; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
@@ -419,10 +429,12 @@
     <input type="hidden" name="start_date" id="start_date">
     <input type="hidden" name="minimum_term_end" id="minimum_term_end">
     <input type="hidden" name="contract_version" id="contract_version">
+    <input type="hidden" name="contract_ref" id="contract_ref">
+    <input type="hidden" name="signature_image" id="signature_image">
     <textarea name="contract_terms" id="contract_terms" hidden></textarea>
 
-    <fieldset>
-      <legend>1. Your plan</legend>
+    <fieldset id="planPicker">
+      <legend>Your plan</legend>
       <div class="form-group">
         <label for="plan">Package <span class="req">*</span></label>
         <select id="plan" name="plan" required>
@@ -439,7 +451,7 @@
     <div class="contract" id="contractDoc" hidden></div>
 
     <fieldset>
-      <legend>2. Your details</legend>
+      <legend>Your details</legend>
       <div class="form-row">
         <div class="form-group">
           <label for="full_name">Full name <span class="req">*</span></label>
@@ -463,14 +475,14 @@
     </fieldset>
 
     <fieldset>
-      <legend>3. Sign your agreement</legend>
+      <legend>Sign your contract</legend>
       <label class="choice declaration">
         <input type="checkbox" name="over_18" value="Yes" required>
         <span>I confirm I am 18 or over.</span>
       </label>
       <label class="choice declaration">
         <input type="checkbox" name="agree_minimum_term" value="Agreed" required>
-        <span id="agreeTermText">I understand this plan has a <strong>3-month minimum term</strong> with <strong>recurring monthly payments</strong>, and that after the minimum term I must give <strong>30 days' written notice</strong> to cancel.</span>
+        <span>I am signing up for a <strong>minimum of 3 months</strong>, paid by <strong>recurring monthly payments</strong>, and I must give <strong>at least 30 days' written notice</strong> before stopping.</span>
       </label>
       <label class="choice declaration">
         <input type="checkbox" name="agree_start_now" value="Agreed" required>
@@ -482,13 +494,24 @@
       </label>
       <label class="choice declaration">
         <input type="checkbox" name="agree_contract" value="Agreed" required>
-        <span>I have read and agree to this Client Agreement and the <a href="terms.html" target="_blank">Terms &amp; Conditions</a>.</span>
+        <span>I have read and agree to this contract in full, including the <strong>Cancellation Policy</strong> and the <strong>Terms &amp; Conditions</strong> set out in it.</span>
       </label>
+      <div class="form-group">
+        <span class="label">Your signature <span class="req">*</span></span>
+        <div class="sig-pad" id="sigWrap">
+          <canvas id="sigCanvas" aria-label="Signature pad: sign with your finger, mouse or trackpad"></canvas>
+          <span class="sig-placeholder" id="sigPlaceholder">Sign here</span>
+          <span class="sig-line"></span>
+        </div>
+        <div class="sig-tools">
+          <p class="hint">Sign with your finger on a phone, or your mouse or trackpad on a computer (press and hold while you draw).</p>
+          <button type="button" class="btn-ghost sig-clear" id="sigClear">Clear</button>
+        </div>
+      </div>
       <div class="form-row">
         <div class="form-group">
-          <label for="signature">Signature — type your full name <span class="req">*</span></label>
-          <input type="text" id="signature" name="signature" class="signature" required>
-          <p class="hint">Typing your name here is your legal signature.</p>
+          <label for="signature">Print name</label>
+          <input type="text" id="signature" name="signature" readonly tabindex="-1">
         </div>
         <div class="form-group">
           <label for="signed_date">Date</label>
@@ -588,12 +611,11 @@ function declineCookies() {
 
 // Client contract
 (function () {
-  var VERSION = 'CGPT-MONTHLY-2026-11';
+  var VERSION = 'CGPT-MONTHLY-2026-11b';
   var EMAIL = 'cgperformancetraining@outlook.com';
 
   var IN_PERSON_RULES = [
     'Sessions are 1 hour, 1-2-1, at JD Gyms East Kilbride, and are booked in advance with your coach.',
-    'To cancel or move a session you must give at least 24 hours\' notice. Sessions cancelled with less notice, or missed, count as used.',
     'Your sessions are a weekly allowance. Sessions not used in a week cannot be carried over to a later week unless your coach agrees.',
     'Your gym access or membership at JD Gyms is separate and is not included in this plan.'
   ];
@@ -604,19 +626,19 @@ function declineCookies() {
 
   var PLANS = {
     'foundation': {
-      name: 'Foundation', type: 'In-Person Coaching', price: 199,
+      name: 'Foundation', type: 'In-Person Coaching', price: 199, inPerson: true,
       stripe: 'https://buy.stripe.com/7sY6oJgHb1800rg7IB9Zm0f',
       includes: ['1 x 1-hour 1-2-1 session every week at JD Gyms East Kilbride', 'Personalised training programme in the app', 'Every workout logged and tracked in the app', 'Real-time form and technique coaching', 'Programme progressed as you improve'],
       rules: IN_PERSON_RULES
     },
     'core': {
-      name: 'Core', type: 'In-Person Coaching', price: 299,
+      name: 'Core', type: 'In-Person Coaching', price: 299, inPerson: true,
       stripe: 'https://buy.stripe.com/9B69AV9eJdUM5LAaUN9Zm0d',
       includes: ['2 x 1-hour 1-2-1 sessions every week at JD Gyms East Kilbride', 'Personalised training programme in the app', 'Personalised nutrition targets', 'Every workout logged and tracked in the app', 'Real-time form and technique coaching'],
       rules: IN_PERSON_RULES
     },
     'performance': {
-      name: 'Performance', type: 'In-Person Coaching', price: 419,
+      name: 'Performance', type: 'In-Person Coaching', price: 419, inPerson: true,
       stripe: 'https://buy.stripe.com/aFa9AVaiN6sk8XM3sl9Zm0c',
       includes: ['3 x 1-hour 1-2-1 sessions every week at JD Gyms East Kilbride', 'Full training programme', 'Weekly progress check-in', 'Programme adjusted every week', 'Real-time form and technique coaching'],
       rules: IN_PERSON_RULES
@@ -631,9 +653,39 @@ function declineCookies() {
       name: 'Online Plus', type: 'Online Coaching', price: 129,
       stripe: 'https://buy.stripe.com/aFa8wR62xbME2zo2oh9Zm0a',
       includes: ['Everything in the Online plan', 'Fortnightly 1-2-1 video call with your coach', 'Personalised training programme', 'Every workout logged and tracked in the app', 'Weekly check-in with your coach'],
-      rules: ONLINE_RULES.concat(['Video calls are booked at a time that suits you both. A call missed without 24 hours\' notice counts as used.'])
+      rules: ONLINE_RULES.concat(['Video calls are booked at a time that suits you both.'])
     }
   };
+
+  // Website Terms & Conditions, as they apply to monthly plans (from terms.html)
+  var TERMS = [
+    ['T1. About us', ['CG Performance Training is a personal training service operated by Charlie Geddes, based in East Kilbride, Scotland. We provide in-person coaching at JD Gyms East Kilbride and online coaching programmes. Contact: ' + EMAIL + '. Website: cg-pt.co.uk.']],
+    ['T2. Services', ['The specific scope of each service is described on the relevant product page and confirmed at time of purchase.']],
+    ['T3. Bookings and payments', [
+      'All payments are processed securely via Stripe. By completing a purchase you confirm you are authorised to use the payment method provided.',
+      { list: ['Prices are displayed in GBP (£) and are inclusive of any applicable taxes.', 'Receipts will be issued automatically by Stripe to the email address you provide.'] }
+    ]],
+    ['T4. Cancellations and refunds', [
+      'In-person sessions: we require a minimum of 24 hours\' notice to cancel or reschedule a session. Cancellations with less than 24 hours\' notice may be charged in full. We will always try to be flexible in genuine emergencies — please contact us as soon as possible.',
+      'Monthly plans: monthly plans are paid by recurring monthly payment and have a minimum term of 3 months from your first payment. Once the minimum term has ended, you can cancel by giving at least 30 days\' written notice by email; payments continue during the notice period. No partial refunds are issued for unused days in a month.',
+      'If you are unhappy with your purchase, please contact us at ' + EMAIL + ' and we will do our best to resolve the situation fairly.',
+      'Your statutory rights under the Consumer Contracts Regulations 2013 and the Consumer Rights Act 2015 are not affected by these terms.'
+    ]],
+    ['T5. Health and safety', [
+      'Your safety is our priority. By engaging our services you confirm that:',
+      { list: ['You are in good general health and are not aware of any medical condition that would prevent you from exercising safely.', 'You have consulted a GP or medical professional if you have any health concerns, injuries, or pre-existing conditions.', 'You will inform your trainer of any changes to your health status prior to each session.', 'You will follow all safety guidance provided by your trainer.'] },
+      'CG Performance Training accepts no liability for injury or illness arising from failure to disclose relevant health information.'
+    ]],
+    ['T6. Liability', [
+      'CG Performance Training takes all reasonable care to ensure services are provided safely and professionally. However, exercise carries inherent risks. To the fullest extent permitted by law:',
+      { list: ['We are not liable for any injury, loss, or damage arising from your participation in training sessions.', 'We are not liable for any indirect, consequential, or special loss.', 'Our total liability to you in connection with any service shall not exceed the amount paid for that service.'] },
+      'Nothing in these terms excludes or limits our liability for death or personal injury caused by our negligence, fraud, or any other liability that cannot be limited by law.'
+    ]],
+    ['T7. Intellectual property', ['All training programmes, nutritional guides, and other materials provided by CG Performance Training are for your personal use only. You may not reproduce, share, sell, or distribute any of our materials without prior written permission.']],
+    ['T8. Client conduct', ['You agree to treat your trainer and any third parties with respect. We reserve the right to terminate a client relationship without refund if a client behaves in a threatening, abusive, or otherwise unacceptable manner.']],
+    ['T9. Changes to these terms', ['We may update these Terms & Conditions from time to time. The current version will always be published on our website. Changes will not reduce your rights under this contract during your current minimum term.']],
+    ['T10. Governing law', ['These terms are governed by the law of Scotland. Any disputes shall be subject to the exclusive jurisdiction of the Scottish courts.']]
+  ];
 
   var $ = function (id) { return document.getElementById(id); };
   var form = $('contractForm'), doc = $('contractDoc'), select = $('plan');
@@ -654,12 +706,25 @@ function declineCookies() {
   var earliestEnd = addDays(minEnd, 30);
   $('signed_date').value = iso(today);
 
+  // Unique reference for this contract, used to match the payment on the thank-you page
+  var REF = 'CG-' + iso(today).replace(/-/g, '') + '-' + Math.random().toString(36).slice(2, 8).toUpperCase();
+  $('contract_ref').value = REF;
+
   // Each section is [heading, [paragraphs or {list: [...]}]]
   function sections(p) {
     var price = '£' + p.price;
+    var cancel = [
+      'Minimum term: you are signing up for a minimum of 3 months. You cannot cancel during these 3 months, except within your 14-day cooling-off period (below) or as set out in section 7.',
+      'After the minimum term: you must give at least 30 days\' notice before stopping. Notice must be in writing, by emailing ' + EMAIL + ', and can be given once your 3-month minimum term has ended. Your plan ends 30 days after we receive your notice.',
+      'Your monthly payments, and your coaching, continue as normal during the 30-day notice period. Any payment due during the notice period will be taken. No partial refunds are given for unused days in a month.',
+      'Stopping payments with your bank or card provider does not count as giving notice, and does not cancel the amounts you owe under this contract.',
+      '14-day cooling-off period: as you are signing up online, you have the legal right to cancel within 14 days of signing without giving a reason, by emailing ' + EMAIL + '. You have asked for your coaching to start straight away, so if you cancel within the 14 days we will refund what you have paid, minus a fair amount for the coaching already provided.'
+    ];
+    if (p.inPerson) cancel.push('Cancelling a session: you must give at least 24 hours\' notice to cancel or move a session. Sessions cancelled with less notice, or missed, count as used.');
+    else if (p.name === 'Online Plus') cancel.push('Cancelling a video call: a call missed or cancelled with less than 24 hours\' notice counts as used.');
     return [
       ['1. The parties', [
-        'This agreement is between Charlie Geddes, trading as CG Performance Training ("we", "us", "your coach"), and the client named below ("you").'
+        'This contract is between Charlie Geddes, trading as CG Performance Training ("we", "us", "your coach"), and the client named and signed below ("you").'
       ]],
       ['2. Your plan', [
         'You are signing up to the ' + p.name + ' plan (' + p.type + '). It includes:',
@@ -667,92 +732,160 @@ function declineCookies() {
       ]],
       ['3. Payments — recurring monthly', [
         'The ' + p.name + ' plan costs ' + price + ' per month.',
-        'Payments are recurring and are taken automatically every month by card through our payment provider, Stripe. Your first payment is taken at checkout, straight after you sign. After that, a payment of ' + price + ' is taken on the same date each month until this agreement ends.',
-        'Payments carry on automatically. They do not stop on their own when the minimum term ends — they only stop once your cancellation takes effect (see section 5).',
+        'Payments are recurring and are taken automatically every month by card through our payment provider, Stripe. Your first payment is taken at checkout, straight after you sign. After that, a payment of ' + price + ' is taken on the same date each month until this contract ends.',
+        'Payments do not stop on their own when the minimum term ends — they only stop once your cancellation takes effect (see section 5).',
         'If a payment fails, we will let you know and Stripe will try again. We may pause your coaching until the payment is made. Any payments missed during the minimum term or your notice period are still owed.'
       ]],
       ['4. 3-month minimum term', [
-        'This plan has a minimum term of 3 months, starting on the date of your first payment. You agree to stay on the plan and pay the monthly fee for at least these 3 months (3 monthly payments).',
-        'You cannot cancel during the minimum term, except within your 14-day cooling-off period (section 6) or in the situations set out in section 8.'
+        'This plan has a minimum term of 3 months, starting on the date of your first payment (' + nice(today) + ') and ending on ' + nice(minEnd) + '. You agree to stay on the plan and pay the monthly fee for at least these 3 months (3 monthly payments).'
       ]],
-      ['5. Cancelling after the minimum term — 30 days\' notice', [
-        'Once the 3-month minimum term is over, your plan continues on a rolling monthly basis until it is cancelled.',
-        'To cancel, you must give at least 30 days\' notice in writing by emailing ' + EMAIL + '. Notice can be given once your minimum term has ended, and your plan ends 30 days after we receive it.',
-        'Your monthly payments, and your coaching, continue as normal during the 30-day notice period. Any payment due during the notice period will be taken.',
-        'Stopping payments with your bank or card provider does not count as giving notice, and does not cancel the amounts you owe under this agreement.'
-      ]],
-      ['6. 14-day cooling-off period', [
-        'As you are signing up online, you have the legal right to cancel within 14 days of signing without giving a reason. To do this, email ' + EMAIL + ' within 14 days.',
-        'You have asked for your coaching to start straight away. If you cancel within the 14 days, we will refund what you have paid, minus a fair amount for the coaching already provided up to the date you tell us.'
-      ]],
-      ['7. How your coaching works', [{ list: p.rules }]],
-      ['8. Pausing, changes and ending the agreement early', [
+      ['5. Cancellation policy', [{ list: cancel }]],
+      ['6. How your coaching works', [{ list: p.rules }]],
+      ['7. Pausing, changes and ending the contract early', [
         'If you are unable to train because of injury or illness, speak to your coach. Pausing your plan (and its payments) is at our discretion and may need evidence such as a doctor\'s note. Any paused time is added on to your minimum term.',
-        'You can move to a different monthly plan by agreement with your coach. A new 3-month minimum term does not start if you move to a more expensive plan.',
+        'You can move to a different monthly plan by agreement with your coach.',
         'We may change the monthly price by giving you at least 30 days\' notice. Prices will not change during your 3-month minimum term. If you don\'t accept a price change, you may cancel before it takes effect.',
-        'We may end this agreement straight away if payments are not made, or if you behave in a threatening, abusive or unsafe way, as set out in our Terms & Conditions. If we end the agreement for any other reason, we will refund any payment for coaching not provided.'
+        'We may end this contract straight away if payments are not made, or if you behave in a threatening, abusive or unsafe way. If we end the contract for any other reason, we will refund any payment for coaching not provided.'
       ]],
-      ['9. Health and safety', [
-        'You confirm you are fit to take part in exercise. You will tell your coach about any injury, illness, medication or medical condition before training and if anything changes. If you are unsure, you should check with your GP before starting.',
-        'Nothing in this agreement limits our liability for death or personal injury caused by our negligence, or anything else that cannot be limited by law.'
-      ]],
-      ['10. General', [
-        'This agreement is read together with our Terms & Conditions and Privacy Policy at cg-pt.co.uk. If they conflict, this agreement applies.',
-        'This agreement is governed by the law of Scotland.'
+      ['8. Terms & Conditions', [
+        'Our Terms & Conditions below form part of this contract. If anything in them conflicts with sections 1 to 7, sections 1 to 7 apply.'
       ]]
     ];
+  }
+
+  function renderBlocks(list, out) {
+    list.forEach(function (s) {
+      out.html += '<h4>' + esc(s[0]) + '</h4>';
+      out.text += '\n' + s[0].toUpperCase() + '\n';
+      s[1].forEach(function (b) {
+        if (b.list) {
+          out.html += '<ul>' + b.list.map(function (li) { return '<li>' + esc(li) + '</li>'; }).join('') + '</ul>';
+          out.text += b.list.map(function (li) { return ' - ' + li; }).join('\n') + '\n';
+        } else {
+          out.html += '<p>' + esc(b) + '</p>';
+          out.text += b + '\n';
+        }
+      });
+    });
   }
 
   function render(key) {
     var p = PLANS[key];
     if (!p) { doc.hidden = true; $('heroPlan').textContent = 'Monthly coaching plans'; return; }
-    var html = '<h3>' + esc(p.name) + ' Plan — Client Agreement</h3>' +
-      '<p class="meta">CG Performance Training · Agreement ref ' + VERSION + '</p>' +
+    var out = { html: '', text: '' };
+    out.html = '<h3>' + esc(p.name) + ' Plan — Client Contract</h3>' +
+      '<p class="meta">CG Performance Training · Contract ref ' + REF + ' · Version ' + VERSION + '</p>' +
       '<div class="key">' +
         '<div><span>Plan</span><b>' + esc(p.name) + ' (' + esc(p.type) + ')</b></div>' +
         '<div><span>Monthly payment</span><b>£' + p.price + ' per month, recurring</b></div>' +
         '<div><span>Start date</span><b>' + nice(today) + '</b></div>' +
         '<div><span>Minimum term</span><b>3 months — ends ' + nice(minEnd) + '</b></div>' +
-        '<div><span>Cancellation</span><b>30 days\' written notice, after the minimum term</b></div>' +
+        '<div><span>To stop</span><b>At least 30 days\' written notice, after the minimum term</b></div>' +
         '<div><span>Earliest end date</span><b>' + nice(earliestEnd) + '</b></div>' +
       '</div>';
-    var text = p.name + ' Plan - Client Agreement (' + VERSION + ')\n' +
+    out.text = p.name + ' Plan - Client Contract\nRef: ' + REF + ' (version ' + VERSION + ')\n' +
       'Plan: ' + p.name + ' (' + p.type + ')\nMonthly payment: £' + p.price + ' per month, recurring\n' +
       'Start date: ' + nice(today) + '\nMinimum term: 3 months, ends ' + nice(minEnd) + '\n' +
-      'Cancellation: 30 days\' written notice after the minimum term\nEarliest end date: ' + nice(earliestEnd) + '\n';
-    sections(p).forEach(function (s) {
-      html += '<h4>' + esc(s[0]) + '</h4>';
-      text += '\n' + s[0].toUpperCase() + '\n';
-      s[1].forEach(function (b) {
-        if (b.list) {
-          html += '<ul>' + b.list.map(function (li) { return '<li>' + esc(li) + '</li>'; }).join('') + '</ul>';
-          text += b.list.map(function (li) { return ' - ' + li; }).join('\n') + '\n';
-        } else {
-          html += '<p>' + esc(b) + '</p>';
-          text += b + '\n';
-        }
-      });
-    });
-    doc.innerHTML = html;
+      'To stop: at least 30 days\' written notice after the minimum term\nEarliest end date: ' + nice(earliestEnd) + '\n';
+    renderBlocks(sections(p), out);
+    out.html += '<p class="part">Terms &amp; Conditions</p>';
+    out.text += '\n\nTERMS & CONDITIONS\n';
+    renderBlocks(TERMS, out);
+    doc.innerHTML = out.html;
     doc.hidden = false;
     doc.scrollTop = 0;
     $('heroPlan').textContent = p.name + ' plan · £' + p.price + '/month';
+    document.title = p.name + ' Contract | CG Performance Training';
     $('plan_name').value = p.name;
     $('monthly_price').value = '£' + p.price;
     $('start_date').value = iso(today);
     $('minimum_term_end').value = iso(minEnd);
     $('contract_version').value = VERSION;
-    $('contract_terms').value = text;
+    $('contract_terms').value = out.text;
   }
 
-  // Pick plan from ?plan=
+  // The buy button on each package opens that package's contract (?plan=...)
   var fromUrl = (location.search.match(/[?&]plan=([a-z-]+)/) || [])[1];
-  if (fromUrl && PLANS[fromUrl]) select.value = fromUrl;
+  if (fromUrl && PLANS[fromUrl]) {
+    select.value = fromUrl;
+    $('planPicker').hidden = true; // the contract is for the package they chose
+  }
   render(select.value);
   select.addEventListener('change', function () {
     render(select.value);
     try { history.replaceState(null, '', 'contract.html' + (select.value ? '?plan=' + select.value : '')); } catch (e) {}
   });
+
+  // Print name follows the full name
+  $('full_name').addEventListener('input', function () { $('signature').value = $('full_name').value.trim(); });
+
+  /* ---------- Signature pad (finger, mouse or trackpad) ---------- */
+  var canvas = $('sigCanvas'), wrap = $('sigWrap'), ctx = canvas.getContext('2d');
+  var strokes = [], current = null;
+
+  function sizeCanvas() {
+    var r = canvas.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.round(r.width * dpr);
+    canvas.height = Math.round(r.height * dpr);
+    redraw();
+  }
+  function drawStrokes(c, w, h) {
+    c.lineCap = 'round'; c.lineJoin = 'round'; c.strokeStyle = '#0d1b2a';
+    c.lineWidth = Math.max(2, w / 220);
+    strokes.forEach(function (s) {
+      c.beginPath();
+      s.forEach(function (pt, i) {
+        var x = pt[0] * w, y = pt[1] * h;
+        if (i === 0) { c.moveTo(x, y); c.lineTo(x + 0.01, y); } else c.lineTo(x, y);
+      });
+      c.stroke();
+    });
+  }
+  function redraw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawStrokes(ctx, canvas.width, canvas.height);
+    $('sigPlaceholder').hidden = strokes.length > 0;
+  }
+  function point(e) {
+    var r = canvas.getBoundingClientRect();
+    return [Math.min(1, Math.max(0, (e.clientX - r.left) / r.width)), Math.min(1, Math.max(0, (e.clientY - r.top) / r.height))];
+  }
+  canvas.addEventListener('pointerdown', function (e) {
+    e.preventDefault();
+    try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
+    current = [point(e)];
+    strokes.push(current);
+    wrap.classList.remove('invalid');
+    if (!form.querySelector('.invalid')) errorBox.hidden = true;
+    redraw();
+  });
+  canvas.addEventListener('pointermove', function (e) {
+    if (!current) return;
+    e.preventDefault();
+    var evs = e.getCoalescedEvents ? e.getCoalescedEvents() : [e];
+    (evs.length ? evs : [e]).forEach(function (ev) { current.push(point(ev)); });
+    redraw();
+  });
+  ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(function (t) {
+    canvas.addEventListener(t, function () { current = null; });
+  });
+  $('sigClear').addEventListener('click', function () { strokes = []; redraw(); });
+  window.addEventListener('resize', sizeCanvas);
+  sizeCanvas();
+
+  function hasSignature() {
+    var n = 0;
+    strokes.forEach(function (s) { n += s.length; });
+    return n >= 8; // more than a single tap
+  }
+  function signatureImage() {
+    var w = 600, h = 190, c = document.createElement('canvas');
+    c.width = w; c.height = h;
+    var x = c.getContext('2d');
+    x.fillStyle = '#fff'; x.fillRect(0, 0, w, h);
+    drawStrokes(x, w, h);
+    return c.toDataURL('image/png');
+  }
 
   // Clear a field's error outline as soon as it's corrected
   ['input', 'change'].forEach(function (ev) {
@@ -763,19 +896,24 @@ function declineCookies() {
     });
   });
 
-  function norm(s) { return s.trim().toLowerCase().replace(/\s+/g, ' '); }
+  function stripeUrl(p, email) {
+    // Pre-fills their email at checkout and tags the payment in Stripe with the contract ref
+    return p.stripe + '?prefilled_email=' + encodeURIComponent(email) + '&client_reference_id=' + encodeURIComponent(REF);
+  }
 
-  function showSuccess(p, name) {
+  function showSuccess(p, name, email, img) {
     form.querySelectorAll('fieldset').forEach(function (f) { f.hidden = true; });
     btn.hidden = true; errorBox.hidden = true;
     doc.insertAdjacentHTML('beforeend',
       '<div class="signed-block"><p><strong>Signed by the client</strong></p>' +
-      '<p class="sig">' + esc(name) + '</p><p>Date: ' + nice(today) + '</p></div>');
-    $('successText').textContent = 'Your signed ' + p.name + ' agreement has been sent to CG Performance Training. Next, set up your £' + p.price + ' monthly payment.';
-    $('payBtn').href = p.stripe;
+      '<img src="' + img + '" alt="Signature">' +
+      '<p>' + esc(name) + '<br>Date: ' + nice(today) + '<br>Contract ref: ' + REF + '</p></div>');
+    var url = stripeUrl(p, email);
+    $('successText').textContent = 'Your signed ' + p.name + ' contract has been sent to CG Performance Training. Next, set up your £' + p.price + ' monthly payment.';
+    $('payBtn').href = url;
     $('formSuccess').hidden = false;
     $('formSuccess').scrollIntoView({ behavior: 'smooth', block: 'center' });
-    var timer = setTimeout(function () { location.href = p.stripe; }, 6000);
+    var timer = setTimeout(function () { location.href = url; }, 6000);
     $('printBtn').addEventListener('click', function () {
       clearTimeout(timer);
       $('redirectNote').textContent = 'When you\'re done, press Continue to Secure Payment.';
@@ -793,15 +931,15 @@ function declineCookies() {
       var ok = el.type === 'checkbox' ? el.checked : el.checkValidity() && el.value.trim() !== '';
       if (!ok) {
         var target = el.type === 'checkbox' ? el.closest('label') : el;
+        if (el.id === 'plan') target = $('planPicker').hidden ? target : el;
         target.classList.add('invalid');
         if (!firstBad) firstBad = target;
       }
     });
     var msg = 'Please complete the highlighted fields before signing.';
-    if (!firstBad && norm($('signature').value) !== norm($('full_name').value)) {
-      firstBad = $('signature');
-      firstBad.classList.add('invalid');
-      msg = 'Your signature must match your full name exactly.';
+    if (!hasSignature()) {
+      wrap.classList.add('invalid');
+      if (!firstBad) { firstBad = wrap; msg = 'Please sign in the signature box.'; }
     }
     if (firstBad) {
       errorBox.textContent = msg;
@@ -811,7 +949,11 @@ function declineCookies() {
     }
 
     var p = PLANS[select.value];
+    var name = $('full_name').value.trim(), email = $('email').value.trim();
     render(select.value); // make sure stored terms match the plan being signed
+    $('signature').value = name;
+    var img = signatureImage();
+    $('signature_image').value = img;
     btn.disabled = true;
     btn.textContent = 'Signing…';
     fetch('/', {
@@ -820,7 +962,11 @@ function declineCookies() {
       body: new URLSearchParams(new FormData(form)).toString()
     }).then(function (res) {
       if (!res.ok) throw new Error('Status ' + res.status);
-      showSuccess(p, $('signature').value.trim());
+      // Remember the contract so the thank-you page can mark it as paid
+      try {
+        localStorage.setItem('cgpt_contract', JSON.stringify({ ref: REF, plan: select.value, name: name, email: email, signed: iso(today) }));
+      } catch (err) {}
+      showSuccess(p, name, email, img);
     }).catch(function () {
       errorBox.textContent = 'Sorry, something went wrong sending your contract. Please try again, or email ' + EMAIL + '.';
       errorBox.hidden = false;

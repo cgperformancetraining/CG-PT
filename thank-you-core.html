@@ -306,5 +306,29 @@ function declineCookies() {
 }
 </script>
 <script src="motion.js"></script>
+
+<!-- Payment confirmation: tells the admin page this client reached the thank-you page after paying -->
+<form name="payment-confirmed" data-netlify="true" netlify-honeypot="bot-field" hidden>
+  <input type="hidden" name="form-name" value="payment-confirmed">
+  <input name="bot-field">
+  <input name="contract_ref"><input name="plan"><input name="full_name"><input name="email"><input name="page">
+</form>
+<script>
+(function () {
+  var PLAN = 'core';
+  var c;
+  try { c = JSON.parse(localStorage.getItem('cgpt_contract') || 'null'); } catch (e) {}
+  if (!c || !c.ref) return;                                   // no signed contract on this device
+  var key = 'cgpt_paid_' + c.ref;
+  try { if (localStorage.getItem(key)) return; } catch (e) {} // already recorded
+  var body = new URLSearchParams({
+    'form-name': 'payment-confirmed', contract_ref: c.ref, plan: PLAN,
+    full_name: c.name || '', email: c.email || '', page: location.pathname
+  });
+  fetch('/', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body: body.toString() })
+    .then(function (r) { if (r.ok) { try { localStorage.setItem(key, new Date().toISOString()); } catch (e) {} } })
+    .catch(function () {});
+})();
+</script>
 </body>
 </html>
