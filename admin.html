@@ -134,7 +134,7 @@
 <section class="login" id="loginView">
   <form class="login-card" id="loginForm">
     <h1>Admin <span>Login</span></h1>
-    <p>Enquiries &amp; consent forms</p>
+    <p>Enquiries, contracts &amp; consent forms</p>
     <label for="password">Password</label>
     <input type="password" id="password" autocomplete="current-password" required autofocus>
     <button class="btn" type="submit" id="loginBtn">Log in</button>
@@ -145,6 +145,7 @@
 <main id="dashView" hidden>
   <div class="tabs" role="tablist">
     <button class="tab active" data-mode="enquiry" role="tab">Enquiries <span class="n" id="n-enquiry"></span></button>
+    <button class="tab" data-mode="contract" role="tab">Contracts <span class="n" id="n-contract"></span></button>
     <button class="tab" data-mode="consent" role="tab">Consent forms <span class="n" id="n-consent"></span></button>
   </div>
   <div class="stats" id="stats"></div>
@@ -164,7 +165,8 @@
   var KEY = 'cgpt_admin_pw';
   var password = null;
   var mode = 'enquiry';
-  var store_data = { enquiry: [], consent: [] };
+  var store_data = { enquiry: [], contract: [], consent: [] };
+  var ORDER = ['enquiry', 'contract', 'consent'];
 
   var $ = function (id) { return document.getElementById(id); };
   var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
@@ -183,6 +185,10 @@
   function sharesAny(s) { return isYes(s.use_website) || isYes(s.use_social_media) || isYes(s.use_marketing); }
   function chip(label, val) { return '<span class="chip ' + (isYes(val) ? 'yes' : 'no') + '">' + label + '</span>'; }
   function daysAgo(iso) { return (Date.now() - new Date(iso).getTime()) / 86400000; }
+  function parseDay(v) { var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(v || ''); return m ? new Date(+m[1], m[2] - 1, +m[3]) : null; }
+  function niceDay(v) { var d = parseDay(v); return d ? d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : v; }
+  function inMinTerm(s) { var d = parseDay(s.minimum_term_end); return !!d && d > new Date(); }
+  function isInPerson(s) { return ['foundation', 'core', 'performance'].indexOf(s.plan) > -1; }
   function cap(v) { return v ? String(v).charAt(0).toUpperCase() + String(v).slice(1) : v; }
   function contactable(v) { return v && v !== 'Not provided'; }
 
@@ -224,6 +230,51 @@
       deleteLabel: 'Delete (consent withdrawn)',
       deleteWord: 'consent form',
       csvName: 'photo-consent-forms'
+    },
+    contract: {
+      title: 'Contracts',
+      fields: [
+        ['full_name', 'Full name'], ['email', 'Email'], ['phone', 'Phone'], ['address', 'Address'],
+        ['plan_name', 'Plan'], ['monthly_price', 'Monthly payment'], ['start_date', 'Start date'],
+        ['minimum_term_end', 'Minimum term ends'], ['over_18', '18 or over'],
+        ['agree_minimum_term', '3-month minimum + 30 days notice'], ['agree_start_now', 'Start now (cooling-off)'],
+        ['agree_health', 'Health declaration'], ['agree_contract', 'Agreed to contract'],
+        ['signature', 'Signature'], ['signed_date', 'Date signed'], ['contract_version', 'Contract version'],
+        ['created_at', 'Submitted'], ['contract_terms', 'Contract signed (full text)']
+      ],
+      longFields: ['contract_terms'],
+      search: ['full_name', 'email', 'phone', 'signature', 'plan_name'],
+      filters: [
+        ['all', 'All contracts', null],
+        ['minterm', 'In minimum term', inMinTerm],
+        ['rolling', 'Past minimum term (30 days notice)', function (s) { return !inMinTerm(s); }],
+        ['foundation', 'Foundation', function (s) { return s.plan === 'foundation'; }],
+        ['core', 'Core', function (s) { return s.plan === 'core'; }],
+        ['performance', 'Performance', function (s) { return s.plan === 'performance'; }],
+        ['online', 'Online', function (s) { return s.plan === 'online'; }],
+        ['online-plus', 'Online Plus', function (s) { return s.plan === 'online-plus'; }]
+      ],
+      stats: [
+        ['Total contracts', null],
+        ['In minimum term', inMinTerm],
+        ['Past minimum term', function (s) { return !inMinTerm(s); }],
+        ['In person', isInPerson],
+        ['Online', function (s) { return !isInPerson(s); }]
+      ],
+      name: function (s) { return s.full_name; },
+      sub: function (s) { return [s.plan_name, s.monthly_price ? s.monthly_price + '/month' : '', s.email].filter(Boolean).join(' · '); },
+      chips: function (s) {
+        var c = s.plan_name ? '<span class="chip info">' + esc(s.plan_name) + '</span>' : '';
+        c += inMinTerm(s)
+          ? '<span class="chip warn">Min. term to ' + esc(niceDay(s.minimum_term_end)) + '</span>'
+          : '<span class="chip yes">30 days notice</span>';
+        return c;
+      },
+      display: function (key, v) { return /^(start_date|minimum_term_end|signed_date)$/.test(key) ? niceDay(v) : v; },
+      empty: 'No contracts signed yet.<br>Clients sign at <strong>cg-pt.co.uk/contract.html</strong> when they press Get Started on a monthly plan.',
+      deleteLabel: 'Delete contract',
+      deleteWord: 'contract',
+      csvName: 'client-contracts'
     },
     enquiry: {
       title: 'Enquiries',
@@ -282,18 +333,17 @@
     password = pw;
     $('loginBtn').disabled = true;
     $('loginErr').hidden = true;
-    return Promise.all([call('GET', 'enquiry'), call('GET', 'consent')]).then(function (res) {
+    return Promise.all(ORDER.map(function (f) { return call('GET', f); })).then(function (res) {
       $('loginBtn').disabled = false;
-      if (res[0]._status === 401 || res[1]._status === 401) {
+      if (res.some(function (r) { return r._status === 401; })) {
         store.clear();
         if (!silent) { $('loginErr').textContent = 'Incorrect password.'; $('loginErr').hidden = false; }
         return;
       }
-      var err = res[0].error || res[1].error;
+      var err = res.map(function (r) { return r.error; }).filter(Boolean)[0];
       if (err) { $('loginErr').textContent = err; $('loginErr').hidden = false; return; }
       store.set(pw);
-      store_data.enquiry = sortNewest(res[0].submissions);
-      store_data.consent = sortNewest(res[1].submissions);
+      ORDER.forEach(function (f, i) { store_data[f] = sortNewest(res[i].submissions); });
       $('loginView').hidden = true; $('dashView').hidden = false; $('logoutBtn').hidden = false;
       setMode(mode);
     }).catch(function () {
@@ -312,7 +362,7 @@
     });
     $('filter').innerHTML = cfg().filters.map(function (f) { return '<option value="' + f[0] + '">' + esc(f[1]) + '</option>'; }).join('');
     $('search').value = '';
-    $('search').placeholder = mode === 'enquiry' ? 'Search name, email, phone or goals…' : 'Search name, email or phone…';
+    $('search').placeholder = mode === 'enquiry' ? 'Search name, email, phone or goals…' : mode === 'contract' ? 'Search name, email, phone or plan…' : 'Search name, email or phone…';
     render();
   }
 
@@ -322,8 +372,7 @@
       var n = st[1] ? list.filter(st[1]).length : list.length;
       return '<div class="stat"><b>' + n + '</b><span>' + esc(st[0]) + '</span></div>';
     }).join('');
-    $('n-enquiry').textContent = store_data.enquiry.length;
-    $('n-consent').textContent = store_data.consent.length;
+    ORDER.forEach(function (f) { $('n-' + f).textContent = store_data[f].length; });
   }
 
   function filtered() {
@@ -340,7 +389,7 @@
   function render() {
     renderStats();
     var c = cfg(), list = data(), rows = filtered();
-    $('count').textContent = rows.length + ' of ' + list.length + ' ' + (mode === 'enquiry' ? (list.length === 1 ? 'enquiry' : 'enquiries') : 'submission' + (list.length === 1 ? '' : 's'));
+    $('count').textContent = rows.length + ' of ' + list.length + ' ' + (mode === 'enquiry' ? (list.length === 1 ? 'enquiry' : 'enquiries') : mode === 'contract' ? 'contract' + (list.length === 1 ? '' : 's') : 'submission' + (list.length === 1 ? '' : 's'));
     if (!list.length) { $('list').innerHTML = '<div class="empty">' + c.empty + '</div>'; return; }
     if (!rows.length) { $('list').innerHTML = '<div class="empty">Nothing matches your search.</div>'; return; }
     $('list').innerHTML = rows.map(function (s) {
@@ -392,7 +441,7 @@
   $('filter').addEventListener('change', render);
   $('refreshBtn').addEventListener('click', function () { login(password, true); });
   $('logoutBtn').addEventListener('click', function () {
-    store.clear(); password = null; store_data = { enquiry: [], consent: [] };
+    store.clear(); password = null; store_data = { enquiry: [], contract: [], consent: [] };
     $('dashView').hidden = true; $('logoutBtn').hidden = true; $('loginView').hidden = false;
     $('password').value = ''; $('list').innerHTML = '';
   });

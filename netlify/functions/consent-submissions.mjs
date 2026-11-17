@@ -1,5 +1,5 @@
-// Admin API for form submissions: photo consent forms and website enquiries.
-// Pick which with ?form=consent (default) or ?form=enquiry
+// Admin API for form submissions: photo consent forms, website enquiries and client contracts.
+// Pick which with ?form=consent (default), ?form=enquiry or ?form=contract
 // Runs on Netlify automatically — no npm or build step needed.
 //
 // Needs two environment variables, set in the Netlify dashboard
@@ -9,7 +9,7 @@
 
 import { createHash, timingSafeEqual } from 'node:crypto';
 
-const FORMS = { consent: 'photo-consent', enquiry: 'enquiry' };
+const FORMS = { consent: 'photo-consent', enquiry: 'enquiry', contract: 'contract' };
 const API = 'https://api.netlify.com/api/v1';
 
 const json = (body, status = 200) =>
