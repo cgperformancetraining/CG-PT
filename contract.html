@@ -375,27 +375,86 @@
   @media (max-width: 520px) { .an-partner .an-text { align-items:center; text-align:center; } }
 </style>
 <link rel="stylesheet" href="motion.css">
+<style id="cg-nav-css">
+  /* Shared site navigation (same as homepage) */
+  nav.cg-nav { display:flex; align-items:center; justify-content:space-between; padding:0.75rem 2rem; z-index:100;
+    background:rgba(13,27,42,0.95); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); border-bottom:1px solid rgba(74,158,222,0.2); }
+  nav.cg-nav .cg-brand { display:flex; align-items:center; gap:0.75rem; text-decoration:none; }
+  nav.cg-nav .cg-brand img { height:52px; width:auto; display:block; }
+  nav.cg-nav .cg-brand span { font-family:'Bebas Neue',sans-serif; font-size:1.3rem; letter-spacing:0.15em; color:#f0f4f8; white-space:nowrap; }
+  nav.cg-nav ul.cg-links { list-style:none; display:flex; gap:2rem; margin:0; padding:0; }
+  nav.cg-nav ul.cg-links li a { color:#b8c5d0; text-decoration:none; font-family:'Barlow',sans-serif; font-size:0.85rem; font-weight:600;
+    letter-spacing:0.1em; text-transform:uppercase; transition:color 0.2s; }
+  nav.cg-nav ul.cg-links li a:hover, nav.cg-nav ul.cg-links li a.active { color:#6db8f0; }
+  nav.cg-nav .cg-burger { display:none; flex-direction:column; justify-content:center; gap:5px; width:36px; height:36px;
+    background:none; border:none; cursor:pointer; padding:4px; }
+  nav.cg-nav .cg-burger span { display:block; width:100%; height:2px; background:#b8c5d0; border-radius:2px; }
+  .cg-mobile { display:none; position:fixed; inset:0; background:rgba(13,27,42,0.98); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+    z-index:1000; flex-direction:column; align-items:center; justify-content:center; }
+  .cg-mobile.open { display:flex; }
+  .cg-mobile a { display:block; width:100%; text-align:center; color:#b8c5d0; text-decoration:none; font-family:'Bebas Neue',sans-serif;
+    font-size:2.2rem; letter-spacing:0.2em; text-transform:uppercase; padding:0.8rem 2rem; border-bottom:1px solid rgba(74,158,222,0.15); }
+  .cg-mobile a:first-of-type { border-top:1px solid rgba(74,158,222,0.15); }
+  .cg-mobile a:hover, .cg-mobile a.active { color:#6db8f0; }
+  .cg-mobile .cg-close { position:absolute; top:1.25rem; right:1.5rem; width:44px; height:44px; background:none;
+    border:1px solid rgba(74,158,222,0.35); color:#b8c5d0; font-size:1.6rem; line-height:1; cursor:pointer; }
+  @media (max-width: 1150px) { nav.cg-nav ul.cg-links { gap:1.4rem; } nav.cg-nav .cg-brand span { display:none; } }
+  @media (max-width: 768px) {
+    nav.cg-nav { padding:0.75rem 1.25rem; }
+    nav.cg-nav ul.cg-links { display:none; }
+    nav.cg-nav .cg-burger { display:flex; }
+    nav.cg-nav .cg-brand span { display:inline; font-size:1.05rem; }
+  }
+  @media (max-width: 400px) { nav.cg-nav .cg-brand span { display:none; } }
+</style>
+<style id="cg-contract-brand">
+  /* Contract page: always show the full business name in the header */
+  nav.cg-nav .cg-brand span { display:inline !important; }
+  nav.cg-nav .cg-burger { flex-shrink:0; }
+  @media (max-width: 1150px) and (min-width: 769px) {
+    nav.cg-nav .cg-brand span { font-size:1.05rem; letter-spacing:0.08em; }
+    nav.cg-nav ul.cg-links { gap:1rem !important; }
+    nav.cg-nav ul.cg-links li a { font-size:0.75rem; letter-spacing:0.06em; }
+  }
+  @media (max-width: 900px) and (min-width: 769px) {
+    nav.cg-nav .cg-brand img { height:42px; }
+    nav.cg-nav .cg-brand span { font-size:0.95rem; letter-spacing:0.05em; }
+    nav.cg-nav ul.cg-links { gap:0.75rem !important; }
+    nav.cg-nav ul.cg-links li a { font-size:0.7rem; letter-spacing:0.03em; }
+  }
+  @media (max-width: 768px) { nav.cg-nav .cg-brand span { font-size:1.05rem; } }
+  @media (max-width: 400px) {
+    nav.cg-nav { padding:0.75rem 1rem !important; }
+    nav.cg-nav .cg-brand { gap:0.5rem; }
+    nav.cg-nav .cg-brand img { height:38px; }
+    nav.cg-nav .cg-brand span { font-size:0.9rem; letter-spacing:0.05em; }
+  }
+</style>
 </head>
 <body>
 
-<nav>
-  <a href="index.html" class="nav-logo-group">
-    <img src="images/logo.png" alt="CG Performance Training" class="logo">
-  </a>
-  <ul>
-    <li><a href="index.html#welcome">Home</a></li>
+<nav class="cg-nav" aria-label="Main">
+  <a href="index.html" class="cg-brand"><img src="images/logo.png" alt="CG Performance Training"><span>CG PERFORMANCE TRAINING</span></a>
+  <ul class="cg-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="testimonials.html">Results</a></li>
     <li><a href="packages.html">Packages</a></li>
     <li><a href="index.html#inquiry">Enquire</a></li>
     <li><a href="index.html#booking">Book</a></li>
+    <li><a href="index.html#location">Location</a></li>
   </ul>
-  <button class="hamburger" id="hamburgerBtn" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+  <button class="cg-burger" id="cgNavBtn" aria-label="Open menu" aria-expanded="false" aria-controls="cgMobileNav"><span></span><span></span><span></span></button>
 </nav>
-<div class="mobile-nav" id="mobileNav">
-  <button class="mobile-nav-close" id="mobileNavClose">&times;</button>
-  <a href="index.html#welcome" onclick="closeMobileNav()">Home</a>
-  <a href="packages.html" onclick="closeMobileNav()">Packages</a>
-  <a href="index.html#inquiry" onclick="closeMobileNav()">Enquire</a>
-  <a href="index.html#booking" onclick="closeMobileNav()">Book</a>
+<div class="cg-mobile" id="cgMobileNav">
+  <button class="cg-close" id="cgNavClose" aria-label="Close menu">&times;</button>
+  <a href="index.html">Home</a>
+  <a href="about.html">About</a>
+  <a href="testimonials.html">Results</a>
+  <a href="packages.html">Packages</a>
+  <a href="index.html#inquiry">Enquire</a>
+  <a href="index.html#booking">Book</a>
+  <a href="index.html#location">Location</a>
 </div>
 
 
@@ -408,17 +467,7 @@
 <div class="content">
 
   <div class="highlight">
-    <p>Please read your agreement carefully before signing. Once it's signed you'll go straight to secure checkout to set up your monthly payment. <strong>All monthly plans have a 3-month minimum term</strong>, then continue month to month until you give 30 days' notice.</p>
-  </div>
-
-  <div class="form-success" id="formSuccess" hidden>
-    <h2>Contract signed — thank you</h2>
-    <p id="successText">Your signed agreement has been sent to CG Performance Training.</p>
-    <div class="success-actions">
-      <a class="btn-contact" id="payBtn" href="#">Continue to Secure Payment</a>
-      <button type="button" class="btn-ghost" id="printBtn">Save a copy (PDF)</button>
-    </div>
-    <p class="hint" id="redirectNote">Taking you to checkout in a few seconds…</p>
+    <p>Please read your agreement carefully before signing. As soon as it's signed you'll go straight to secure checkout to set up your monthly payment. <strong>All monthly plans have a 3-month minimum term</strong>, then continue month to month until you give 30 days' notice.</p>
   </div>
 
   <form name="contract" id="contractForm" method="POST" action="contract.html" data-netlify="true" netlify-honeypot="bot-field" novalidate>
@@ -601,14 +650,6 @@ function declineCookies() {
 </script>
 
 <script>
-// Mobile nav
-(function () {
-  var btn = document.getElementById('hamburgerBtn'), nav = document.getElementById('mobileNav'), close = document.getElementById('mobileNavClose');
-  window.closeMobileNav = function () { nav.classList.remove('open'); btn.classList.remove('active'); document.body.style.overflow = ''; };
-  if (btn) btn.addEventListener('click', function () { var o = nav.classList.toggle('open'); btn.classList.toggle('active', o); document.body.style.overflow = o ? 'hidden' : ''; });
-  if (close) close.addEventListener('click', window.closeMobileNav);
-})();
-
 // Client contract
 (function () {
   var VERSION = 'CGPT-MONTHLY-2026-11b';
@@ -901,26 +942,6 @@ function declineCookies() {
     return p.stripe + '?prefilled_email=' + encodeURIComponent(email) + '&client_reference_id=' + encodeURIComponent(REF);
   }
 
-  function showSuccess(p, name, email, img) {
-    form.querySelectorAll('fieldset').forEach(function (f) { f.hidden = true; });
-    btn.hidden = true; errorBox.hidden = true;
-    doc.insertAdjacentHTML('beforeend',
-      '<div class="signed-block"><p><strong>Signed by the client</strong></p>' +
-      '<img src="' + img + '" alt="Signature">' +
-      '<p>' + esc(name) + '<br>Date: ' + nice(today) + '<br>Contract ref: ' + REF + '</p></div>');
-    var url = stripeUrl(p, email);
-    $('successText').textContent = 'Your signed ' + p.name + ' contract has been sent to CG Performance Training. Next, set up your £' + p.price + ' monthly payment.';
-    $('payBtn').href = url;
-    $('formSuccess').hidden = false;
-    $('formSuccess').scrollIntoView({ behavior: 'smooth', block: 'center' });
-    var timer = setTimeout(function () { location.href = url; }, 6000);
-    $('printBtn').addEventListener('click', function () {
-      clearTimeout(timer);
-      $('redirectNote').textContent = 'When you\'re done, press Continue to Secure Payment.';
-      window.print();
-    });
-  }
-
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     errorBox.hidden = true;
@@ -952,8 +973,7 @@ function declineCookies() {
     var name = $('full_name').value.trim(), email = $('email').value.trim();
     render(select.value); // make sure stored terms match the plan being signed
     $('signature').value = name;
-    var img = signatureImage();
-    $('signature_image').value = img;
+    $('signature_image').value = signatureImage();
     btn.disabled = true;
     btn.textContent = 'Signing…';
     fetch('/', {
@@ -966,7 +986,9 @@ function declineCookies() {
       try {
         localStorage.setItem('cgpt_contract', JSON.stringify({ ref: REF, plan: select.value, name: name, email: email, signed: iso(today) }));
       } catch (err) {}
-      showSuccess(p, name, email, img);
+      // Go straight to the Stripe checkout for this package
+      btn.textContent = 'Taking you to payment…';
+      location.href = stripeUrl(p, email);
     }).catch(function () {
       errorBox.textContent = 'Sorry, something went wrong sending your contract. Please try again, or email ' + EMAIL + '.';
       errorBox.hidden = false;
@@ -977,5 +999,16 @@ function declineCookies() {
 })();
 </script>
 <script src="motion.js"></script>
+<script>
+(function () {
+  var btn = document.getElementById('cgNavBtn'), menu = document.getElementById('cgMobileNav'), close = document.getElementById('cgNavClose');
+  if (!btn || !menu) return;
+  function shut() { menu.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); document.body.style.overflow = ''; }
+  btn.addEventListener('click', function () { menu.classList.add('open'); btn.setAttribute('aria-expanded', 'true'); document.body.style.overflow = 'hidden'; });
+  close.addEventListener('click', shut);
+  menu.querySelectorAll('a').forEach(function (a) { a.addEventListener('click', shut); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') shut(); });
+})();
+</script>
 </body>
 </html>
