@@ -14,7 +14,7 @@
   <link rel="icon" type="image/png" href="images/CG%20PT%20Favicon.png">
   <link rel="apple-touch-icon" href="images/CG%20PT%20Favicon.png">
 <title>Client Contract | CG Performance Training</title>
-<meta name="description" content="Client contract for CG Performance Training monthly coaching plans.">
+<meta name="description" content="Client contract for CG Performance Training coaching plans.">
 <meta name="robots" content="noindex, nofollow">
 <link rel="canonical" href="https://cg-pt.co.uk/contract.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -467,7 +467,7 @@
 <div class="content">
 
   <div class="highlight">
-    <p>Please read your agreement carefully before signing. As soon as it's signed you'll go straight to secure checkout to set up your monthly payment. <strong>All monthly plans have a 3-month minimum term</strong>, then continue month to month until you give 30 days' notice.</p>
+    <p id="introText">Please read your agreement carefully before signing. As soon as it's signed you'll go straight to secure checkout to set up your monthly payment. <strong>All monthly plans have a 3-month minimum term</strong>, then continue month to month until you give 30 days' notice.</p>
   </div>
 
   <form name="contract" id="contractForm" method="POST" action="contract.html" data-netlify="true" netlify-honeypot="bot-field" novalidate>
@@ -493,6 +493,9 @@
           <option value="performance">Performance — £419/month (in person)</option>
           <option value="online">Online — £79/month</option>
           <option value="online-plus">Online Plus — £129/month</option>
+          <option value="foundation-3-month">Foundation 3-Month — £529 upfront, then £199/month (in person)</option>
+          <option value="core-3-month">Core 3-Month — £799 upfront, then £299/month (in person)</option>
+          <option value="performance-3-month">Performance 3-Month — £1,119 upfront, then £419/month (in person)</option>
         </select>
       </div>
     </fieldset>
@@ -531,7 +534,7 @@
       </label>
       <label class="choice declaration">
         <input type="checkbox" name="agree_minimum_term" value="Agreed" required>
-        <span>I am signing up for a <strong>minimum of 3 months</strong>, paid by <strong>recurring monthly payments</strong>, and I must give <strong>at least 30 days' written notice</strong> before stopping.</span>
+        <span id="termDeclaration">I am signing up for a <strong>minimum of 3 months</strong>, paid by <strong>recurring monthly payments</strong>, and I must give <strong>at least 30 days' written notice</strong> before stopping.</span>
       </label>
       <label class="choice declaration">
         <input type="checkbox" name="agree_start_now" value="Agreed" required>
@@ -653,6 +656,8 @@ function declineCookies() {
 // Client contract
 (function () {
   var VERSION = 'CGPT-MONTHLY-2026-11b';
+  var UPFRONT_VERSION = 'CGPT-UPFRONT-3M-2026-11';
+  var PROMO_VERSION = 'CGPT-NEWYEAR-2026-12';
   var EMAIL = 'cgperformancetraining@outlook.com';
 
   var IN_PERSON_RULES = [
@@ -697,6 +702,26 @@ function declineCookies() {
       rules: ONLINE_RULES.concat(['Video calls are booked at a time that suits you both.'])
     }
   };
+
+  // 3-month upfront packages: one payment for the first 3 months, then the matching monthly plan
+  [['foundation', 529, 'https://buy.stripe.com/dRmdRb76B03W0rge6Z9Zm0j'],
+   ['core', 799, 'https://buy.stripe.com/00waEZ8aFaIA2zo3sl9Zm0k'],
+   ['performance', 1119, 'https://buy.stripe.com/5kQ6oJ3Up2c41vkbYR9Zm0i']].forEach(function (u) {
+    var base = PLANS[u[0]];
+    PLANS[u[0] + '-3-month'] = {
+      name: base.name + ' 3-Month', monthlyName: base.name, type: base.type, inPerson: true,
+      upfront: u[1], price: base.price, stripe: u[2],
+      includes: base.includes, rules: base.rules
+    };
+  });
+  // New Year New Me offer: 3 months of Core for the price of 2, then monthly Core. Only available 1 Dec - 31 Dec.
+  PLANS['new-year'] = {
+    name: 'New Year New Me Offer', monthlyName: 'Core', type: 'In-Person Coaching', inPerson: true,
+    upfront: 598, price: 299, stripe: 'https://buy.stripe.com/aFaaEZ62x8Asa1QaUN9Zm0l', promo: true,
+    availableFrom: new Date('2026-12-01T00:00:00Z'), availableUntil: new Date('2027-01-01T00:00:00Z'),
+    includes: PLANS.core.includes, rules: PLANS.core.rules
+  };
+  function money(n) { return '£' + n.toLocaleString('en-GB'); }
 
   // Website Terms & Conditions, as they apply to monthly plans (from terms.html)
   var TERMS = [
@@ -750,6 +775,55 @@ function declineCookies() {
   // Unique reference for this contract, used to match the payment on the thank-you page
   var REF = 'CG-' + iso(today).replace(/-/g, '') + '-' + Math.random().toString(36).slice(2, 8).toUpperCase();
   $('contract_ref').value = REF;
+
+  // Contract wording for the 3-month upfront packages
+  function upfrontSections(p) {
+    var up = money(p.upfront), monthly = money(p.price);
+    var noticeBy = addDays(minEnd, -30);
+    return [
+      ['1. The parties', [
+        'This contract is between Charlie Geddes, trading as CG Performance Training ("we", "us", "your coach"), and the client named and signed below ("you").'
+      ]],
+      ['2. Your plan', [
+        p.promo
+          ? 'You are signing up to the ' + p.name + ' (' + p.type + '): 3 months of ' + p.monthlyName + ' coaching for the price of 2, paid upfront, which then continues as the monthly ' + p.monthlyName + ' plan. It includes:'
+          : 'You are signing up to the ' + p.name + ' package (' + p.type + '): 3 months of coaching paid upfront, which then continues as the monthly ' + p.monthlyName + ' plan. It includes:',
+        { list: p.includes }
+      ]],
+      ['3. Payments', [
+        'Upfront payment: the first 3 months cost ' + up + ', paid in full by card through our payment provider, Stripe, at checkout straight after you sign. This covers your coaching from ' + nice(today) + ' to ' + nice(minEnd) + '.',
+        'After the 3 months: unless you have given notice (see section 5), your plan continues as the monthly ' + p.monthlyName + ' plan at ' + monthly + ' per month. Monthly payments are recurring and are taken automatically by card through Stripe, with the first payment on ' + nice(minEnd) + ' and then on the same date each month until this contract ends.',
+        'Before your 3 months end, we will send you a secure Stripe link to set up your monthly payment.',
+        'Monthly payments do not stop on their own — they only stop once your cancellation takes effect (see section 5).',
+        'If a payment fails, we will let you know and Stripe will try again. We may pause your coaching until the payment is made. Any payments missed during your notice period are still owed.'
+      ]],
+      ['4. Your 3-month upfront term', p.promo ? [
+        'Your upfront term runs for 3 months, from ' + nice(today) + ' to ' + nice(minEnd) + '.',
+        'Refunds: this is a promotional offer, so the upfront payment of ' + up + ' is non-refundable. No refunds or part-refunds will be given once it has been paid, including if you stop training before the 3 months are complete. This does not affect your 14-day cooling-off right (section 5), or a refund under section 7 if we end the contract.',
+        'Booking your sessions: you must book 2 sessions in every week of the 3 months. If 2 sessions are not booked in any week, you lose the unbooked sessions for that week. They cannot be carried over to a later week, exchanged or refunded.'
+      ] : [
+        'Your upfront term runs for 3 months, from ' + nice(today) + ' to ' + nice(minEnd) + '. The upfront payment is for the full 3 months and is not refundable, except within your 14-day cooling-off period (section 5) or as set out in section 7.'
+      ]],
+      ['5. Cancellation policy', [{ list: [
+        'You cannot cancel during your 3-month upfront term, except within your 14-day cooling-off period (below) or as set out in section 7.',
+        'Stopping at the end of the 3 months: if you do not want to continue on the monthly plan, email ' + EMAIL + ' at least 30 days before your 3 months end (by ' + nice(noticeBy) + '). Your plan will then end on ' + nice(minEnd) + ' and no monthly payments will be taken.',
+        'Once you are on the monthly plan: you must give at least 30 days\' written notice by emailing ' + EMAIL + '. Your plan ends 30 days after we receive your notice. Your monthly payments, and your coaching, continue as normal during the notice period, and any payment due during it will be taken. No partial refunds are given for unused days in a month.',
+        'Stopping payments with your bank or card provider does not count as giving notice, and does not cancel the amounts you owe under this contract.',
+        '14-day cooling-off period: as you are signing up online, you have the legal right to cancel within 14 days of signing without giving a reason, by emailing ' + EMAIL + '. You have asked for your coaching to start straight away, so if you cancel within the 14 days we will refund what you have paid, minus a fair amount for the coaching already provided.',
+        'Cancelling a session: you must give at least 24 hours\' notice to cancel or move a session. Sessions cancelled with less notice, or missed, count as used.'
+      ] }]],
+      ['6. How your coaching works', [{ list: p.rules }]],
+      ['7. Pausing, changes and ending the contract early', [
+        'If you are unable to train because of injury or illness, speak to your coach. Pausing your plan is at our discretion and may need evidence such as a doctor\'s note. Any paused time is added on to the end of your 3-month upfront term, and your monthly payments start later to match.',
+        'You can move to a different monthly plan by agreement with your coach.',
+        'The monthly price after your 3 months will be ' + monthly + '. We may change the monthly price by giving you at least 30 days\' notice, but not during your 3-month upfront term. If you don\'t accept a price change, you may cancel before it takes effect.',
+        'We may end this contract straight away if payments are not made, or if you behave in a threatening, abusive or unsafe way. If we end the contract for any other reason, we will refund any payment for coaching not provided.'
+      ]],
+      ['8. Terms & Conditions', [
+        'Our Terms & Conditions below form part of this contract. If anything in them conflicts with sections 1 to 7, sections 1 to 7 apply.'
+      ]]
+    ];
+  }
 
   // Each section is [heading, [paragraphs or {list: [...]}]]
   function sections(p) {
@@ -810,9 +884,52 @@ function declineCookies() {
     });
   }
 
+  var OFFER_GONE = '';
+  var MONTHLY_INTRO = $('introText').innerHTML, MONTHLY_DECL = $('termDeclaration').innerHTML;
+
+  function renderUpfront(p) {
+    var out = { html: '', text: '' }, up = money(p.upfront), monthly = money(p.price);
+    var noticeBy = addDays(minEnd, -30), V = p.promo ? PROMO_VERSION : UPFRONT_VERSION;
+    out.html = '<h3>' + esc(p.name) + (p.promo ? '' : ' Package') + ' — Client Contract</h3>' +
+      '<p class="meta">CG Performance Training · Contract ref ' + REF + ' · Version ' + V + '</p>' +
+      '<div class="key">' +
+        '<div><span>Package</span><b>' + esc(p.name) + ' (' + esc(p.type) + ')</b></div>' +
+        '<div><span>Upfront payment</span><b>' + up + ' today, covers 3 months</b></div>' +
+        '<div><span>Start date</span><b>' + nice(today) + '</b></div>' +
+        '<div><span>Upfront term</span><b>3 months — ends ' + nice(minEnd) + '</b></div>' +
+        '<div><span>After 3 months</span><b>' + monthly + ' per month, recurring, from ' + nice(minEnd) + '</b></div>' +
+        '<div><span>To stop after 3 months</span><b>Email notice by ' + nice(noticeBy) + '</b></div>' +
+      '</div>';
+    out.text = p.name + (p.promo ? '' : ' Package') + ' - Client Contract\nRef: ' + REF + ' (version ' + V + ')\n' +
+      'Package: ' + p.name + ' (' + p.type + ')\nUpfront payment: ' + up + ' today, covers 3 months\n' +
+      'Start date: ' + nice(today) + '\nUpfront term: 3 months, ends ' + nice(minEnd) + '\n' +
+      'After 3 months: ' + monthly + ' per month, recurring, from ' + nice(minEnd) + '\n' +
+      'To stop after 3 months: email notice by ' + nice(noticeBy) + '\n';
+    renderBlocks(upfrontSections(p), out);
+    out.html += '<p class="part">Terms &amp; Conditions</p>';
+    out.text += '\n\nTERMS & CONDITIONS\n';
+    renderBlocks(TERMS, out);
+    doc.innerHTML = out.html;
+    doc.hidden = false;
+    doc.scrollTop = 0;
+    $('heroPlan').textContent = p.name + ' · ' + up + ' upfront, then ' + monthly + '/month';
+    document.title = p.name + ' Contract | CG Performance Training';
+    $('introText').innerHTML = 'Please read your agreement carefully before signing. As soon as it\'s signed you\'ll go straight to secure checkout to pay <strong>' + up + ' for your first 3 months</strong>' + (p.promo ? ' (3 months for the price of 2 — non-refundable promotional offer)' : '') + '. After that your plan continues at <strong>' + monthly + ' per month</strong> until you give 30 days\' notice — give notice before your 3 months end and no monthly payments are taken.';
+    $('termDeclaration').innerHTML = 'I am paying <strong>' + up + ' upfront for 3 months</strong> of coaching. After the 3 months my plan <strong>continues at ' + monthly + ' per month by recurring payment</strong> until I give <strong>at least 30 days\' written notice</strong>. I can give notice during my 3 months so no monthly payments are taken.';
+    $('plan_name').value = p.name;
+    $('monthly_price').value = up + ' upfront for 3 months, then ' + monthly + ' per month';
+    $('start_date').value = iso(today);
+    $('minimum_term_end').value = iso(minEnd);
+    $('contract_version').value = V;
+    $('contract_terms').value = out.text;
+  }
+
   function render(key) {
     var p = PLANS[key];
+    $('introText').innerHTML = p ? MONTHLY_INTRO : (OFFER_GONE || MONTHLY_INTRO);
+    $('termDeclaration').innerHTML = MONTHLY_DECL;
     if (!p) { doc.hidden = true; $('heroPlan').textContent = 'Monthly coaching plans'; return; }
+    if (p.upfront) return renderUpfront(p);
     var out = { html: '', text: '' };
     out.html = '<h3>' + esc(p.name) + ' Plan — Client Contract</h3>' +
       '<p class="meta">CG Performance Training · Contract ref ' + REF + ' · Version ' + VERSION + '</p>' +
@@ -846,8 +963,20 @@ function declineCookies() {
   }
 
   // The buy button on each package opens that package's contract (?plan=...)
-  var fromUrl = (location.search.match(/[?&]plan=([a-z-]+)/) || [])[1];
+  var fromUrl = (location.search.match(/[?&]plan=([a-z0-9-]+)/) || [])[1];
+  var offer = fromUrl && PLANS[fromUrl];
+  if (offer && offer.promo && (Date.now() < offer.availableFrom || Date.now() >= offer.availableUntil)) {
+    fromUrl = null;
+    OFFER_GONE = '<strong>This offer is not available right now.</strong> Please choose one of our packages below, or <a href="index.html#inquiry">get in touch</a>.';
+    $('introText').innerHTML = OFFER_GONE;
+  }
   if (fromUrl && PLANS[fromUrl]) {
+    if (!select.querySelector('option[value="' + fromUrl + '"]')) {
+      // offers aren't in the package list, so add this one while it's running
+      var opt = document.createElement('option');
+      opt.value = fromUrl; opt.textContent = PLANS[fromUrl].name;
+      select.appendChild(opt);
+    }
     select.value = fromUrl;
     $('planPicker').hidden = true; // the contract is for the package they chose
   }

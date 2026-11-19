@@ -316,6 +316,13 @@
   .products-subhead + .products-grid { margin-top:1.25rem; }
   .products-help { text-align:center; margin-top:3rem; font-size:0.95rem; }
   .products-help a { color:var(--blue-light); }
+  .product-card.upfront { border-color:rgba(231,76,60,0.5); background:linear-gradient(160deg, var(--navy-light), #2a2030); }
+  .product-card.upfront::before {
+    content:attr(data-save); position:absolute; top:3rem; right:-2rem; background:var(--red); color:white;
+    padding:0.2rem 3rem; font-size:0.7rem; letter-spacing:0.15em; font-weight:700; transform:rotate(45deg);
+    font-family:'Barlow Condensed',sans-serif;
+  }
+  .product-was { font-size:1.1rem; color:var(--text-muted); text-decoration:line-through; margin-left:0.4rem; }
   @media (max-width:900px) { .products-grid { grid-template-columns:1fr 1fr; } }
   @media (max-width:600px) { .products-grid { grid-template-columns:1fr; } }
 </style>
@@ -427,6 +434,33 @@
   </div>
 </section>
 
+<!-- NEW YEAR NEW ME OFFER: shows from 00:00 on 1 December and hides itself at 00:00 on 1 January -->
+<section class="bf" id="new-year" data-starts="2026-12-01T00:00:00Z" data-ends="2027-01-01T00:00:00Z" hidden>
+  <div class="bf-inner">
+    <div class="bf-copy">
+      <span class="bf-tag">New Year New Me Offer</span>
+      <h2 class="bf-title">3 Months of Training <span>for the Price of 2</span></h2>
+      <p class="bf-desc">2 x 1-2-1 sessions a week for 3 months at JD Gyms East Kilbride, for one payment of &pound;598. Start the new year already ahead.</p>
+      <div class="bf-price">
+        <span class="bf-now">&pound;598</span>
+        <span class="bf-was">&pound;897</span>
+        <span class="bf-save">Save &pound;299</span>
+      </div>
+    </div>
+    <div class="bf-side">
+      <p class="bf-ends">Offer ends in</p>
+      <div class="bf-clock" role="timer" aria-label="Time left on the New Year New Me offer">
+        <div><b data-bf="d">--</b><span>Days</span></div>
+        <div><b data-bf="h">--</b><span>Hours</span></div>
+        <div><b data-bf="m">--</b><span>Minutes</span></div>
+        <div><b data-bf="s">--</b><span>Seconds</span></div>
+      </div>
+      <a href="contract.html?plan=new-year" class="bf-buy">Buy Now</a>
+      <p class="bf-small">Ends at midnight on Thursday 31 December. After 3 months, continues at &pound;299/month unless you give notice. <a href="terms.html#new-year">Offer terms</a></p>
+    </div>
+  </div>
+</section>
+
 <div class="products-wrap">
   <h3 class="products-subhead">In-Person Coaching <span>· JD Gyms East Kilbride</span></h3>
   <div class="products-grid">
@@ -464,6 +498,46 @@
       <div class="card-buttons">
         <a href="performance.html" class="btn-learn">Learn More</a>
         <button class="btn-buy" onclick="buyProduct('performance')">Buy Now</button>
+      </div>
+    </div>
+  </div>
+
+  <h3 class="products-subhead">Pay Upfront &amp; Save <span>· 3 months, one payment</span></h3>
+  <div class="products-grid">
+    <!-- Foundation 3-Month (upfront) -->
+    <div class="product-card upfront" data-save="SAVE £68">
+      <div class="product-icon">💪</div>
+      <div class="product-name">Foundation 3-Month</div>
+      <div class="product-price">£529<span class="product-was">£597</span></div>
+      <div class="product-price-note">one payment · 3 months</div>
+      <p class="product-desc">Everything in Foundation for 3 months — 1 session a week plus your programme in the app. Pay once upfront and save £68.</p>
+      <div class="card-buttons">
+        <a href="foundation-3-month.html" class="btn-learn">Learn More</a>
+        <button class="btn-buy" onclick="buyProduct('foundation-3-month')">Buy Now</button>
+      </div>
+    </div>
+    <!-- Core 3-Month (upfront) -->
+    <div class="product-card upfront" data-save="SAVE £98">
+      <div class="product-icon">🔥</div>
+      <div class="product-name">Core 3-Month</div>
+      <div class="product-price">£799<span class="product-was">£897</span></div>
+      <div class="product-price-note">one payment · 3 months</div>
+      <p class="product-desc">Everything in Core for 3 months — 2 sessions a week, your programme in the app and personalised nutrition targets. Pay once upfront and save £98.</p>
+      <div class="card-buttons">
+        <a href="core-3-month.html" class="btn-learn">Learn More</a>
+        <button class="btn-buy" onclick="buyProduct('core-3-month')">Buy Now</button>
+      </div>
+    </div>
+    <!-- Performance 3-Month (upfront) -->
+    <div class="product-card upfront" data-save="SAVE £138">
+      <div class="product-icon">🏆</div>
+      <div class="product-name">Performance 3-Month</div>
+      <div class="product-price">£1,119<span class="product-was">£1,257</span></div>
+      <div class="product-price-note">one payment · 3 months</div>
+      <p class="product-desc">Everything in Performance for 3 months — 3 sessions a week, a full programme and a weekly check-in. Pay once upfront and save £138.</p>
+      <div class="card-buttons">
+        <a href="performance-3-month.html" class="btn-learn">Learn More</a>
+        <button class="btn-buy" onclick="buyProduct('performance-3-month')">Buy Now</button>
       </div>
     </div>
   </div>
@@ -548,6 +622,9 @@ var stripeLinks = {
   'performance': 'contract.html?plan=performance',
   'online': 'contract.html?plan=online',
   'online-plus': 'contract.html?plan=online-plus',
+  'foundation-3-month': 'contract.html?plan=foundation-3-month',
+  'core-3-month': 'contract.html?plan=core-3-month',
+  'performance-3-month': 'contract.html?plan=performance-3-month',
   'starter-kit': 'https://buy.stripe.com/3cI6oJez3bMEa1Qd2V9Zm08'
 };
 function buyProduct(product) {
